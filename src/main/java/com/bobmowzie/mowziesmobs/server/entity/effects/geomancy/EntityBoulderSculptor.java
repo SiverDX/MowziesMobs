@@ -154,6 +154,7 @@ public class EntityBoulderSculptor extends EntityBoulderProjectile {
 
     public boolean nextSingleBoulder() {
         int whichTierIndex = (int) (Math.pow(random.nextFloat(), 2) * (GeomancyTier.values().length - 2) + 1);
+        if (getHeightFrac() > 0.85 && whichTierIndex == 3) whichTierIndex = 1;
         GeomancyTier nextTier = GeomancyTier.values()[whichTierIndex];
         EntityBoulderSculptor nextBoulder = new EntityBoulderSculptor(EntityHandler.BOULDER_SCULPTOR.get(), level(), getCaster(), getBlock(), blockPosition(), nextTier);
 
