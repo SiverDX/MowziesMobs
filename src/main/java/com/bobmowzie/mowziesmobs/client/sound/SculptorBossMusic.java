@@ -12,11 +12,13 @@ import java.util.TreeMap;
 
 public class SculptorBossMusic extends BossMusic<EntitySculptor> {
     protected static SoundEvent soundEventIntro = MMSounds.MUSIC_SCULPTOR_THEME_INTRO.get();
-    protected static SoundEvent soundEventLevel1 = MMSounds.MUSIC_SCULPTOR_THEME_LEVEL1.get();
-    protected static SoundEvent soundEventLevel2 = MMSounds.MUSIC_SCULPTOR_THEME_LEVEL2.get();
-    protected static SoundEvent soundEventLevel3 = MMSounds.MUSIC_SCULPTOR_THEME_LEVEL3.get();
+    protected static SoundEvent soundEventLevel1_1 = MMSounds.MUSIC_SCULPTOR_THEME_LEVEL1_1.get();
+    protected static SoundEvent soundEventLevel1_2 = MMSounds.MUSIC_SCULPTOR_THEME_LEVEL1_2.get();
+    protected static SoundEvent soundEventLevel2_1 = MMSounds.MUSIC_SCULPTOR_THEME_LEVEL2_1.get();
+    protected static SoundEvent soundEventLevel2_2 = MMSounds.MUSIC_SCULPTOR_THEME_LEVEL2_2.get();
     protected static SoundEvent soundEventTransition = MMSounds.MUSIC_SCULPTOR_THEME_TRANSITION.get();
-    protected static SoundEvent soundEventLevel4 = MMSounds.MUSIC_SCULPTOR_THEME_LEVEL4.get();
+    protected static SoundEvent soundEventLevel3_1 = MMSounds.MUSIC_SCULPTOR_THEME_LEVEL3_1.get();
+    protected static SoundEvent soundEventLevel3_2 = MMSounds.MUSIC_SCULPTOR_THEME_LEVEL3_2.get();
     protected static SoundEvent soundEventEnding = MMSounds.MUSIC_SCULPTOR_THEME_ENDING.get();
     protected static SoundEvent soundEventOutro = MMSounds.MUSIC_SCULPTOR_THEME_OUTRO.get();
 
@@ -29,32 +31,48 @@ public class SculptorBossMusic extends BossMusic<EntitySculptor> {
     private int ticksInSection;
 
     private enum SculptorMusicSection {
-        INTRO,
-        LEVEL1,
-        LEVEL2,
-        LEVEL3,
-        TRANSITION,
-        LEVEL4,
-        ENDING,
-        OUTRO
+        INTRO(0),
+        LEVEL1_1(1),
+        LEVEL1_2(2),
+        LEVEL2_1(3),
+        LEVEL2_2(4),
+        TRANSITION(5),
+        LEVEL3_1(6),
+        LEVEL3_2(7),
+        ENDING(8),
+        OUTRO(9);
+
+        SculptorMusicSection(int order) {
+            this.order = order;
+        }
+
+        private Integer order;
+
+        public boolean isHigherThan(SculptorMusicSection other) {
+            return this.order > other.order;
+        }
     }
 
     private static final SortedMap<SculptorMusicSection, Float> SECTION_HEIGHTS = new TreeMap<>();
     static {
-        SECTION_HEIGHTS.put(SculptorMusicSection.LEVEL1, 0.0f);
-        SECTION_HEIGHTS.put(SculptorMusicSection.LEVEL2, 0.1f);
-        SECTION_HEIGHTS.put(SculptorMusicSection.LEVEL3, 0.35f);
-        SECTION_HEIGHTS.put(SculptorMusicSection.LEVEL4, 0.65f);
+        SECTION_HEIGHTS.put(SculptorMusicSection.LEVEL1_1, 0.0f);
+        SECTION_HEIGHTS.put(SculptorMusicSection.LEVEL1_2, 0.1f);
+        SECTION_HEIGHTS.put(SculptorMusicSection.LEVEL2_1, 0.35f);
+        SECTION_HEIGHTS.put(SculptorMusicSection.LEVEL2_2, 0.5f);
+        SECTION_HEIGHTS.put(SculptorMusicSection.LEVEL3_1, 0.65f);
+        SECTION_HEIGHTS.put(SculptorMusicSection.LEVEL3_2, 0.825f);
         SECTION_HEIGHTS.put(SculptorMusicSection.ENDING, 0.98f);
     }
     private static final Map<SculptorMusicSection, SoundEvent> SECTION_SOUNDS = new HashMap<>();
     static {
         SECTION_SOUNDS.put(SculptorMusicSection.INTRO, soundEventIntro);
-        SECTION_SOUNDS.put(SculptorMusicSection.LEVEL1, soundEventLevel1);
-        SECTION_SOUNDS.put(SculptorMusicSection.LEVEL2, soundEventLevel2);
-        SECTION_SOUNDS.put(SculptorMusicSection.LEVEL3, soundEventLevel3);
+        SECTION_SOUNDS.put(SculptorMusicSection.LEVEL1_1, soundEventLevel1_1);
+        SECTION_SOUNDS.put(SculptorMusicSection.LEVEL1_2, soundEventLevel1_2);
+        SECTION_SOUNDS.put(SculptorMusicSection.LEVEL2_1, soundEventLevel2_1);
+        SECTION_SOUNDS.put(SculptorMusicSection.LEVEL2_2, soundEventLevel2_2);
         SECTION_SOUNDS.put(SculptorMusicSection.TRANSITION, soundEventTransition);
-        SECTION_SOUNDS.put(SculptorMusicSection.LEVEL4, soundEventLevel4);
+        SECTION_SOUNDS.put(SculptorMusicSection.LEVEL3_1, soundEventLevel3_1);
+        SECTION_SOUNDS.put(SculptorMusicSection.LEVEL3_2, soundEventLevel3_2);
         SECTION_SOUNDS.put(SculptorMusicSection.ENDING, soundEventEnding);
         SECTION_SOUNDS.put(SculptorMusicSection.OUTRO, soundEventOutro);
     }
@@ -78,8 +96,14 @@ public class SculptorBossMusic extends BossMusic<EntitySculptor> {
 
             if (currentSection == SculptorMusicSection.TRANSITION) {
                 if (ticksInSection == 512) {
-                    changeLevelSection(SculptorMusicSection.LEVEL4);
-                    return;
+                    if (getBoss().playerProgress() > SECTION_HEIGHTS.get(SculptorMusicSection.LEVEL3_2)) {
+                        changeLevelSection(SculptorMusicSection.LEVEL3_2);
+                        return;
+                    }
+                    else if (getBoss().playerProgress() > SECTION_HEIGHTS.get(SculptorMusicSection.LEVEL3_1)) {
+                        changeLevelSection(SculptorMusicSection.LEVEL3_1);
+                        return;
+                    }
                 }
             }
 
@@ -91,11 +115,13 @@ public class SculptorBossMusic extends BossMusic<EntitySculptor> {
             }
 
             if (
-                    currentSection == SculptorMusicSection.LEVEL1 ||
-                    currentSection == SculptorMusicSection.LEVEL2 ||
-                    currentSection == SculptorMusicSection.LEVEL3 ||
+                    currentSection == SculptorMusicSection.LEVEL1_1 ||
+                    currentSection == SculptorMusicSection.LEVEL1_2 ||
+                    currentSection == SculptorMusicSection.LEVEL2_1 ||
+                    currentSection == SculptorMusicSection.LEVEL2_2 ||
                     currentSection == SculptorMusicSection.TRANSITION ||
-                    currentSection == SculptorMusicSection.LEVEL4 ||
+                    currentSection == SculptorMusicSection.LEVEL3_1 ||
+                    currentSection == SculptorMusicSection.LEVEL3_2 ||
                     currentSection == SculptorMusicSection.ENDING
             ) {
                 if (ticksInSection % 128 == 0) {
@@ -107,7 +133,7 @@ public class SculptorBossMusic extends BossMusic<EntitySculptor> {
 
     private void startMainTrack() {
         ticksInSection = 0;
-        changeLevelSection(SculptorMusicSection.LEVEL1);
+        changeLevelSection(SculptorMusicSection.LEVEL1_1);
     }
 
     private void measureBreak() {
@@ -117,11 +143,11 @@ public class SculptorBossMusic extends BossMusic<EntitySculptor> {
         }
 
         SculptorMusicSection currentSectionIgnoreTransition = currentSection;
-        if (currentSection == SculptorMusicSection.TRANSITION) currentSectionIgnoreTransition = SculptorMusicSection.LEVEL4;
+        if (currentSection == SculptorMusicSection.TRANSITION) currentSectionIgnoreTransition = SculptorMusicSection.LEVEL3_1;
 
         float playerProgress = getBoss().playerProgress();
         float currentSectionHeight = SECTION_HEIGHTS.get(currentSectionIgnoreTransition);
-        SculptorMusicSection nextSection = SculptorMusicSection.LEVEL1;
+        SculptorMusicSection nextSection = SculptorMusicSection.LEVEL1_1;
         for (Map.Entry<SculptorMusicSection, Float> sectionHeight : SECTION_HEIGHTS.entrySet()) {
             SculptorMusicSection section = sectionHeight.getKey();
             float height = sectionHeight.getValue();
@@ -135,7 +161,8 @@ public class SculptorBossMusic extends BossMusic<EntitySculptor> {
             }
         }
         if (nextSection != currentSectionIgnoreTransition) {
-            if (nextSection == SculptorMusicSection.LEVEL4) {
+            // If the current section is below the transition and we are moving to level 3, then play the transition instead
+            if (!currentSectionIgnoreTransition.isHigherThan(SculptorMusicSection.TRANSITION) && (nextSection == SculptorMusicSection.LEVEL3_1 || nextSection == SculptorMusicSection.LEVEL3_2)) {
                 nextSection = SculptorMusicSection.TRANSITION;
             }
             changeLevelSection(nextSection);

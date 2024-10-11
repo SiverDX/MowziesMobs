@@ -270,11 +270,13 @@ public final class MMSounds {
     public static final RegistryObject<SoundEvent> MUSIC_FERROUS_WROUGHTNAUT_THEME = create("music.ferrous_wroughtnaut_theme");
     public static final RegistryObject<SoundEvent> MUSIC_FROSTMAW_THEME = create("music.frostmaw_theme");
     public static final RegistryObject<SoundEvent> MUSIC_SCULPTOR_THEME_INTRO = create("music.sculptor_theme_intro");
-    public static final RegistryObject<SoundEvent> MUSIC_SCULPTOR_THEME_LEVEL1 = create("music.sculptor_theme_level1");
-    public static final RegistryObject<SoundEvent> MUSIC_SCULPTOR_THEME_LEVEL2 = create("music.sculptor_theme_level2");
-    public static final RegistryObject<SoundEvent> MUSIC_SCULPTOR_THEME_LEVEL3 = create("music.sculptor_theme_level3");
+    public static final RegistryObject<SoundEvent> MUSIC_SCULPTOR_THEME_LEVEL1_1 = create("music.sculptor_theme_level1_1");
+    public static final RegistryObject<SoundEvent> MUSIC_SCULPTOR_THEME_LEVEL1_2 = create("music.sculptor_theme_level1_2");
+    public static final RegistryObject<SoundEvent> MUSIC_SCULPTOR_THEME_LEVEL2_1 = create("music.sculptor_theme_level2_1");
+    public static final RegistryObject<SoundEvent> MUSIC_SCULPTOR_THEME_LEVEL2_2 = create("music.sculptor_theme_level2_2");
     public static final RegistryObject<SoundEvent> MUSIC_SCULPTOR_THEME_TRANSITION = create("music.sculptor_theme_transition");
-    public static final RegistryObject<SoundEvent> MUSIC_SCULPTOR_THEME_LEVEL4 = create("music.sculptor_theme_level4");
+    public static final RegistryObject<SoundEvent> MUSIC_SCULPTOR_THEME_LEVEL3_1 = create("music.sculptor_theme_level3_1");
+    public static final RegistryObject<SoundEvent> MUSIC_SCULPTOR_THEME_LEVEL3_2 = create("music.sculptor_theme_level3_2");
     public static final RegistryObject<SoundEvent> MUSIC_SCULPTOR_THEME_ENDING = create("music.sculptor_theme_ending");
     public static final RegistryObject<SoundEvent> MUSIC_SCULPTOR_THEME_OUTRO = create("music.sculptor_theme_outro");
 

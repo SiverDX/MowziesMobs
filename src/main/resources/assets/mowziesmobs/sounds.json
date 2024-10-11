@@ -785,33 +785,44 @@
 		],
 		"subtitle": "subtitles.mowziesmobs.sculptor_theme"
 	},
-	"music.sculptor_theme_level1": {
+	"music.sculptor_theme_level1_1": {
 		"category": "music",
 		"sounds": [
 			{
-				"name": "mowziesmobs:music/sculptor/level1",
+				"name": "mowziesmobs:music/sculptor/level1_1",
 				"stream": true,
 				"volume": 0.5
 			}
 		],
 		"subtitle": "subtitles.mowziesmobs.sculptor_theme"
 	},
-	"music.sculptor_theme_level2": {
+	"music.sculptor_theme_level1_2": {
 		"category": "music",
 		"sounds": [
 			{
-				"name": "mowziesmobs:music/sculptor/level2",
+				"name": "mowziesmobs:music/sculptor/level1_2",
 				"stream": true,
 				"volume": 0.5
 			}
 		],
 		"subtitle": "subtitles.mowziesmobs.sculptor_theme"
 	},
-	"music.sculptor_theme_level3": {
+	"music.sculptor_theme_level2_1": {
 		"category": "music",
 		"sounds": [
 			{
-				"name": "mowziesmobs:music/sculptor/level3",
+				"name": "mowziesmobs:music/sculptor/level2_1",
+				"stream": true,
+				"volume": 0.5
+			}
+		],
+		"subtitle": "subtitles.mowziesmobs.sculptor_theme"
+	},
+	"music.sculptor_theme_level2_2": {
+		"category": "music",
+		"sounds": [
+			{
+				"name": "mowziesmobs:music/sculptor/level2_2",
 				"stream": true,
 				"volume": 0.5
 			}
@@ -829,11 +840,22 @@
 		],
 		"subtitle": "subtitles.mowziesmobs.sculptor_theme"
 	},
-	"music.sculptor_theme_level4": {
+	"music.sculptor_theme_level3_1": {
 		"category": "music",
 		"sounds": [
 			{
-				"name": "mowziesmobs:music/sculptor/level4",
+				"name": "mowziesmobs:music/sculptor/level3_1",
+				"stream": true,
+				"volume": 0.5
+			}
+		],
+		"subtitle": "subtitles.mowziesmobs.sculptor_theme"
+	},
+	"music.sculptor_theme_level3_2": {
+		"category": "music",
+		"sounds": [
+			{
+				"name": "mowziesmobs:music/sculptor/level3_2",
 				"stream": true,
 				"volume": 0.5
 			}
