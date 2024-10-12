@@ -36,17 +36,17 @@ public class ModelSculptor extends MowzieGeoModel<EntitySculptor> {
 
     @Override
     public ResourceLocation getModelResource(EntitySculptor object) {
-        return new ResourceLocation(MowziesMobs.MODID, "geo/sculptor.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/sculptor.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(EntitySculptor object) {
-        return new ResourceLocation(MowziesMobs.MODID, "textures/entity/sculptor.png");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/sculptor.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(EntitySculptor object) {
-        return new ResourceLocation(MowziesMobs.MODID, "animations/sculptor.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/sculptor.animation.json");
     }
 
     @Override

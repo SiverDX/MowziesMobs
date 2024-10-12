@@ -21,8 +21,8 @@ import software.bernie.geckolib.core.object.Color;
 import java.util.Optional;
 
 public class RenderSculptor extends MowzieGeoEntityRenderer<EntitySculptor> {
-    public final ResourceLocation staff_geo_location = new ResourceLocation(MowziesMobs.MODID, "geo/sculptor_staff.geo.json");
-    public final ResourceLocation staff_tex_location = new ResourceLocation(MowziesMobs.MODID, "textures/item/sculptor_staff.png");
+    public final ResourceLocation staff_geo_location = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/sculptor_staff.geo.json");
+    public final ResourceLocation staff_tex_location = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/item/sculptor_staff.png");
 
     public RenderSculptor(EntityRendererProvider.Context renderManager) {
         super(renderManager, new ModelSculptor());

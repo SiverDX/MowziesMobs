@@ -34,6 +34,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -249,12 +250,12 @@ public class EntityBabyFoliaath extends MowzieLLibraryEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        getEntityData().define(GROWTH, 0);
-        getEntityData().define(INFANT, false);
-        getEntityData().define(HUNGRY, false);
-        getEntityData().define(EATING, ItemStack.EMPTY);
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(GROWTH, 0);
+        builder.define(INFANT, false);
+        builder.define(HUNGRY, false);
+        builder.define(EATING, ItemStack.EMPTY);
     }
 
     public int getGrowth() {

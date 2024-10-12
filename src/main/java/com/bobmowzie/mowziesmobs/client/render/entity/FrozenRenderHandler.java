@@ -39,7 +39,7 @@ import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 public enum FrozenRenderHandler {
     INSTANCE;
 
-    private static final ResourceLocation FROZEN_TEXTURE = new ResourceLocation(MowziesMobs.MODID, "textures/entity/frozen.png");
+    private static final ResourceLocation FROZEN_TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/frozen.png");
 
     public static class LayerFrozen<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T,M> {
         private final LivingEntityRenderer<T, M> renderer;

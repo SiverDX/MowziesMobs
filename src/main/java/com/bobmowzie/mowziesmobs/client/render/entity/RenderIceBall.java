@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
 public class RenderIceBall extends EntityRenderer<EntityIceBall> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(MowziesMobs.MODID, "textures/effects/ice_ball.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/effects/ice_ball.png");
     public ModelIceBall model;
 
     public RenderIceBall(EntityRendererProvider.Context mgr) {

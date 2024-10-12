@@ -26,29 +26,25 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.ICapabilityProvider;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerCapability {
-    public static ResourceLocation ID = new ResourceLocation(MowziesMobs.MODID, "player_cap");
+    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "player_cap");
 
     public interface IPlayerCapability extends INBTSerializable<CompoundTag> {
 
         Power[] getPowers();
 
-        void tick(TickEvent.PlayerTickEvent event);
+        void tick(PlayerTickEvent event);
 
         void addedToWorld(EntityJoinLevelEvent event);
 
@@ -108,7 +104,7 @@ public class PlayerCapability {
 
         void setPrevCooledAttackStrength(float cooledAttackStrength);
 
-        @OnlyIn(Dist.CLIENT)
+        @OnlyIn(Dist.CLIENT) // FIXME 1.21 :: remove this
         GeckoPlayer.GeckoPlayerThirdPerson getGeckoPlayer();
     }
 
@@ -255,8 +251,8 @@ public class PlayerCapability {
             }
         }
 
-        public void tick(TickEvent.PlayerTickEvent event) {
-            Player player = event.player;
+        public void tick(PlayerTickEvent event) {
+            Player player = event.getEntity();
             
             tribeCircleTick++;
 
@@ -269,7 +265,7 @@ public class PlayerCapability {
                 untilAxeSwing--;
             }
 
-            if (event.side == LogicalSide.SERVER) {
+            if (player.level().isClientSide()) {
                 if (player.getMainHandItem().getItem() instanceof ItemEarthrendGauntlet || player.getOffhandItem().getItem() instanceof ItemEarthrendGauntlet) {
                     player.addEffect(new MobEffectInstance(EffectHandler.GEOMANCY.get(), 20, 0, false, false));
                 }
@@ -304,7 +300,7 @@ public class PlayerCapability {
 
             useIceCrystalStack(player);
 
-            if (event.side == LogicalSide.CLIENT) {
+            if (player.level().isClientSide()) {
                 if (Minecraft.getInstance().options.keyAttack.isDown() && !mouseLeftDown) {
                     mouseLeftDown = true;
                     MowziesMobs.NETWORK.sendToServer(new MessageLeftMouseDown());

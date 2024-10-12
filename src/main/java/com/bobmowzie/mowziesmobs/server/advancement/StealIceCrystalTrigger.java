@@ -11,7 +11,7 @@ import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerPlayer;
 
 public class StealIceCrystalTrigger extends MMTrigger<AbstractCriterionTriggerInstance, StealIceCrystalTrigger.Listener> {
-    public static final ResourceLocation ID = new ResourceLocation(MowziesMobs.MODID, "steal_ice_crystal");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "steal_ice_crystal");
 
     public StealIceCrystalTrigger() {
     }

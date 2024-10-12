@@ -37,7 +37,7 @@ public class LootTableHandler {
     public static RegistryObject<LootItemConditionType> FROSTMAW_HAS_CRYSTAL = registerCondition("has_crystal", new LootConditionFrostmawHasCrystal.ConditionSerializer());
 
     private static ResourceLocation register(String id) {
-        return new ResourceLocation(MowziesMobs.MODID, id);
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, id);
     }
 
     private static RegistryObject<LootItemFunctionType> registerFunction(String name, Serializer<? extends LootItemFunction> serializer) {

@@ -35,12 +35,12 @@ public class ModelGeckoBiped extends MowzieGeoModel<GeckoPlayer> {
 	
 	@Override
 	public ResourceLocation getAnimationResource(GeckoPlayer animatable) {
-		return new ResourceLocation(MowziesMobs.MODID, "animations/animated_player.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/animated_player.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(GeckoPlayer animatable) {
-		return new ResourceLocation(MowziesMobs.MODID, "geo/animated_player.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/animated_player.geo.json");
 	}
 
 	@Override

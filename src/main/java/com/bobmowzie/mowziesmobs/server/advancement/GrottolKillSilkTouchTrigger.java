@@ -11,7 +11,7 @@ import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerPlayer;
 
 public class GrottolKillSilkTouchTrigger extends MMTrigger<AbstractCriterionTriggerInstance, GrottolKillSilkTouchTrigger.Listener> {
-    public static final ResourceLocation ID = new ResourceLocation(MowziesMobs.MODID, "kill_grottol_silk_touch");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "kill_grottol_silk_touch");
 
     public GrottolKillSilkTouchTrigger() {
     }

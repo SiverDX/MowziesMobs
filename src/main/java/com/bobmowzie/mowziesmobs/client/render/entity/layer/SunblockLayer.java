@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
 public class SunblockLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T,M> {
-    private static final ResourceLocation SUNBLOCK_ARMOR = new ResourceLocation(MowziesMobs.MODID, "textures/entity/sunblock_glow.png");
+    private static final ResourceLocation SUNBLOCK_ARMOR = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/sunblock_glow.png");
 
     public SunblockLayer(RenderLayerParent<T, M> entityRendererIn) {
         super(entityRendererIn);

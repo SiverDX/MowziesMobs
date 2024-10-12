@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderFoliaath extends MobRenderer<EntityFoliaath, ModelFoliaath<EntityFoliaath>> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(MowziesMobs.MODID, "textures/entity/foliaath.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/foliaath.png");
 
     public RenderFoliaath(EntityRendererProvider.Context mgr) {
         super(mgr, new ModelFoliaath<>(), 0);

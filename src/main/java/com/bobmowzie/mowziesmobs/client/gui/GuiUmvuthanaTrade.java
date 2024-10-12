@@ -5,8 +5,6 @@ import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthanaMinion;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.trade.Trade;
 import com.bobmowzie.mowziesmobs.server.inventory.ContainerUmvuthanaTrade;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -16,13 +14,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.joml.Quaternionf;
 
-@OnlyIn(Dist.CLIENT)
 public final class GuiUmvuthanaTrade extends AbstractContainerScreen<ContainerUmvuthanaTrade> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(MowziesMobs.MODID, "textures/gui/container/umvuthana.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/gui/container/umvuthana.png");
 
     private final EntityUmvuthanaMinion umvuthana;
 
@@ -48,6 +42,7 @@ public final class GuiUmvuthanaTrade extends AbstractContainerScreen<ContainerUm
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         guiGraphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         umvuthana.renderingInGUI = true;
+        // FIXME 1.21 :: needs 'to x' and 'to y' coordinates and a potential 'y offset'
         InventoryScreen.renderEntityInInventoryFollowsMouse(guiGraphics, leftPos + 33, topPos + 64, 20, leftPos + 33 - x, topPos + 21 - y, umvuthana);
         umvuthana.renderingInGUI = false;
     }

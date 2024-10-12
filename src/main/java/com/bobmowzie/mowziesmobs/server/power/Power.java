@@ -4,11 +4,10 @@ import com.bobmowzie.mowziesmobs.server.capability.PlayerCapability;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public abstract class Power {
         this.capability = capability;
     }
 
-    public void tick(TickEvent.PlayerTickEvent event) {
+    public void tick(PlayerTickEvent event) {
 
     }
 
@@ -52,6 +51,7 @@ public abstract class Power {
 
     }
 
+    // FIXME 1.21
     public void onTakeDamage(LivingHurtEvent event) {
 
     }

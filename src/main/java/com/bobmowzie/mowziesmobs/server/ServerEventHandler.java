@@ -35,9 +35,7 @@ import com.bobmowzie.mowziesmobs.server.potion.EffectHandler;
 import com.bobmowzie.mowziesmobs.server.power.Power;
 import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
 import com.bobmowzie.mowziesmobs.server.tag.TagHandler;
-import com.bobmowzie.mowziesmobs.server.world.feature.structure.MowzieStructure;
 import com.bobmowzie.mowziesmobs.server.world.feature.structure.StructureTypeHandler;
-import com.sk89q.worldedit.world.entity.EntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -48,7 +46,6 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -75,23 +72,21 @@ import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.EntityMountEvent;
-import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.player.*;
-import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.EntityMountEvent;
+import net.neoforged.neoforge.event.entity.living.*;
+import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
+import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,7 +103,7 @@ public final class ServerEventHandler {
         }
 
         if (event.getEntity() instanceof Player) {
-            PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability((Player) event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
+            PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
             if (playerCapability != null) playerCapability.addedToWorld(event);
         }
 
@@ -155,10 +150,8 @@ public final class ServerEventHandler {
     private static final AttributeModifier KNOCKBACK_MODIFIER_BELT = new AttributeModifier(KNOCKBACK_MODIFIER_BELT_UUID, "Geomancy Belt knockback resistance boost", 1D, AttributeModifier.Operation.ADDITION);
 
     @SubscribeEvent
-    public void onLivingTick(LivingEvent.LivingTickEvent event) {
-        if (event.getEntity() != null) {
-            LivingEntity entity = event.getEntity();
-
+    public void onLivingTick(EntityTickEvent event) { // FIXME 1.21 :: was 'LivingTickEvent' -> use 'Pre' or 'Post'?
+        if (event.getEntity() instanceof LivingEntity entity) {
             if (entity.getEffect(EffectHandler.POISON_RESIST.get()) != null && entity.getEffect(MobEffects.POISON) != null) {
                 entity.removeEffectNoUpdate(MobEffects.POISON);
             }
@@ -216,7 +209,7 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public void onAddPotionEffect(MobEffectEvent.Added event) {
-        if (event.getEffectInstance().getEffect() == EffectHandler.SUNBLOCK.get()) {
+        if (event.getEffectInstance().getEffect() == EffectHandler.SUNBLOCK.get()) { // FIXME 1.21
             if (!event.getEntity().level().isClientSide()) {
                 MowziesMobs.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageSunblockEffect(event.getEntity(), true));
             }
@@ -321,11 +314,8 @@ public final class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.START || event.player == null) {
-            return;
-        }
-        Player player = event.player;
+    public void onPlayerTick(PlayerTickEvent event) {
+        Player player = event.getEntity();
         PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
         if (playerCapability != null) {
             playerCapability.tick(event);
@@ -816,12 +806,12 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof LivingEntity) {
-            event.addCapability(new ResourceLocation(MowziesMobs.MODID, "frozen"), new FrozenCapability.FrozenProvider());
-            event.addCapability(new ResourceLocation(MowziesMobs.MODID, "last_damage"), new LivingCapability.LivingProvider());
-            event.addCapability(new ResourceLocation(MowziesMobs.MODID, "ability"), new AbilityCapability.AbilityProvider());
+            event.addCapability(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "frozen"), new FrozenCapability.FrozenProvider());
+            event.addCapability(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "last_damage"), new LivingCapability.LivingProvider());
+            event.addCapability(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "ability"), new AbilityCapability.AbilityProvider());
         }
         if (event.getObject() instanceof Player) {
-            event.addCapability(new ResourceLocation(MowziesMobs.MODID, "player"), new PlayerCapability.PlayerProvider());
+            event.addCapability(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "player"), new PlayerCapability.PlayerProvider());
         }
     }
 

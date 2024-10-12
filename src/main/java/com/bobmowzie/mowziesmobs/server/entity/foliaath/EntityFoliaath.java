@@ -106,8 +106,8 @@ public class EntityFoliaath extends MowzieLLibraryEntity implements Enemy {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        getEntityData().define(CAN_DESPAWN, true);
-        getEntityData().define(ACTIVATE_TARGET, 0);
+        getEntityData().set(CAN_DESPAWN, true);
+        getEntityData().set(ACTIVATE_TARGET, 0);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

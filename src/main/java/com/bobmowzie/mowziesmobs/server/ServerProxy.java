@@ -108,7 +108,7 @@ public class ServerProxy {
 
     public void initNetwork() {
         final String version = "1";
-        MowziesMobs.NETWORK = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(MowziesMobs.MODID, "net"))
+        MowziesMobs.NETWORK = NetworkRegistry.ChannelBuilder.named(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "net"))
                 .networkProtocolVersion(() -> version)
                 .clientAcceptedVersions(version::equals)
                 .serverAcceptedVersions(version::equals)

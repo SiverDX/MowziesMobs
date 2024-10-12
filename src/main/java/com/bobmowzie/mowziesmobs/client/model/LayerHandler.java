@@ -22,6 +22,6 @@ public class LayerHandler {
     }
 
     private static ModelLayerLocation register(String model, String layer) {
-        return new ModelLayerLocation(new ResourceLocation(MowziesMobs.MODID, model), layer);
+        return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, model), layer);
     }
 }

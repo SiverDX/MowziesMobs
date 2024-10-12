@@ -22,17 +22,17 @@ public class ModelUmvuthi extends MowzieGeoModel<EntityUmvuthi> {
 
     @Override
     public ResourceLocation getModelResource(EntityUmvuthi object) {
-        return new ResourceLocation(MowziesMobs.MODID, "geo/umvuthi.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/umvuthi.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(EntityUmvuthi object) {
-        return new ResourceLocation(MowziesMobs.MODID, "textures/entity/umvuthi.png");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/umvuthi.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(EntityUmvuthi object) {
-        return new ResourceLocation(MowziesMobs.MODID, "animations/umvuthi.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/umvuthi.animation.json");
     }
 
     @Override

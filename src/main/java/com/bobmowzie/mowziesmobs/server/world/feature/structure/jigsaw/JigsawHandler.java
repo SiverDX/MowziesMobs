@@ -18,6 +18,6 @@ public class JigsawHandler {
     }
 
     private static <P extends StructurePoolElement> StructurePoolElementType<P> register(String name, Codec<P> codec) {
-        return Registry.register(BuiltInRegistries.STRUCTURE_POOL_ELEMENT, new ResourceLocation(MowziesMobs.MODID, name), () -> codec);
+        return Registry.register(BuiltInRegistries.STRUCTURE_POOL_ELEMENT, ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, name), () -> codec);
     }
 }

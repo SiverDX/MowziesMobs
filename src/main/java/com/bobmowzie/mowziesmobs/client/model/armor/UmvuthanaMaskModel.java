@@ -10,17 +10,17 @@ public class UmvuthanaMaskModel extends GeoModel<ItemUmvuthanaMask> {
 
     @Override
     public ResourceLocation getModelResource(ItemUmvuthanaMask object) {
-        return new ResourceLocation(MowziesMobs.MODID, "geo/mask_" + object.getMaskType().name + ".geo.json");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/mask_" + object.getMaskType().name + ".geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(ItemUmvuthanaMask object) {
-        return new ResourceLocation(MowziesMobs.MODID, "textures/item/umvuthana_mask_" + object.getMaskType().name + ".png");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/item/umvuthana_mask_" + object.getMaskType().name + ".png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(ItemUmvuthanaMask animatable) {
-        return new ResourceLocation(MowziesMobs.MODID, "animations/umvuthana_mask.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/umvuthana_mask.animation.json");
     }
 
     @Override

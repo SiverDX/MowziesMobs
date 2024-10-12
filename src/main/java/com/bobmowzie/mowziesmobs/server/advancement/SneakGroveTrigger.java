@@ -11,7 +11,7 @@ import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerPlayer;
 
 public class SneakGroveTrigger extends MMTrigger<AbstractCriterionTriggerInstance, SneakGroveTrigger.Listener> {
-    public static final ResourceLocation ID = new ResourceLocation(MowziesMobs.MODID, "sneak_grove");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "sneak_grove");
 
     public SneakGroveTrigger() {
     }

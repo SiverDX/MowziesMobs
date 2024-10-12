@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 public class AbilityCapability {
-    public static ResourceLocation ID = new ResourceLocation(MowziesMobs.MODID, "ability_cap");
+    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "ability_cap");
 
     public interface IAbilityCapability extends INBTSerializable<CompoundTag> {
 

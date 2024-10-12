@@ -12,7 +12,7 @@ public class ModelPillar extends MowzieGeoModel<EntityPillar> {
 
     @Override
     public ResourceLocation getModelResource(EntityPillar object) {
-        return new ResourceLocation(MowziesMobs.MODID, "geo/geomancy_pillar.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/geomancy_pillar.geo.json");
     }
 
     @Override

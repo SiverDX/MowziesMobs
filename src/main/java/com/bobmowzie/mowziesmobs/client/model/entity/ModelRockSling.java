@@ -28,12 +28,12 @@ public class ModelRockSling extends GeoModel<EntityRockSling> {
 
     @Override
     public ResourceLocation getAnimationResource(EntityRockSling entity) {
-        return new ResourceLocation(MowziesMobs.MODID, "animations/rock_sling.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/rock_sling.animation.json");
     }
 
     @Override
     public ResourceLocation getModelResource(EntityRockSling entity) {
-        return new ResourceLocation(MowziesMobs.MODID, "geo/rock_sling.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/rock_sling.geo.json");
 
     }
 

@@ -9,6 +9,7 @@ classes/
 bin/
 eclipse/
 run/
+runs/
 run-server/
 .settings/
 .classpath

@@ -22,12 +22,12 @@ public class ModelGeckoPlayerFirstPerson extends MowzieGeoModel<GeckoPlayer> {
 	
 	@Override
 	public ResourceLocation getAnimationResource(GeckoPlayer animatable) {
-		return new ResourceLocation(MowziesMobs.MODID, "animations/animated_player_first_person.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/animated_player_first_person.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(GeckoPlayer animatable) {
-		return new ResourceLocation(MowziesMobs.MODID, "geo/animated_player_first_person.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/animated_player_first_person.geo.json");
 	}
 
 	@Override

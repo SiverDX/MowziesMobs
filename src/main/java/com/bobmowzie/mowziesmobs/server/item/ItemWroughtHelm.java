@@ -17,7 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -64,7 +64,7 @@ public class ItemWroughtHelm extends MowzieArmorItem {
     @Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return new ResourceLocation(MowziesMobs.MODID, "textures/item/wrought_helmet.png").toString();
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/item/wrought_helmet.png").toString();
     }
 
     @Override
@@ -78,6 +78,7 @@ public class ItemWroughtHelm extends MowzieArmorItem {
         return ConfigHandler.COMMON.TOOLS_AND_ABILITIES.WROUGHT_HELM.armorConfig;
     }
 
+    // FIXME 1.21
     private static class WroughtHelmMaterial implements ArmorMaterial {
 
         @Override

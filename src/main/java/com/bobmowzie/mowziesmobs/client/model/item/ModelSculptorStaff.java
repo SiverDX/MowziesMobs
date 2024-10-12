@@ -9,16 +9,16 @@ public class ModelSculptorStaff extends GeoModel<ItemSculptorStaff> {
 
     @Override
     public ResourceLocation getModelResource(ItemSculptorStaff object) {
-        return new ResourceLocation(MowziesMobs.MODID, "geo/sculptor_staff.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/sculptor_staff.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(ItemSculptorStaff object) {
-        return new ResourceLocation(MowziesMobs.MODID, "textures/item/sculptor_staff.png");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/item/sculptor_staff.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(ItemSculptorStaff animatable) {
-        return new ResourceLocation(MowziesMobs.MODID, "animations/sculptor.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/sculptor.animation.json");
     }
 }

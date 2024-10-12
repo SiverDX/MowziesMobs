@@ -29,8 +29,8 @@ import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
 
 public final class GuiUmvuthiTrade extends AbstractContainerScreen<ContainerUmvuthiTrade> implements InventoryUmvuthi.ChangeListener {
-    private static final ResourceLocation TEXTURE_TRADE = new ResourceLocation(MowziesMobs.MODID, "textures/gui/container/umvuthi_trade.png");
-    private static final ResourceLocation TEXTURE_REPLENISH = new ResourceLocation(MowziesMobs.MODID, "textures/gui/container/umvuthi_replenish.png");
+    private static final ResourceLocation TEXTURE_TRADE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/gui/container/umvuthi_trade.png");
+    private static final ResourceLocation TEXTURE_REPLENISH = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/gui/container/umvuthi_replenish.png");
 
     private final EntityUmvuthi umvuthi;
     private final Player player;

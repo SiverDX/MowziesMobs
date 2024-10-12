@@ -16,7 +16,7 @@ public class EffectGeomancy extends MowzieEffect {
     public static boolean isBlockUseable(BlockState blockState) {
         if (blockState.is(TagHandler.GEOMANCY_USEABLE)) return true;
 
-        ICopiedBlockProperties properties = (ICopiedBlockProperties) blockState.getBlock().properties;
+        ICopiedBlockProperties properties = (ICopiedBlockProperties) blockState.getBlock().properties();
         Block baseBlock = properties.getBaseBlock();
         if (baseBlock != null) {
             return baseBlock.defaultBlockState().is(TagHandler.GEOMANCY_USEABLE);

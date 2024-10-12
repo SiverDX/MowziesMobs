@@ -10,17 +10,17 @@ public class SolVisageModel extends GeoModel<ItemSolVisage> {
 
 	@Override
 	public ResourceLocation getModelResource(ItemSolVisage object) {
-		return new ResourceLocation(MowziesMobs.MODID, "geo/sol_visage.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/sol_visage.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(ItemSolVisage object) {
-		return new ResourceLocation(MowziesMobs.MODID, "textures/entity/umvuthi.png");
+		return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/umvuthi.png");
 	}
 
 	@Override
 	public ResourceLocation getAnimationResource(ItemSolVisage animatable) {
-		return new ResourceLocation(MowziesMobs.MODID, "animations/sol_visage.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/sol_visage.animation.json");
 	}
 
 	@Override

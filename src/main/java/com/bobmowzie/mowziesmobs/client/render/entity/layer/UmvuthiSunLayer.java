@@ -153,7 +153,7 @@ public class UmvuthiSunLayer extends GeoRenderLayer<EntityUmvuthi> {
             if (bone.getName().equals("sun_render")) {
                 poseStack.translate(0.06d, 0d, -0.0d);
                 poseStack.scale(0.06f, 0.06f, 0.06f);
-                VertexConsumer ivertexbuilder = bufferSource.getBuffer(RenderType.entityTranslucent(new ResourceLocation(MowziesMobs.MODID, "textures/effects/sun_effect.png"), true));
+                VertexConsumer ivertexbuilder = bufferSource.getBuffer(RenderType.entityTranslucent(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/effects/sun_effect.png"), true));
                 PoseStack.Pose matrixstack$entry = poseStack.last();
                 Matrix4f matrix4f = matrixstack$entry.pose();
                 Matrix3f matrix3f = matrixstack$entry.normal();

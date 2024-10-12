@@ -44,20 +44,17 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-@OnlyIn(Dist.CLIENT)
 public enum ClientEventHandler {
     INSTANCE;
 
-    private static final ResourceLocation FROZEN_BLUR = new ResourceLocation("textures/misc/powder_snow_outline.png");
+    private static final ResourceLocation FROZEN_BLUR = ResourceLocation.withDefaultNamespace("textures/misc/powder_snow_outline.png");
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onHandRender(RenderHandEvent event) {
@@ -124,13 +121,10 @@ public enum ClientEventHandler {
     }
 
     @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.START || event.player == null) {
-            return;
-        }
-        Player player = event.player;
+    public void onPlayerTick(PlayerTickEvent event) {
+        Player player = event.getEntity();
         PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
-        if (playerCapability != null && event.side == LogicalSide.CLIENT) {
+        if (playerCapability != null && player.level().isClientSide()) {
             GeckoPlayer geckoPlayer = playerCapability.getGeckoPlayer();
             if (geckoPlayer != null) geckoPlayer.tick();
             if (player == Minecraft.getInstance().player) GeckoFirstPersonRenderer.GECKO_PLAYER_FIRST_PERSON.tick();
@@ -154,7 +148,7 @@ public enum ClientEventHandler {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent // FIXME 1.21
     public void onRenderTick(TickEvent.RenderTickEvent event) {
         Player player = Minecraft.getInstance().player;
 //        if (player != null) {
@@ -184,7 +178,7 @@ public enum ClientEventHandler {
     }
 
     @SubscribeEvent
-    public void onRenderLiving(RenderLivingEvent.Pre event) {
+    public void onRenderLiving(RenderLivingEvent.Pre<?, ?> event) {
         LivingEntity entity = event.getEntity();
         FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
         if (frozenCapability != null && frozenCapability.getFrozen() && frozenCapability.getPrevFrozen()) {
@@ -194,12 +188,12 @@ public enum ClientEventHandler {
             entity.yBodyRot = entity.yBodyRotO = frozenCapability.getFrozenRenderYawOffset();
             entity.attackAnim = entity.oAttackAnim = frozenCapability.getFrozenSwingProgress();
             entity.walkAnimation.setSpeed(frozenCapability.getFrozenWalkAnimSpeed());
-            entity.walkAnimation.position = frozenCapability.getFrozenWalkAnimPosition();
+            entity.walkAnimation.position(frozenCapability.getFrozenWalkAnimPosition());
             entity.setShiftKeyDown(false);
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent // FIXME 1.21
     public void onRenderOverlay(RenderGuiOverlayEvent.Post e) {
         final int startTime = 210;
         final int pointStart = 1200;
@@ -216,7 +210,7 @@ public enum ClientEventHandler {
     }
 
     // Remove frozen overlay
-    @SubscribeEvent
+    @SubscribeEvent // FIXME 1.21
     public void onRenderHUD(RenderGuiOverlayEvent.Pre event) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null && player.isPassenger()) {
@@ -278,7 +272,7 @@ public enum ClientEventHandler {
         customBossBar.renderBossBar(event);
     }
 
-    private static ResourceLocation SCULPTOR_BLOCK_GLOW = new ResourceLocation(MowziesMobs.MODID, "textures/entity/sculptor_highlight.png");
+    private static ResourceLocation SCULPTOR_BLOCK_GLOW = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/sculptor_highlight.png");
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onRenderLevelStage(RenderLevelStageEvent event) {
@@ -299,8 +293,8 @@ public enum ClientEventHandler {
                     float f = (float) Minecraft.getInstance().player.tickCount + Minecraft.getInstance().getPartialTick();
                     float blockOffset = (blockpos2.getX() + blockpos2.getY() + blockpos2.getZ()) * 0.25f;
                     VertexConsumer vertexconsumer1 = new SheetedDecalTextureGenerator(Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(MMRenderType.highlight(SCULPTOR_BLOCK_GLOW, f * 0.02f + blockOffset, f * 0.01f + blockOffset)), posestack$pose1.pose(), posestack$pose1.normal(), 0.25F);
-                    net.minecraftforge.client.model.data.ModelData modelData = level.getModelDataManager().getAt(blockpos2);
-                    renderBreakingTexture(level.getBlockState(blockpos2), blockpos2, level, event.getPoseStack(), level.random, vertexconsumer1, modelData == null ? net.minecraftforge.client.model.data.ModelData.EMPTY : modelData);
+                    ModelData modelData = level.getModelDataManager().getAt(blockpos2);
+                    renderBreakingTexture(level.getBlockState(blockpos2), blockpos2, level, event.getPoseStack(), level.random, vertexconsumer1, modelData == null ? ModelData.EMPTY : modelData);
 
                     event.getPoseStack().popPose();
                 }
@@ -308,7 +302,7 @@ public enum ClientEventHandler {
         }
     }
 
-    private void renderBreakingTexture(BlockState state, BlockPos pos, BlockAndTintGetter blockAndTintGetter, PoseStack poseStack, RandomSource random, VertexConsumer vertexConsumer, net.minecraftforge.client.model.data.ModelData modelData) {
+    private void renderBreakingTexture(BlockState state, BlockPos pos, BlockAndTintGetter blockAndTintGetter, PoseStack poseStack, RandomSource random, VertexConsumer vertexConsumer, ModelData modelData) {
         if (state.getRenderShape() == RenderShape.MODEL) {
             BlockRenderDispatcher blockRenderDispatcher = Minecraft.getInstance().getBlockRenderer();
             BakedModel bakedmodel = blockRenderDispatcher.getBlockModel(state);
@@ -318,8 +312,8 @@ public enum ClientEventHandler {
     }
 
     @SubscribeEvent
-    public void onLevelTick(TickEvent.LevelTickEvent event) {
-        if (event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END) {
+    public void onLevelTick(LevelTickEvent event) {
+        if (event.getLevel().isClientSide()) {
             MowziesMobs.PROXY.updateMarkedBlocks();
             BossMusicPlayer.tick();
         }

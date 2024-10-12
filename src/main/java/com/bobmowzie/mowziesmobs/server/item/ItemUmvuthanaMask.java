@@ -150,7 +150,7 @@ public class ItemUmvuthanaMask extends MowzieArmorItem implements UmvuthanaMask,
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         String s = ChatFormatting.stripFormatting(stack.getHoverName().getString());
-        return new ResourceLocation(MowziesMobs.MODID, "textures/item/umvuthana_mask_" + this.type.name + ".png").toString();
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/item/umvuthana_mask_" + this.type.name + ".png").toString();
     }
 
     @Override

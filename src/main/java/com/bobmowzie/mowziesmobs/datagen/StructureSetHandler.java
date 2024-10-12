@@ -25,7 +25,7 @@ public class StructureSetHandler {
     public static ResourceKey<StructureSet> MONASTERIES = createSetKey("monasteries");
 
     private static ResourceKey<StructureSet> createSetKey(String name) {
-        return ResourceKey.create(Registries.STRUCTURE_SET, new ResourceLocation(MowziesMobs.MODID, name));
+        return ResourceKey.create(Registries.STRUCTURE_SET, ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, name));
     }
 
     public static void bootstrap(BootstapContext<StructureSet> context) {

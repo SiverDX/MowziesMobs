@@ -10,18 +10,18 @@ import com.bobmowzie.mowziesmobs.server.block.entity.BlockEntityHandler;
 import com.bobmowzie.mowziesmobs.server.entity.EntityHandler;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.MaskType;
 import com.bobmowzie.mowziesmobs.server.inventory.ContainerHandler;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
-@Mod.EventBusSubscriber(modid = MowziesMobs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEventBusSubscriber {
 
     @SubscribeEvent
@@ -64,20 +64,23 @@ public class ClientEventBusSubscriber {
 
         BlockEntityRenderers.register(BlockEntityHandler.GONG_BLOCK_ENTITY.get(), GongRenderer::new);
         EntityRenderers.register(EntityHandler.ROCK_SLING.get(), RenderRockSling::new);
+    }
 
-        MenuScreens.register(ContainerHandler.CONTAINER_UMVUTHANA_TRADE.get(), GuiUmvuthanaTrade::new);
-        MenuScreens.register(ContainerHandler.CONTAINER_UMVUTHI_TRADE.get(), GuiUmvuthiTrade::new);
-        MenuScreens.register(ContainerHandler.CONTAINER_SCULPTOR_TRADE.get(), GuiSculptorTrade::new);
+    @SubscribeEvent
+    public static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
+        event.register(ContainerHandler.CONTAINER_UMVUTHANA_TRADE.get(), GuiUmvuthanaTrade::new);
+        event.register(ContainerHandler.CONTAINER_UMVUTHI_TRADE.get(), GuiUmvuthiTrade::new);
+        event.register(ContainerHandler.CONTAINER_SCULPTOR_TRADE.get(), GuiSculptorTrade::new);
     }
 
     @SubscribeEvent
     public static void onRegisterModels(ModelEvent.RegisterAdditional modelRegistryEvent) {
         for (String item : MMModels.HAND_MODEL_ITEMS) {
-        	modelRegistryEvent.register(new ModelResourceLocation(new ResourceLocation(MowziesMobs.MODID, item + "_in_hand"), "inventory"));
+        	modelRegistryEvent.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, item + "_in_hand"), "inventory"));
         }
         for (MaskType type : MaskType.values()) {
-        	modelRegistryEvent.register(new ModelResourceLocation(new ResourceLocation(MowziesMobs.MODID,"umvuthana_mask_" + type.name + "_frame"), "inventory"));
+        	modelRegistryEvent.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID,"umvuthana_mask_" + type.name + "_frame"), "inventory"));
         }
-        modelRegistryEvent.register(new ModelResourceLocation(new ResourceLocation(MowziesMobs.MODID, "sol_visage_frame"), "inventory"));
+        modelRegistryEvent.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "sol_visage_frame"), "inventory"));
     }
 }

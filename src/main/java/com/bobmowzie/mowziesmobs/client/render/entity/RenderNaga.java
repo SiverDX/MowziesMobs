@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderNaga extends MobRenderer<EntityNaga, ModelNaga<EntityNaga>> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(MowziesMobs.MODID, "textures/entity/naga.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/naga.png");
 
     public RenderNaga(EntityRendererProvider.Context mgr) {
         super(mgr, new ModelNaga<>(), 0);

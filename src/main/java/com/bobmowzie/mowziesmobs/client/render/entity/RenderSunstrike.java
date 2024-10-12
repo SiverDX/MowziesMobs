@@ -27,7 +27,7 @@ import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderSunstrike extends EntityRenderer<EntitySunstrike> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(MowziesMobs.MODID, "textures/effects/sunstrike.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/effects/sunstrike.png");
     private static final Random RANDOMIZER = new Random(0);
     private static final float TEXTURE_WIDTH = 256;
     private static final float TEXTURE_HEIGHT = 32;

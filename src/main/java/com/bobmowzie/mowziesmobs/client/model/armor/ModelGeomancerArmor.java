@@ -2,32 +2,30 @@ package com.bobmowzie.mowziesmobs.client.model.armor;
 
 import com.bobmowzie.mowziesmobs.MowziesMobs;
 import com.bobmowzie.mowziesmobs.server.item.ItemGeomancerArmor;
-import com.mojang.math.Axis;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
 
 public class ModelGeomancerArmor extends GeoModel<ItemGeomancerArmor> {
     @Override
     public ResourceLocation getModelResource(ItemGeomancerArmor object) {
-        return new ResourceLocation(MowziesMobs.MODID, "geo/geomancer_armor.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/geomancer_armor.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(ItemGeomancerArmor object) {
-        return new ResourceLocation(MowziesMobs.MODID, "textures/item/geomancer_armor.png");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/item/geomancer_armor.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(ItemGeomancerArmor animatable) {
-        return new ResourceLocation(MowziesMobs.MODID, "animations/empty.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/empty.animation.json");
     }
 
     @Override

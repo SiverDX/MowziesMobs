@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class GongRenderer implements BlockEntityRenderer<GongBlockEntity> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(MowziesMobs.MODID, "textures/block/gong.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/block/gong.png");
     private final ModelPart gongBase;
     private final ModelPart chain;
 

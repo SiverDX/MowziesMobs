@@ -25,8 +25,8 @@ import org.joml.Vector3d;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderUmvuthi extends MowzieGeoEntityRenderer<EntityUmvuthi> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(MowziesMobs.MODID, "textures/entity/umvuthi.png");
-    public static final ResourceLocation SUN = new ResourceLocation(MowziesMobs.MODID, "textures/effects/sun_effect.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/umvuthi.png");
+    public static final ResourceLocation SUN = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/effects/sun_effect.png");
 
     public static final float BURST_RADIUS = 3.5f;
     public static final int BURST_FRAME_COUNT = 10;
@@ -70,7 +70,7 @@ public class RenderUmvuthi extends MowzieGeoEntityRenderer<EntityUmvuthi> {
         }
 
 //        matrixStackIn.pushPose();
-//        VertexConsumer ivertexbuilder = bufferIn.getBuffer(MMRenderType.getSolarFlare( new ResourceLocation(MowziesMobs.MODID, "textures/effects/super_nova_8.png")));
+//        VertexConsumer ivertexbuilder = bufferIn.getBuffer(MMRenderType.getSolarFlare( ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/effects/super_nova_8.png")));
 //        PoseStack.Pose matrixstack$entry = matrixStackIn.last();
 //        matrixStackIn.scale(1.2f,1.2f,1.2f);
 //        Matrix4f matrix4f = matrixstack$entry.pose();

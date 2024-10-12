@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class FrostmawPieces {
 
-    private static final ResourceLocation FROSTMAW = new ResourceLocation(MowziesMobs.MODID, "frostmaw_spawn");
+    private static final ResourceLocation FROSTMAW = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "frostmaw_spawn");
 
     private static final Map<ResourceLocation, BlockPos> OFFSET = ImmutableMap.of(
             FROSTMAW, new BlockPos(0, 1, 0)

@@ -188,6 +188,9 @@
   "_comment": "Death Messages",
   "death.attack.dart": "%1$s was shot by %2$s",
 
+  "_comment": "Sounds",
+  "jukebox_song.mowziesmobs.14": "LudoCrypt - Petiole",
+
   "_comment": "Config",
   "config.mowziesmobs.mobs": "Mobs",
   "config.mowziesmobs.mobs.tooltip": "Controls for all of Mowzie's Mobs mobs",

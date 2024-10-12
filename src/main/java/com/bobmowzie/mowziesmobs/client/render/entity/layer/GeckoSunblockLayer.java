@@ -17,7 +17,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class GeckoSunblockLayer<T extends LivingEntity & GeoEntity> extends GeoRenderLayer<T> {
-    private static final ResourceLocation SUNBLOCK_ARMOR = new ResourceLocation(MowziesMobs.MODID, "textures/entity/sunblock_glow.png");
+    private static final ResourceLocation SUNBLOCK_ARMOR = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/sunblock_glow.png");
 
     public GeckoSunblockLayer(GeoRenderer<T> entityRendererIn, EntityRendererProvider.Context context) {
         super(entityRendererIn);

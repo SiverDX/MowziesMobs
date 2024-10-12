@@ -17,8 +17,8 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.common.util.TriPredicate;
-import net.minecraftforge.common.world.ModifiableBiomeInfo;
+import net.neoforged.neoforge.common.util.TriPredicate;
+import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
 
 import java.util.HashMap;
 import java.util.Map;

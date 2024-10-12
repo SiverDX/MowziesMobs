@@ -2,11 +2,10 @@ package com.bobmowzie.mowziesmobs.server.world.feature.structure;
 
 import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
 import com.bobmowzie.mowziesmobs.server.tag.TagHandler;
-import com.bobmowzie.mowziesmobs.datagen.StructureSetHandler;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -18,7 +17,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilde
 import java.util.HashMap;
 
 public class FrostmawStructure extends MowzieStructure {
-	public static final Codec<FrostmawStructure> CODEC = simpleCodec(FrostmawStructure::new);
+	public static final MapCodec<FrostmawStructure> CODEC = simpleCodec(FrostmawStructure::new);
 	
     public FrostmawStructure(Structure.StructureSettings settings) {
         super(settings, ConfigHandler.COMMON.MOBS.FROSTMAW.generationConfig, StructureTypeHandler.FROSTMAW_BIOMES);
@@ -39,7 +38,8 @@ public class FrostmawStructure extends MowzieStructure {
 		return StructureTypeHandler.FROSTMAW.get();
 	}
 
-    public static FrostmawStructure buildStructureConfig(BootstapContext<Structure> context) {
+    // FIXME 1.21 :: unused?
+    public static FrostmawStructure buildStructureConfig(BootstrapContext<Structure> context) {
         return new FrostmawStructure(
                 new Structure.StructureSettings(
                         context.lookup(Registries.BIOME).getOrThrow(TagHandler.HAS_MOWZIE_STRUCTURE),

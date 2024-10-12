@@ -63,7 +63,7 @@ public class BiomeChecker {
                 }
                 inverted[i] = typeStrings[i].charAt(0) == '!';
                 String name = typeStrings[i].replace("!", "");
-                neededTags[i] = new ResourceLocation(name);
+                neededTags[i] = ResourceLocation.tryParse(name);
             }
         }
 

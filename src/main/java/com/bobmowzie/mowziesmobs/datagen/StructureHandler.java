@@ -27,7 +27,7 @@ public class StructureHandler {
     public static final ResourceKey<Structure> MONASTERY = createStructureKey("monastery");
 
     private static ResourceKey<Structure> createStructureKey(String name) {
-        return ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(MowziesMobs.MODID, name));
+        return ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, name));
     }
 
     public static void bootstrap(BootstapContext<Structure> context) {

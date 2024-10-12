@@ -32,7 +32,7 @@ import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public class FrozenCapability {
-    public static ResourceLocation ID = new ResourceLocation(MowziesMobs.MODID, "frozen_cap");
+    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "frozen_cap");
 
     public static int MAX_FREEZE_DECAY_DELAY = 10;
 

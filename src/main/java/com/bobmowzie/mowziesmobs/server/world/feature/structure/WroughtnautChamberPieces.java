@@ -18,7 +18,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class WroughtnautChamberPieces {
 
-    private static final ResourceLocation PART = new ResourceLocation(MowziesMobs.MODID, "wroughtnaut_chamber");
+    private static final ResourceLocation PART = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "wroughtnaut_chamber");
 
     public static void start(StructureTemplateManager manager, BlockPos pos, Rotation rot, StructurePieceAccessor pieces) {
         pieces.addPiece(new WroughtnautChamberPieces.Piece(manager, PART, pos, rot));

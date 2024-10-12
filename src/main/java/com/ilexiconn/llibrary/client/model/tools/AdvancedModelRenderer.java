@@ -18,6 +18,7 @@ import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import software.bernie.geckolib.util.Color;
 
 /**
  * An enhanced ModelRenderer
@@ -444,7 +445,6 @@ public class AdvancedModelRenderer extends BasicModelRenderer {
         rotationPointZ = vec.z() * 16;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public abstract static class ModelPart {
         public void render(Matrix4f mat4, Matrix3f mat3, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 
@@ -452,7 +452,6 @@ public class AdvancedModelRenderer extends BasicModelRenderer {
     }
 
     // From parent class. Copied to avoid using reflection to access private data
-    @OnlyIn(Dist.CLIENT)
     public static class ModelBox extends ModelPart {
         protected final AdvancedModelRenderer.TexturedQuad[] quads;
         public final float posX1;
@@ -526,13 +525,12 @@ public class AdvancedModelRenderer extends BasicModelRenderer {
                     float f5 = modelrenderer$positiontexturevertex.position.z() / 16.0F;
                     Vector4f vector4f = new Vector4f(f3, f4, f5, 1.0F);
                     vector4f.mul(matrix4f);
-                    bufferIn.vertex(vector4f.x(), vector4f.y(), vector4f.z(), red, green, blue, alpha, modelrenderer$positiontexturevertex.textureU, modelrenderer$positiontexturevertex.textureV, packedOverlayIn, packedLightIn, f, f1, f2);
+                    bufferIn.addVertex(vector4f.x(), vector4f.y(), vector4f.z(), Color.ofARGB(alpha, red, green, blue).getColor(), modelrenderer$positiontexturevertex.textureU, modelrenderer$positiontexturevertex.textureV, packedOverlayIn, packedLightIn, f, f1, f2);
                 }
             }
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     static class PositionTextureVertex {
         public final Vector3f position;
         public final float textureU;
@@ -553,7 +551,6 @@ public class AdvancedModelRenderer extends BasicModelRenderer {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     static class TexturedQuad {
         public final AdvancedModelRenderer.PositionTextureVertex[] vertexPositions;
         public final Vector3f normal;

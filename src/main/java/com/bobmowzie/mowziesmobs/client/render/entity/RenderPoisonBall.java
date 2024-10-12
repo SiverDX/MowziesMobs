@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
 public class RenderPoisonBall extends EntityRenderer<EntityPoisonBall> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(MowziesMobs.MODID, "textures/effects/poison_ball.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/effects/poison_ball.png");
     public ModelPoisonBall model;
 
     public RenderPoisonBall(EntityRendererProvider.Context mgr) {

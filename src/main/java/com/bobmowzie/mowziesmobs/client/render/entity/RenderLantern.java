@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
  * Created by BobMowzie on 5/8/2017.
  */
 public class RenderLantern extends MobRenderer<EntityLantern, ModelLantern<EntityLantern>> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(MowziesMobs.MODID, "textures/entity/mmlantern.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/mmlantern.png");
 
     public RenderLantern(EntityRendererProvider.Context mgr) {
         super(mgr, new ModelLantern<>(), 0.6f);

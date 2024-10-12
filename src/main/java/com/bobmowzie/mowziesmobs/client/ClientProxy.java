@@ -10,9 +10,6 @@ import com.bobmowzie.mowziesmobs.server.entity.effects.EntitySolarBeam;
 import com.bobmowzie.mowziesmobs.server.entity.effects.EntitySunstrike;
 import com.bobmowzie.mowziesmobs.server.entity.naga.EntityNaga;
 import com.bobmowzie.mowziesmobs.server.item.ItemHandler;
-import com.google.common.collect.Sets;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
@@ -20,27 +17,19 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.TerrainParticle;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
-import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.BlockDestructionProgress;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.*;
 
-@OnlyIn(Dist.CLIENT)
 public class ClientProxy extends ServerProxy {
     private static final List<SunblockSound> sunblockSounds = new ArrayList<>();
     public static final Map<UUID, ResourceLocation> bossBarRegistryNames = new HashMap<>();
@@ -49,18 +38,18 @@ public class ClientProxy extends ServerProxy {
 
     private Entity referencedMob = null;
 
-    @Override
+    @Override // FIXME 1.21 :: use client and server specific entry points
     public void init(final IEventBus modbus) {
         super.init(modbus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigHandler.CLIENT_CONFIG);
 
         modbus.register(MMModels.class);
-        MinecraftForge.EVENT_BUS.register(ClientEventHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(FrozenRenderHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(AbilityClientEventHandler.INSTANCE);
+        NeoForge.EVENT_BUS.register(ClientEventHandler.INSTANCE);
+        NeoForge.EVENT_BUS.register(FrozenRenderHandler.INSTANCE);
+        NeoForge.EVENT_BUS.register(AbilityClientEventHandler.INSTANCE);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientLayerRegistry::onAddLayers);
+        modbus.addListener(ClientLayerRegistry::onAddLayers);
     }
 
     @Override

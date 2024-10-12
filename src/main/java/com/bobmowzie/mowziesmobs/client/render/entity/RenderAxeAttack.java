@@ -23,7 +23,7 @@ import org.joml.Vector3f;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderAxeAttack extends EntityRenderer<EntityAxeAttack> {
-    public static ResourceLocation TEXTURE = new ResourceLocation(MowziesMobs.MODID, "textures/entity/wroughtnaut.png");
+    public static ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/wroughtnaut.png");
 
     ModelAxeAttack model;
 
