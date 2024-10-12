@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.gui;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthanaMinion;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.trade.Trade;
 import com.bobmowzie.mowziesmobs.server.inventory.ContainerUmvuthanaTrade;
@@ -16,7 +16,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
 public final class GuiUmvuthanaTrade extends AbstractContainerScreen<ContainerUmvuthanaTrade> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/gui/container/umvuthana.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/gui/container/umvuthana.png");
 
     private final EntityUmvuthanaMinion umvuthana;
 

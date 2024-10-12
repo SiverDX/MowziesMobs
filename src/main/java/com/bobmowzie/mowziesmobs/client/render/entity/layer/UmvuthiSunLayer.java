@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.render.entity.layer;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthi;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -14,12 +14,9 @@ import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import software.bernie.geckolib.util.RenderUtils;
-
-import java.util.Optional;
 
 public class UmvuthiSunLayer extends GeoRenderLayer<EntityUmvuthi> {
     protected Matrix4f dispatchedMat = new Matrix4f();
@@ -153,7 +150,7 @@ public class UmvuthiSunLayer extends GeoRenderLayer<EntityUmvuthi> {
             if (bone.getName().equals("sun_render")) {
                 poseStack.translate(0.06d, 0d, -0.0d);
                 poseStack.scale(0.06f, 0.06f, 0.06f);
-                VertexConsumer ivertexbuilder = bufferSource.getBuffer(RenderType.entityTranslucent(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/effects/sun_effect.png"), true));
+                VertexConsumer ivertexbuilder = bufferSource.getBuffer(RenderType.entityTranslucent(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/effects/sun_effect.png"), true));
                 PoseStack.Pose matrixstack$entry = poseStack.last();
                 Matrix4f matrix4f = matrixstack$entry.pose();
                 Matrix3f matrix3f = matrixstack$entry.normal();

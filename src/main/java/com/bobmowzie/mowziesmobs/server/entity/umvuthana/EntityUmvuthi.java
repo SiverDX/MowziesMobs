@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.entity.umvuthana;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.tools.ControlledAnimation;
 import com.bobmowzie.mowziesmobs.client.model.tools.MathUtils;
 import com.bobmowzie.mowziesmobs.client.model.tools.geckolib.MowzieAnimationController;
@@ -831,7 +831,7 @@ public class EntityUmvuthi extends MowzieGeckoEntity implements LeaderSunstrikeI
 
     public void openGUI(Player playerEntity) {
         setCustomer(playerEntity);
-        MowziesMobs.PROXY.setReferencedMob(this);
+        MMCommon.PROXY.setReferencedMob(this);
         if (!this.level().isClientSide && getTarget() == null && isAlive()) {
             playerEntity.openMenu(new MenuProvider() {
                 @Override

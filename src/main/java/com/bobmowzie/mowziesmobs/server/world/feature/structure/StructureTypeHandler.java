@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.world.feature.structure;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
 import com.bobmowzie.mowziesmobs.server.world.BiomeChecker;
 import net.minecraft.core.Holder;
@@ -17,8 +17,8 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 public class StructureTypeHandler {
-    public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPE_REG = DeferredRegister.create(Registries.STRUCTURE_TYPE, MowziesMobs.MODID);
-    public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE_TYPE_REG = DeferredRegister.create(Registries.STRUCTURE_PIECE, MowziesMobs.MODID);
+    public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPE_REG = DeferredRegister.create(Registries.STRUCTURE_TYPE, MMCommon.MODID);
+    public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE_TYPE_REG = DeferredRegister.create(Registries.STRUCTURE_PIECE, MMCommon.MODID);
 
     public static DeferredHolder<StructureType<?>, StructureType<WroughtnautChamberStructure>> WROUGHTNAUT_CHAMBER = registerStructureType("wrought_chamber", () -> () -> WroughtnautChamberStructure.CODEC);
     public static DeferredHolder<StructurePieceType, StructurePieceType> WROUGHTNAUT_CHAMBER_PIECE = registerStructurePieceType("wrought_chamber_template", WroughtnautChamberPieces.Piece::new);

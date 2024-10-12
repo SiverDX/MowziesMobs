@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.render.entity;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.entity.ModelWroughtnaut;
 import com.bobmowzie.mowziesmobs.client.render.entity.layer.ItemLayer;
 import com.bobmowzie.mowziesmobs.client.render.entity.layer.WroughtnautEyesLayer;
@@ -23,7 +23,7 @@ import org.joml.Matrix4f;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderWroughtnaut extends MobRenderer<EntityWroughtnaut, ModelWroughtnaut<EntityWroughtnaut>> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/wroughtnaut.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/entity/wroughtnaut.png");
 
     public RenderWroughtnaut(EntityRendererProvider.Context mgr) {
         super(mgr, new ModelWroughtnaut<>(), 1.0F);

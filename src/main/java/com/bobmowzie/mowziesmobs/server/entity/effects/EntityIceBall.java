@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.entity.effects;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleCloud;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleHandler;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleRing;
@@ -43,7 +43,7 @@ public class EntityIceBall extends EntityMagicEffect {
 
         if (tickCount == 1) {
             if (level().isClientSide) {
-                MowziesMobs.PROXY.playIceBreathSound(this);
+                MMCommon.PROXY.playIceBreathSound(this);
             }
         }
 

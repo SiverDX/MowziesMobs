@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.model.entity;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.tools.geckolib.MowzieGeoBone;
 import com.bobmowzie.mowziesmobs.client.model.tools.geckolib.MowzieGeoModel;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthi;
@@ -22,17 +22,17 @@ public class ModelUmvuthi extends MowzieGeoModel<EntityUmvuthi> {
 
     @Override
     public ResourceLocation getModelResource(EntityUmvuthi object) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/umvuthi.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "geo/umvuthi.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(EntityUmvuthi object) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/umvuthi.png");
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/entity/umvuthi.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(EntityUmvuthi object) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/umvuthi.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "animations/umvuthi.animation.json");
     }
 
     @Override

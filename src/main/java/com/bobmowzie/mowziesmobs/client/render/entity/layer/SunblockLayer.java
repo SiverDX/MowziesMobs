@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.render.entity.layer;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.capability.CapabilityHandler;
 import com.bobmowzie.mowziesmobs.server.capability.LivingCapability;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
 public class SunblockLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T,M> {
-    private static final ResourceLocation SUNBLOCK_ARMOR = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/sunblock_glow.png");
+    private static final ResourceLocation SUNBLOCK_ARMOR = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/entity/sunblock_glow.png");
 
     public SunblockLayer(RenderLayerParent<T, M> entityRendererIn) {
         super(entityRendererIn);

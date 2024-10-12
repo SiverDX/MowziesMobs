@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.model.entity;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.tools.geckolib.MowzieGeoBone;
 import com.bobmowzie.mowziesmobs.client.model.tools.geckolib.MowzieGeoModel;
 import com.bobmowzie.mowziesmobs.client.render.entity.player.GeckoPlayer;
@@ -22,12 +22,12 @@ public class ModelGeckoPlayerFirstPerson extends MowzieGeoModel<GeckoPlayer> {
 	
 	@Override
 	public ResourceLocation getAnimationResource(GeckoPlayer animatable) {
-		return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/animated_player_first_person.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "animations/animated_player_first_person.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(GeckoPlayer animatable) {
-		return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/animated_player_first_person.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "geo/animated_player_first_person.geo.json");
 	}
 
 	@Override

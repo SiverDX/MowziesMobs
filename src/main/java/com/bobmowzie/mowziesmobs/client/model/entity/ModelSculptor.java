@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.model.entity;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.tools.RigUtils;
 import com.bobmowzie.mowziesmobs.client.model.tools.dynamics.GeckoDynamicChain;
 import com.bobmowzie.mowziesmobs.client.model.tools.geckolib.MowzieGeoBone;
@@ -36,17 +36,17 @@ public class ModelSculptor extends MowzieGeoModel<EntitySculptor> {
 
     @Override
     public ResourceLocation getModelResource(EntitySculptor object) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/sculptor.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "geo/sculptor.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(EntitySculptor object) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/sculptor.png");
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/entity/sculptor.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(EntitySculptor object) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/sculptor.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "animations/sculptor.animation.json");
     }
 
     @Override

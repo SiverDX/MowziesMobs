@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleHandler;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleVanillaCloudExtended;
 import com.bobmowzie.mowziesmobs.client.particle.util.AdvancedParticleBase;
@@ -211,13 +211,13 @@ public final class ServerEventHandler {
     public void onAddPotionEffect(MobEffectEvent.Added event) {
         if (event.getEffectInstance().getEffect() == EffectHandler.SUNBLOCK.get()) { // FIXME 1.21
             if (!event.getEntity().level().isClientSide()) {
-                MowziesMobs.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageSunblockEffect(event.getEntity(), true));
+                MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageSunblockEffect(event.getEntity(), true));
             }
-            MowziesMobs.PROXY.playSunblockSound(event.getEntity());
+            MMCommon.PROXY.playSunblockSound(event.getEntity());
         }
         if (event.getEffectInstance().getEffect() == EffectHandler.FROZEN.get()) {
             if (!event.getEntity().level().isClientSide()) {
-                MowziesMobs.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), true));
+                MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), true));
                 FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
                 if (frozenCapability != null) {
                     frozenCapability.onFreeze(event.getEntity());
@@ -231,10 +231,10 @@ public final class ServerEventHandler {
     	if(event.getEffectInstance() == null)
     		return;
         if (!event.getEntity().level().isClientSide() && event.getEffectInstance().getEffect() == EffectHandler.SUNBLOCK.get()) {
-            MowziesMobs.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageSunblockEffect(event.getEntity(), false));
+            MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageSunblockEffect(event.getEntity(), false));
         }
         if (!event.getEntity().level().isClientSide() && event.getEffectInstance().getEffect() == EffectHandler.FROZEN.get()) {
-            MowziesMobs.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), false));
+            MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), false));
             FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
             if (frozenCapability != null) {
                 frozenCapability.onUnfreeze(event.getEntity());
@@ -246,10 +246,10 @@ public final class ServerEventHandler {
     public void onPotionEffectExpire(MobEffectEvent.Expired event) {
         MobEffectInstance effectInstance = event.getEffectInstance();
         if (!event.getEntity().level().isClientSide() && effectInstance != null && effectInstance.getEffect() == EffectHandler.SUNBLOCK.get()) {
-            MowziesMobs.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageSunblockEffect(event.getEntity(), false));
+            MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageSunblockEffect(event.getEntity(), false));
         }
         if (!event.getEntity().level().isClientSide() && effectInstance != null && effectInstance.getEffect() == EffectHandler.FROZEN.get()) {
-            MowziesMobs.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), false));
+            MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), false));
             FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
             if (frozenCapability != null) {
                 frozenCapability.onUnfreeze(event.getEntity());
@@ -284,7 +284,7 @@ public final class ServerEventHandler {
 
         if (event.getSource().is(DamageTypeTags.IS_FIRE)) {
             event.getEntity().removeEffectNoUpdate(EffectHandler.FROZEN.get());
-            MowziesMobs.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), false));
+            MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), false));
             FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
             if (frozenCapability != null) {
                 frozenCapability.onUnfreeze(event.getEntity());
@@ -562,7 +562,7 @@ public final class ServerEventHandler {
         if (player.getMainHandItem() != null && player.getMainHandItem().getItem() == ItemHandler.SPEAR.get()) {
             LivingEntity entityHit = ItemSpear.raytraceEntities(player.getCommandSenderWorld(), player, range);
             if (entityHit != null) {
-                MowziesMobs.NETWORK.sendToServer(new MessagePlayerAttackMob(entityHit));
+                MMCommon.NETWORK.sendToServer(new MessagePlayerAttackMob(entityHit));
             }
         }
         if (playerCapability != null) {
@@ -579,7 +579,7 @@ public final class ServerEventHandler {
         if (entity.getHealth() <= event.getAmount() && entity.hasEffect(EffectHandler.FROZEN.get())) {
             entity.removeEffectNoUpdate(EffectHandler.FROZEN.get());
             FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
-            MowziesMobs.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), false));
+            MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), false));
             if (frozenCapability != null) {
                 frozenCapability.onUnfreeze(entity);
             }
@@ -806,12 +806,12 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof LivingEntity) {
-            event.addCapability(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "frozen"), new FrozenCapability.FrozenProvider());
-            event.addCapability(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "last_damage"), new LivingCapability.LivingProvider());
-            event.addCapability(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "ability"), new AbilityCapability.AbilityProvider());
+            event.addCapability(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "frozen"), new FrozenCapability.FrozenProvider());
+            event.addCapability(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "last_damage"), new LivingCapability.LivingProvider());
+            event.addCapability(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "ability"), new AbilityCapability.AbilityProvider());
         }
         if (event.getObject() instanceof Player) {
-            event.addCapability(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "player"), new PlayerCapability.PlayerProvider());
+            event.addCapability(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "player"), new PlayerCapability.PlayerProvider());
         }
     }
 

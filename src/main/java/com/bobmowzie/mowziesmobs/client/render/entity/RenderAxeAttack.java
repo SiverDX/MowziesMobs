@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.render.entity;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.entity.ModelAxeAttack;
 import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
 import com.bobmowzie.mowziesmobs.server.entity.effects.EntityAxeAttack;
@@ -23,7 +23,7 @@ import org.joml.Vector3f;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderAxeAttack extends EntityRenderer<EntityAxeAttack> {
-    public static ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/wroughtnaut.png");
+    public static ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/entity/wroughtnaut.png");
 
     ModelAxeAttack model;
 

@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.render.entity;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.entity.ModelSculptor;
 import com.bobmowzie.mowziesmobs.client.model.tools.geckolib.MowzieGeoBone;
 import com.bobmowzie.mowziesmobs.client.render.entity.layer.ItemLayerSculptorStaff;
@@ -8,7 +8,6 @@ import com.bobmowzie.mowziesmobs.client.render.entity.layer.GeckoSunblockLayer;
 import com.bobmowzie.mowziesmobs.server.entity.sculptor.EntitySculptor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -21,8 +20,8 @@ import software.bernie.geckolib.core.object.Color;
 import java.util.Optional;
 
 public class RenderSculptor extends MowzieGeoEntityRenderer<EntitySculptor> {
-    public final ResourceLocation staff_geo_location = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/sculptor_staff.geo.json");
-    public final ResourceLocation staff_tex_location = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/item/sculptor_staff.png");
+    public final ResourceLocation staff_geo_location = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "geo/sculptor_staff.geo.json");
+    public final ResourceLocation staff_tex_location = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/item/sculptor_staff.png");
 
     public RenderSculptor(EntityRendererProvider.Context renderManager) {
         super(renderManager, new ModelSculptor());

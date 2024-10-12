@@ -1,18 +1,15 @@
 package com.bobmowzie.mowziesmobs.client.gui;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthi;
 import com.bobmowzie.mowziesmobs.server.inventory.ContainerUmvuthiTrade;
 import com.bobmowzie.mowziesmobs.server.inventory.InventoryUmvuthi;
 import com.bobmowzie.mowziesmobs.server.item.ItemHandler;
 import com.bobmowzie.mowziesmobs.server.message.MessageUmvuthiTrade;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.PlainTextButton;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -26,11 +23,10 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import org.joml.Quaternionf;
 
 public final class GuiUmvuthiTrade extends AbstractContainerScreen<ContainerUmvuthiTrade> implements InventoryUmvuthi.ChangeListener {
-    private static final ResourceLocation TEXTURE_TRADE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/gui/container/umvuthi_trade.png");
-    private static final ResourceLocation TEXTURE_REPLENISH = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/gui/container/umvuthi_replenish.png");
+    private static final ResourceLocation TEXTURE_TRADE = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/gui/container/umvuthi_trade.png");
+    private static final ResourceLocation TEXTURE_REPLENISH = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/gui/container/umvuthi_replenish.png");
 
     private final EntityUmvuthi umvuthi;
     private final Player player;
@@ -65,7 +61,7 @@ public final class GuiUmvuthiTrade extends AbstractContainerScreen<ContainerUmvu
     	if (button == grantButton) {
             hasTraded = true;
             updateButton();
-            MowziesMobs.NETWORK.sendToServer(new MessageUmvuthiTrade(umvuthi));
+            MMCommon.NETWORK.sendToServer(new MessageUmvuthiTrade(umvuthi));
             if (!Minecraft.getInstance().isLocalServer()) {
                 boolean satisfied = umvuthi.hasTradedWith(player);
                 if (!satisfied) {

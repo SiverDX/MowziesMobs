@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.model.entity;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.tools.geckolib.MowzieGeoBone;
 import com.bobmowzie.mowziesmobs.client.model.tools.geckolib.MowzieGeoModel;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthana;
@@ -19,18 +19,18 @@ public class ModelUmvuthana extends MowzieGeoModel<EntityUmvuthana> {
 
     @Override
     public ResourceLocation getModelResource(EntityUmvuthana object) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/umvuthana.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "geo/umvuthana.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(EntityUmvuthana entity) {
         boolean isElite = entity.getMaskType() == MaskType.FAITH || entity.getMaskType() == MaskType.FURY;
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, isElite ? "textures/entity/umvuthana_elite.png" : "textures/entity/umvuthana.png");
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, isElite ? "textures/entity/umvuthana_elite.png" : "textures/entity/umvuthana.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(EntityUmvuthana object) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/umvuthana.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "animations/umvuthana.animation.json");
     }
 
     @Override

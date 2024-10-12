@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.entity.effects;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.tools.MathUtils;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleOrb;
 import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
@@ -138,7 +138,7 @@ public class EntitySunstrike extends Entity implements IEntityAdditionalSpawnDat
 
         if (level().isClientSide) {
             if (strikeTime == 0) {
-                MowziesMobs.PROXY.playSunstrikeSound(this);
+                MMCommon.PROXY.playSunstrikeSound(this);
             } else if (strikeTime < STRIKE_EXPLOSION - 10) {
                 float time = getStrikeTime(1);
                 int timeBonus = (int) (time * 5);

@@ -1,8 +1,8 @@
 package com.ilexiconn.llibrary.client.model.tools;
 
 import net.minecraft.util.Mth;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 /**
  * This is a timer that can be used to easily animate models between poses. You have to set the number of

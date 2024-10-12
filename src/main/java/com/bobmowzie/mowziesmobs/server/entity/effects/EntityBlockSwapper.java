@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.entity.effects;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.entity.EntityHandler;
 import com.bobmowzie.mowziesmobs.server.entity.ILinkedEntity;
 import com.bobmowzie.mowziesmobs.server.entity.sculptor.EntitySculptor;
@@ -219,7 +219,7 @@ public class EntityBlockSwapper extends Entity {
                 Entity entity = ((ServerLevel)this.level()).getEntity(this.getTunnelerID().get());
                 if (entity instanceof LivingEntity) {
                     cachedTunneler = (LivingEntity) entity;
-                    MowziesMobs.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> this), new MessageLinkEntities(this, cachedTunneler));
+                    MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> this), new MessageLinkEntities(this, cachedTunneler));
                 }
                 return this.cachedTunneler;
             } else {

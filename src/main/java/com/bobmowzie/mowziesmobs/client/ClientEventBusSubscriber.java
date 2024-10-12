@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.gui.GuiSculptorTrade;
 import com.bobmowzie.mowziesmobs.client.gui.GuiUmvuthanaTrade;
 import com.bobmowzie.mowziesmobs.client.gui.GuiUmvuthiTrade;
@@ -76,11 +76,11 @@ public class ClientEventBusSubscriber {
     @SubscribeEvent
     public static void onRegisterModels(ModelEvent.RegisterAdditional modelRegistryEvent) {
         for (String item : MMModels.HAND_MODEL_ITEMS) {
-        	modelRegistryEvent.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, item + "_in_hand"), "inventory"));
+        	modelRegistryEvent.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, item + "_in_hand"), "inventory"));
         }
         for (MaskType type : MaskType.values()) {
-        	modelRegistryEvent.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID,"umvuthana_mask_" + type.name + "_frame"), "inventory"));
+        	modelRegistryEvent.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID,"umvuthana_mask_" + type.name + "_frame"), "inventory"));
         }
-        modelRegistryEvent.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "sol_visage_frame"), "inventory"));
+        modelRegistryEvent.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "sol_visage_frame"), "inventory"));
     }
 }

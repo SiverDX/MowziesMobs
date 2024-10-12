@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.item;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.LayerHandler;
 import com.bobmowzie.mowziesmobs.client.model.armor.WroughtHelmModel;
 import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
@@ -64,7 +64,7 @@ public class ItemWroughtHelm extends MowzieArmorItem {
     @Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/item/wrought_helmet.png").toString();
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/item/wrought_helmet.png").toString();
     }
 
     @Override

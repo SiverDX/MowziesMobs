@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.bossinfo;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.entity.MowzieEntity;
 import com.bobmowzie.mowziesmobs.server.message.MessageUpdateBossBar;
 import net.minecraft.server.level.ServerBossEvent;
@@ -36,7 +36,7 @@ public class MMBossInfoServer extends ServerBossEvent {
 
     @Override
     public void addPlayer(ServerPlayer player) {
-    	MowziesMobs.NETWORK.sendTo(new MessageUpdateBossBar(this.getId(), entity), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+    	MMCommon.NETWORK.sendTo(new MessageUpdateBossBar(this.getId(), entity), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
         if (this.entity.getSensing().hasLineOfSight(player)) {
             super.addPlayer(player);
         } else {
@@ -46,7 +46,7 @@ public class MMBossInfoServer extends ServerBossEvent {
 
     @Override
     public void removePlayer(ServerPlayer player) {
-    	MowziesMobs.NETWORK.sendTo(new MessageUpdateBossBar(this.getId(), null), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+    	MMCommon.NETWORK.sendTo(new MessageUpdateBossBar(this.getId(), null), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
         super.removePlayer(player);
         this.unseen.remove(player);
     }

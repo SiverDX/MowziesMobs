@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.block;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.item.ItemHandler;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 public final class BlockHandler {
 
-    public static final DeferredRegister<Block> REG = DeferredRegister.create(Registries.BLOCK, MowziesMobs.MODID);
+    public static final DeferredRegister<Block> REG = DeferredRegister.create(Registries.BLOCK, MMCommon.MODID);
 
     // FIXME 1.21 :: replace 'copy' with either 'ofFullCopy' or 'ofLegacyCopy'
     public static final DeferredHolder<Block, Block> PAINTED_ACACIA = registerBlockAndItem("painted_acacia", () -> new Block(Block.Properties.copy(Blocks.ACACIA_PLANKS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));

@@ -1,32 +1,24 @@
 package com.bobmowzie.mowziesmobs.client;
 
 import com.bobmowzie.mowziesmobs.client.render.block.SculptorBlockMarking;
-import com.bobmowzie.mowziesmobs.client.render.entity.FrozenRenderHandler;
 import com.bobmowzie.mowziesmobs.client.sound.*;
 import com.bobmowzie.mowziesmobs.server.ServerProxy;
-import com.bobmowzie.mowziesmobs.server.ability.AbilityClientEventHandler;
 import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
 import com.bobmowzie.mowziesmobs.server.entity.effects.EntitySolarBeam;
 import com.bobmowzie.mowziesmobs.server.entity.effects.EntitySunstrike;
 import com.bobmowzie.mowziesmobs.server.entity.naga.EntityNaga;
-import com.bobmowzie.mowziesmobs.server.item.ItemHandler;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.TerrainParticle;
-import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.*;
 
@@ -37,26 +29,6 @@ public class ClientProxy extends ServerProxy {
     public static final Long2ObjectMap<SculptorBlockMarking> sculptorMarkedBlocks = new Long2ObjectOpenHashMap<>();
 
     private Entity referencedMob = null;
-
-    @Override // FIXME 1.21 :: use client and server specific entry points
-    public void init(final IEventBus modbus) {
-        super.init(modbus);
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigHandler.CLIENT_CONFIG);
-
-        modbus.register(MMModels.class);
-        NeoForge.EVENT_BUS.register(ClientEventHandler.INSTANCE);
-        NeoForge.EVENT_BUS.register(FrozenRenderHandler.INSTANCE);
-        NeoForge.EVENT_BUS.register(AbilityClientEventHandler.INSTANCE);
-
-        modbus.addListener(ClientLayerRegistry::onAddLayers);
-    }
-
-    @Override
-    public void onLateInit(final IEventBus modbus) {
-        ItemPropertyFunction pulling = ItemProperties.getProperty(Items.BOW, new ResourceLocation("pulling"));
-        ItemProperties.register(ItemHandler.BLOWGUN.get().asItem(), new ResourceLocation("pulling"), pulling);
-    }
 
     @Override
     public void playSunstrikeSound(EntitySunstrike strike) {

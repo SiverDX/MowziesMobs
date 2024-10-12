@@ -24,64 +24,65 @@ import com.bobmowzie.mowziesmobs.server.world.feature.structure.StructureTypeHan
 import com.bobmowzie.mowziesmobs.server.world.feature.structure.jigsaw.JigsawHandler;
 import com.bobmowzie.mowziesmobs.server.world.feature.structure.processor.ProcessorHandler;
 import com.bobmowzie.mowziesmobs.server.world.spawn.SpawnHandler;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib.GeckoLib;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-@Mod(MowziesMobs.MODID)
-@Mod.EventBusSubscriber(modid = MowziesMobs.MODID)
-public final class MowziesMobs {
+@EventBusSubscriber
+@Mod(MMCommon.MODID)
+public final class MMCommon {
     public static final String MODID = "mowziesmobs";
     public static final Logger LOGGER = LogManager.getLogger();
     public static ServerProxy PROXY;
 
     public static SimpleChannel NETWORK;
 
-    public MowziesMobs() {
+    public MMCommon(IEventBus modBus, ModContainer container) {
         GeckoLibUtil.addCustomBakedModelFactory(MODID, new MowzieModelFactory());
-        GeckoLib.initialize();
 
-        PROXY = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
-        final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        BlockHandler.REG.register(bus);
-        EntityHandler.REG.register(bus);
-        ItemHandler.REG.register(bus);
-        MMSounds.REG.register(bus);
-        BlockEntityHandler.REG.register(bus);
-        ParticleHandler.REG.register(bus);
-        StructureTypeHandler.STRUCTURE_TYPE_REG.register(bus);
-        StructureTypeHandler.STRUCTURE_PIECE_TYPE_REG.register(bus);
-        ContainerHandler.REG.register(bus);
-        EffectHandler.REG.register(bus);
-        PotionTypeHandler.REG.register(bus);
-        BiomeModifiersHandler.REG.register(bus);
-        LootTableHandler.LOOT_CONDITION_TYPE_REG.register(bus);
-        LootTableHandler.LOOT_FUNCTION_TYPE_REG.register(bus);
-        CreativeTabHandler.register(bus);
+        PROXY = FMLLoader.getDist().isClient() ? new ClientProxy() : new ServerProxy();
+        BlockHandler.REG.register(modBus);
+        EntityHandler.REG.register(modBus);
+        ItemHandler.REG.register(modBus);
+        MMSounds.REG.register(modBus);
+        BlockEntityHandler.REG.register(modBus);
+        ParticleHandler.REG.register(modBus);
+        StructureTypeHandler.STRUCTURE_TYPE_REG.register(modBus);
+        StructureTypeHandler.STRUCTURE_PIECE_TYPE_REG.register(modBus);
+        ContainerHandler.REG.register(modBus);
+        EffectHandler.REG.register(modBus);
+        PotionTypeHandler.REG.register(modBus);
+        BiomeModifiersHandler.REG.register(modBus);
+        LootTableHandler.LOOT_CONDITION_TYPE_REG.register(modBus);
+        LootTableHandler.LOOT_FUNCTION_TYPE_REG.register(modBus);
+        CreativeTabHandler.register(modBus);
 
-        PROXY.init(bus);
-        bus.<FMLCommonSetupEvent>addListener(this::init);
-        bus.<FMLLoadCompleteEvent>addListener(this::init);
-        bus.addListener(this::onModConfigEvent);
-        bus.addListener(CapabilityHandler::registerCapabilities);
+        PROXY.init(modBus);
+        modBus.<FMLCommonSetupEvent>addListener(this::init);
+        modBus.<FMLLoadCompleteEvent>addListener(this::init);
+        modBus.addListener(this::onModConfigEvent);
+        modBus.addListener(CapabilityHandler::registerCapabilities);
 
-        MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(new ServerEventHandler());
-        MinecraftForge.EVENT_BUS.register(new AbilityCommonEventHandler());
-        MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, CapabilityHandler::attachEntityCapability);
+        NeoForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.register(new ServerEventHandler());
+        NeoForge.EVENT_BUS.register(new AbilityCommonEventHandler());
+        NeoForge.EVENT_BUS.addGenericListener(Entity.class, CapabilityHandler::attachEntityCapability);
+
+        container.registerConfig(ModConfig.Type.COMMON, ConfigHandler.COMMON_CONFIG);
     }
     
     @SubscribeEvent

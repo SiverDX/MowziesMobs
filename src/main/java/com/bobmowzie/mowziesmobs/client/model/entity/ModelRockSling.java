@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.model.entity;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.entity.effects.geomancy.EntityRockSling;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -28,12 +28,12 @@ public class ModelRockSling extends GeoModel<EntityRockSling> {
 
     @Override
     public ResourceLocation getAnimationResource(EntityRockSling entity) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/rock_sling.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "animations/rock_sling.animation.json");
     }
 
     @Override
     public ResourceLocation getModelResource(EntityRockSling entity) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/rock_sling.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "geo/rock_sling.geo.json");
 
     }
 

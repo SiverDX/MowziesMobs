@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.render.entity.layer;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.ability.AbilitySection;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthana;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,14 +15,10 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import software.bernie.geckolib.util.RenderUtils;
-
-import java.util.Optional;
 
 public class UmvuthanaSunLayer extends GeoRenderLayer<EntityUmvuthana> {
     protected final EntityRenderDispatcher entityRenderDispatcher;
@@ -51,7 +47,7 @@ public class UmvuthanaSunLayer extends GeoRenderLayer<EntityUmvuthana> {
                 vecScale.mul(matrix4f);
                 float scale = (float) new Vec3(vecScale.x() - vecTranslation.x(), vecScale.y() - vecTranslation.y(), vecScale.z() - vecTranslation.z()).length();
                 newPoseStack.scale(scale, scale, scale);
-                VertexConsumer ivertexbuilder = bufferSource.getBuffer(RenderType.entityTranslucent(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/particle/sun_no_glow.png"),true));
+                VertexConsumer ivertexbuilder = bufferSource.getBuffer(RenderType.entityTranslucent(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/particle/sun_no_glow.png"),true));
                 PoseStack.Pose matrixstack$entry2 = newPoseStack.last();
                 Matrix4f matrix4f2 = matrixstack$entry2.pose();
                 Matrix3f matrix3f = matrixstack$entry.normal();

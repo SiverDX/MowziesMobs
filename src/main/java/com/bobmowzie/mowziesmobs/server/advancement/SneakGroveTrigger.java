@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.advancement;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
@@ -11,7 +11,7 @@ import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerPlayer;
 
 public class SneakGroveTrigger extends MMTrigger<AbstractCriterionTriggerInstance, SneakGroveTrigger.Listener> {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "sneak_grove");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "sneak_grove");
 
     public SneakGroveTrigger() {
     }

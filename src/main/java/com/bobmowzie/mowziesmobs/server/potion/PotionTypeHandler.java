@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.potion;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.item.ItemHandler;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -17,7 +17,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public final class PotionTypeHandler {
     private PotionTypeHandler() {}
     
-	public static final DeferredRegister<Potion> REG = DeferredRegister.create(Registries.POTION, MowziesMobs.MODID);
+	public static final DeferredRegister<Potion> REG = DeferredRegister.create(Registries.POTION, MMCommon.MODID);
 
     public static final DeferredHolder<Potion, Potion> POISON_RESIST = REG.register("poison_resist", () -> new Potion("poison_resist", new MobEffectInstance(EffectHandler.POISON_RESIST.get(), 3600)));
     public static final DeferredHolder<Potion, Potion> LONG_POISON_RESIST = REG.register("long_poison_resist", () -> new Potion("long_poison_resist", new MobEffectInstance(EffectHandler.POISON_RESIST.get(), 9600)));

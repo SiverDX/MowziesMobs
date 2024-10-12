@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.message;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.block.BlockGrottol;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -48,7 +48,7 @@ public final class MessageBlackPinkInYourArea {
                 Entity entity = world.getEntity(message.entityID);
                 if (entity instanceof AbstractMinecart) {
                     AbstractMinecart minecart = (AbstractMinecart) entity;
-                    MowziesMobs.PROXY.playBlackPinkSound(minecart);
+                    MMCommon.PROXY.playBlackPinkSound(minecart);
                     BlockState state = Blocks.STONE.defaultBlockState()
                             .setValue(BlockGrottol.VARIANT, BlockGrottol.Variant.BLACK_PINK);
                     BlockPos pos = minecart.blockPosition();
@@ -65,7 +65,7 @@ public final class MessageBlackPinkInYourArea {
                             sound.getPitch() * 0.8F,
                             false
                     );
-                    MowziesMobs.PROXY.minecartParticles(world, minecart, scale, x, y, z, state, pos);
+                    MMCommon.PROXY.minecartParticles(world, minecart, scale, x, y, z, state, pos);
                 }
             });
             context.setPacketHandled(true);

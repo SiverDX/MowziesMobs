@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.item;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.render.item.RenderSolVisageArmor;
 import com.bobmowzie.mowziesmobs.client.render.item.RenderSolVisageItem;
 import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
@@ -81,7 +81,7 @@ public class ItemSolVisage extends MowzieArmorItem implements UmvuthanaMask, Geo
     @Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/umvuthi.png").toString();
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/entity/umvuthi.png").toString();
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.render.entity.FrozenRenderHandler;
 import com.bobmowzie.mowziesmobs.client.render.entity.layer.SunblockLayer;
 import com.bobmowzie.mowziesmobs.client.render.entity.player.GeckoPlayer;
@@ -45,7 +45,7 @@ public class ClientLayerRegistry {
                 renderer = event.getRenderer(entityType);
             }catch (Exception e){
                 if (!entityType.getBaseClass().isAssignableFrom(MowzieEntity.class)) {
-                    MowziesMobs.LOGGER.warn("Could not apply layer to " + Registries.ENTITY_TYPE.getKey(entityType) + ", has custom renderer that is not LivingEntityRenderer.");
+                    MMCommon.LOGGER.warn("Could not apply layer to " + Registries.ENTITY_TYPE.getKey(entityType) + ", has custom renderer that is not LivingEntityRenderer.");
                 }
             }
             if(renderer != null){

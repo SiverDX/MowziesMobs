@@ -1,7 +1,6 @@
 package com.bobmowzie.mowziesmobs.server;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
-import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.entity.effects.EntitySolarBeam;
 import com.bobmowzie.mowziesmobs.server.entity.effects.EntitySunstrike;
 import com.bobmowzie.mowziesmobs.server.entity.naga.EntityNaga;
@@ -24,16 +23,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkRegistry;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class ServerProxy {
     private int nextMessageId;
@@ -67,19 +60,12 @@ public class ServerProxy {
 
         @Override
         public Optional<Trade> copy(Optional<Trade> value) {
-            if (value.isPresent()) {
-                return Optional.of(new Trade(value.get()));
-            }
-            return Optional.empty();
+            return value.map(Trade::new);
         }
     };
 
-    public void init(final IEventBus modbus) {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.COMMON_CONFIG);
+    public void init() {
         EntityDataSerializers.registerSerializer(OPTIONAL_TRADE);
-    }
-
-    public void onLateInit(final IEventBus modbus) {
     }
 
     public void playSunstrikeSound(EntitySunstrike strike) {
@@ -108,7 +94,7 @@ public class ServerProxy {
 
     public void initNetwork() {
         final String version = "1";
-        MowziesMobs.NETWORK = NetworkRegistry.ChannelBuilder.named(ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "net"))
+        MMCommon.NETWORK = NetworkRegistry.ChannelBuilder.named(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "net"))
                 .networkProtocolVersion(() -> version)
                 .clientAcceptedVersions(version::equals)
                 .serverAcceptedVersions(version::equals)
@@ -135,7 +121,7 @@ public class ServerProxy {
     }
 
     private <MSG> void registerMessage(final Class<MSG> clazz, final BiConsumer<MSG, FriendlyByteBuf> encoder, final Function<FriendlyByteBuf, MSG> decoder, final BiConsumer<MSG, Supplier<NetworkEvent.Context>> consumer) {
-        MowziesMobs.NETWORK.registerMessage(this.nextMessageId++, clazz, encoder, decoder, consumer);
+        MMCommon.NETWORK.registerMessage(this.nextMessageId++, clazz, encoder, decoder, consumer);
     }
 
     public void setTPS(float tickRate) {

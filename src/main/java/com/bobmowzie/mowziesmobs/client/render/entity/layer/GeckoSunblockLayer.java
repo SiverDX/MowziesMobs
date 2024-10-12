@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.render.entity.layer;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.capability.CapabilityHandler;
 import com.bobmowzie.mowziesmobs.server.capability.LivingCapability;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -17,7 +17,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class GeckoSunblockLayer<T extends LivingEntity & GeoEntity> extends GeoRenderLayer<T> {
-    private static final ResourceLocation SUNBLOCK_ARMOR = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/sunblock_glow.png");
+    private static final ResourceLocation SUNBLOCK_ARMOR = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/entity/sunblock_glow.png");
 
     public GeckoSunblockLayer(GeoRenderer<T> entityRendererIn, EntityRendererProvider.Context context) {
         super(entityRendererIn);

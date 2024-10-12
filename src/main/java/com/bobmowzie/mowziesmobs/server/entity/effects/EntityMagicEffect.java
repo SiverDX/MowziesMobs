@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.entity.effects;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.entity.ILinkedEntity;
 import com.bobmowzie.mowziesmobs.server.message.MessageLinkEntities;
 import net.minecraft.nbt.CompoundTag;
@@ -70,7 +70,7 @@ public abstract class EntityMagicEffect extends Entity implements ILinkedEntity 
             Entity entity = ((ServerLevel)this.level()).getEntity(this.getCasterID().get());
             if (entity instanceof LivingEntity) {
                 cachedCaster = (LivingEntity) entity;
-                MowziesMobs.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> this), new MessageLinkEntities(this, cachedCaster));
+                MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> this), new MessageLinkEntities(this, cachedCaster));
             }
             return this.cachedCaster;
         } else {

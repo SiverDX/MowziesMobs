@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.world.feature.structure.jigsaw;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -18,6 +18,6 @@ public class JigsawHandler {
     }
 
     private static <P extends StructurePoolElement> StructurePoolElementType<P> register(String name, Codec<P> codec) {
-        return Registry.register(BuiltInRegistries.STRUCTURE_POOL_ELEMENT, ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, name), () -> codec);
+        return Registry.register(BuiltInRegistries.STRUCTURE_POOL_ELEMENT, ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, name), () -> codec);
     }
 }

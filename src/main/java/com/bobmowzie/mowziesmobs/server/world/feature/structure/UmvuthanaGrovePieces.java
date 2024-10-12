@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.world.feature.structure;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.block.BlockHandler;
 import com.bobmowzie.mowziesmobs.server.entity.EntityHandler;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthanaMinion;
@@ -51,39 +51,39 @@ import java.util.Set;
 public class UmvuthanaGrovePieces {
     private static final Set<Block> BLOCKS_NEEDING_POSTPROCESSING = ImmutableSet.<Block>builder().add(Blocks.NETHER_BRICK_FENCE).add(Blocks.TORCH).add(Blocks.WALL_TORCH).add(Blocks.OAK_FENCE).add(Blocks.SPRUCE_FENCE).add(Blocks.DARK_OAK_FENCE).add(Blocks.ACACIA_FENCE).add(Blocks.BIRCH_FENCE).add(Blocks.JUNGLE_FENCE).add(Blocks.MANGROVE_FENCE).add(Blocks.LADDER).add(Blocks.SKELETON_SKULL).build();
 
-    public static final ResourceLocation PLATFORM_1 = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "umvuthana/umvuthana_platform_1");
-    public static final ResourceLocation PLATFORM_2 = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "umvuthana/umvuthana_platform_2");
+    public static final ResourceLocation PLATFORM_1 = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "umvuthana/umvuthana_platform_1");
+    public static final ResourceLocation PLATFORM_2 = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "umvuthana/umvuthana_platform_2");
     public static final ResourceLocation[] PLATFORMS = new ResourceLocation[] {
             PLATFORM_1,
             PLATFORM_2
     };
-    public static final ResourceLocation PLATFORM_EXTEND = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "umvuthana/umvuthana_platform_extend");
-    public static final ResourceLocation FIREPIT = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "umvuthana/umvuthana_firepit");
-    public static final ResourceLocation FIREPIT_SMALL_1 = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "umvuthana/umvuthana_firepit_small_1");
-    public static final ResourceLocation FIREPIT_SMALL_2 = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "umvuthana/umvuthana_firepit_small_2");
+    public static final ResourceLocation PLATFORM_EXTEND = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "umvuthana/umvuthana_platform_extend");
+    public static final ResourceLocation FIREPIT = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "umvuthana/umvuthana_firepit");
+    public static final ResourceLocation FIREPIT_SMALL_1 = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "umvuthana/umvuthana_firepit_small_1");
+    public static final ResourceLocation FIREPIT_SMALL_2 = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "umvuthana/umvuthana_firepit_small_2");
     public static final ResourceLocation[] FIREPIT_SMALL = new ResourceLocation[] {
             FIREPIT_SMALL_1,
             FIREPIT_SMALL_2
     };
-    public static final ResourceLocation TREE_1 = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "umvuthana/umvuthana_tree_1");
-    public static final ResourceLocation TREE_2 = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "umvuthana/umvuthana_tree_2");
-    public static final ResourceLocation TREE_3 = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "umvuthana/umvuthana_tree_3");
+    public static final ResourceLocation TREE_1 = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "umvuthana/umvuthana_tree_1");
+    public static final ResourceLocation TREE_2 = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "umvuthana/umvuthana_tree_2");
+    public static final ResourceLocation TREE_3 = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "umvuthana/umvuthana_tree_3");
     public static final ResourceLocation[] TREES = new ResourceLocation[] {
             TREE_1,
             TREE_2,
             TREE_3
     };
-    public static final ResourceLocation SPIKE_1 = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "umvuthana/umvuthana_spike_1");
-    public static final ResourceLocation SPIKE_2 = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "umvuthana/umvuthana_spike_2");
-    public static final ResourceLocation SPIKE_3 = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "umvuthana/umvuthana_spike_3");
-    public static final ResourceLocation SPIKE_4 = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "umvuthana/umvuthana_spike_4");
+    public static final ResourceLocation SPIKE_1 = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "umvuthana/umvuthana_spike_1");
+    public static final ResourceLocation SPIKE_2 = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "umvuthana/umvuthana_spike_2");
+    public static final ResourceLocation SPIKE_3 = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "umvuthana/umvuthana_spike_3");
+    public static final ResourceLocation SPIKE_4 = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "umvuthana/umvuthana_spike_4");
     public static final ResourceLocation[] SPIKES = new ResourceLocation[] {
             SPIKE_1,
             SPIKE_2,
             SPIKE_3,
             SPIKE_4
     };
-    public static final ResourceLocation THRONE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "umvuthana/umvuthi_throne");
+    public static final ResourceLocation THRONE = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "umvuthana/umvuthi_throne");
 
     private static final Map<ResourceLocation, BlockPos> OFFSET = ImmutableMap.<ResourceLocation, BlockPos>builder()
             .put(PLATFORM_1, new BlockPos(-5, 0, -5))

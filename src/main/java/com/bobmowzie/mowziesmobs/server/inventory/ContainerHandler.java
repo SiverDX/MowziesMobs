@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.inventory;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
@@ -10,7 +10,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class ContainerHandler {
-    public static final DeferredRegister<MenuType<?>> REG = DeferredRegister.create(Registries.MENU, MowziesMobs.MODID);
+    public static final DeferredRegister<MenuType<?>> REG = DeferredRegister.create(Registries.MENU, MMCommon.MODID);
     
     public static final MenuType<ContainerUmvuthanaTrade> UMVUTHANA_TRADE = new MenuType<>(ContainerUmvuthanaTrade::new, FeatureFlags.VANILLA_SET);
     public static final MenuType<ContainerUmvuthiTrade> UMVUTHI_TRADE = new MenuType<>(ContainerUmvuthiTrade::new, FeatureFlags.VANILLA_SET);

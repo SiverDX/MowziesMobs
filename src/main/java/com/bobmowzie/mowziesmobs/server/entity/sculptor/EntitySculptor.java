@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.entity.sculptor;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.tools.dynamics.GeckoDynamicChain;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleHandler;
 import com.bobmowzie.mowziesmobs.client.particle.util.AdvancedParticleBase;
@@ -500,7 +500,7 @@ public class EntitySculptor extends MowzieGeckoEntity {
                         isTestObstructed = true;
                         isTestObstructedSoFar = true;
                         if (level().isClientSide() && isPlayerInTestZone(Minecraft.getInstance().player) && blockHasExposedSide(checkPos)) {
-                            MowziesMobs.PROXY.sculptorMarkBlock(this.getId(), checkPos);
+                            MMCommon.PROXY.sculptorMarkBlock(this.getId(), checkPos);
                             ParticleRotation.FaceCamera faceCamera = new ParticleRotation.FaceCamera(0);
                             AdvancedParticleBase.spawnAlwaysVisibleParticle(level(), ParticleHandler.RING2.get(), 64, checkPos.getX() + 0.5, checkPos.getY() + 0.5, checkPos.getZ() + 0.5, 0, 0, 0, faceCamera, 3.5F, 0.83f, 1, 0.39f, 1, 1, 20, true, false, new ParticleComponent[]{
                                     new ParticleComponent.PropertyControl(ParticleComponent.PropertyControl.EnumParticleProperty.ALPHA, ParticleComponent.KeyTrack.startAndEnd(0.7f, 0f), false),
@@ -652,7 +652,7 @@ public class EntitySculptor extends MowzieGeckoEntity {
 
     public void openGUI(Player playerEntity) {
         setCustomer(playerEntity);
-        MowziesMobs.PROXY.setReferencedMob(this);
+        MMCommon.PROXY.setReferencedMob(this);
         if (!this.level().isClientSide && getTarget() == null && isAlive()) {
             playerEntity.openMenu(new MenuProvider() {
                 @Override

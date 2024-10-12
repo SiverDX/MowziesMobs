@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.capability;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -14,7 +14,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 
 public class LivingCapability {
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "living_cap");
+    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "living_cap");
 
     public interface ILivingCapability extends INBTSerializable<CompoundTag> {
         void setLastDamage(float damage);

@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.ability.abilities.player.geomancy;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleHandler;
 import com.bobmowzie.mowziesmobs.client.particle.util.AdvancedParticleBase;
 import com.bobmowzie.mowziesmobs.client.particle.util.ParticleComponent;
@@ -79,7 +79,7 @@ public class SpawnBoulderAbility extends PlayerAbility {
         if (getCurrentSection().sectionType == AbilitySection.AbilitySectionType.STARTUP) {
             spawnBoulderCharge++;
             if (spawnBoulderCharge > 2) getUser().addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 3, 3, false, false));
-            if (spawnBoulderCharge == 1 && getUser().level().isClientSide) MowziesMobs.PROXY.playBoulderChargeSound(getUser());
+            if (spawnBoulderCharge == 1 && getUser().level().isClientSide) MMCommon.PROXY.playBoulderChargeSound(getUser());
             if ((spawnBoulderCharge + 10) % 10 == 0 && spawnBoulderCharge < 40) {
                 if (getUser().level().isClientSide) {
                     AdvancedParticleBase.spawnParticle(getUser().level(), ParticleHandler.RING2.get(), (float) getUser().getX(), (float) getUser().getY() + getUser().getBbHeight() / 2f, (float) getUser().getZ(), 0, 0, 0, false, 0, Math.PI / 2f, 0, 0, 3.5F, 0.83f, 1, 0.39f, 1, 1, 10, true, true, new ParticleComponent[]{

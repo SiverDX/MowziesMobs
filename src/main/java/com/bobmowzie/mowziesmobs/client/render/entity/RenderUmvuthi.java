@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.render.entity;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.entity.ModelUmvuthi;
 import com.bobmowzie.mowziesmobs.client.model.tools.geckolib.MowzieGeoBone;
 import com.bobmowzie.mowziesmobs.client.render.MMRenderType;
@@ -25,8 +25,8 @@ import org.joml.Vector3d;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderUmvuthi extends MowzieGeoEntityRenderer<EntityUmvuthi> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/umvuthi.png");
-    public static final ResourceLocation SUN = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/effects/sun_effect.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/entity/umvuthi.png");
+    public static final ResourceLocation SUN = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/effects/sun_effect.png");
 
     public static final float BURST_RADIUS = 3.5f;
     public static final int BURST_FRAME_COUNT = 10;

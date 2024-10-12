@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.capability;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleCloud;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleHandler;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleSnowFlake;
@@ -32,7 +32,7 @@ import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public class FrozenCapability {
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "frozen_cap");
+    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "frozen_cap");
 
     public static int MAX_FREEZE_DECAY_DELAY = 10;
 

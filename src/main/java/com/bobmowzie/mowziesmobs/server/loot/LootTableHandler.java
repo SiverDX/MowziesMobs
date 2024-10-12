@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.loot;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.Serializer;
@@ -29,15 +29,15 @@ public class LootTableHandler {
     public static final ResourceLocation UMVUTHANA_GROVE_CHEST = register("chests/umvuthana_grove_chest");
     public static final ResourceLocation MONASTERY_CHEST = register("chests/monastery_chest");
 
-    public static final DeferredRegister<LootItemFunctionType> LOOT_FUNCTION_TYPE_REG = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, MowziesMobs.MODID);
-    public static final DeferredRegister<LootItemConditionType> LOOT_CONDITION_TYPE_REG = DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, MowziesMobs.MODID);
+    public static final DeferredRegister<LootItemFunctionType> LOOT_FUNCTION_TYPE_REG = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, MMCommon.MODID);
+    public static final DeferredRegister<LootItemConditionType> LOOT_CONDITION_TYPE_REG = DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, MMCommon.MODID);
 
     public static RegistryObject<LootItemFunctionType> GROTTOL_DEATH_TYPE = registerFunction("grottol_death_type", new LootFunctionGrottolDeathType.FunctionSerializer());
 
     public static RegistryObject<LootItemConditionType> FROSTMAW_HAS_CRYSTAL = registerCondition("has_crystal", new LootConditionFrostmawHasCrystal.ConditionSerializer());
 
     private static ResourceLocation register(String id) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, id);
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, id);
     }
 
     private static RegistryObject<LootItemFunctionType> registerFunction(String name, Serializer<? extends LootItemFunction> serializer) {

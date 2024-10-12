@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.ability;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.ability.abilities.player.*;
 import com.bobmowzie.mowziesmobs.server.ability.abilities.player.geomancy.*;
 import com.bobmowzie.mowziesmobs.server.ability.abilities.player.heliomancy.SolarBeamAbility;
@@ -90,7 +90,7 @@ public enum AbilityHandler {
             Ability instance = abilityCapability.getAbilityMap().get(abilityType);
             if (instance != null && instance.canUse()) {
                 abilityCapability.activateAbility(entity, abilityType);
-                MowziesMobs.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new MessageUseAbility(entity.getId(), ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), abilityType)));
+                MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new MessageUseAbility(entity.getId(), ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), abilityType)));
             }
         }
     }
@@ -104,7 +104,7 @@ public enum AbilityHandler {
             Ability instance = abilityCapability.getAbilityMap().get(abilityType);
             if (instance.isUsing()) {
                 instance.interrupt();
-                MowziesMobs.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new MessageInterruptAbility(entity.getId(), ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), abilityType)));
+                MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new MessageInterruptAbility(entity.getId(), ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), abilityType)));
             }
         }
     }
@@ -115,7 +115,7 @@ public enum AbilityHandler {
         }
         AbilityCapability.IAbilityCapability abilityCapability = getAbilityCapability(entity);
         if (abilityCapability != null) {
-            MowziesMobs.NETWORK.sendToServer(new MessagePlayerUseAbility(ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), ability)));
+            MMCommon.NETWORK.sendToServer(new MessagePlayerUseAbility(ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), ability)));
         }
     }
 
@@ -129,7 +129,7 @@ public enum AbilityHandler {
             Ability instance = abilityCapability.getAbilityMap().get(abilityType);
             if (instance.isUsing()) {
                 instance.jumpToSection(sectionIndex);
-                MowziesMobs.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new MessageJumpToAbilitySection(entity.getId(), ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), abilityType), sectionIndex));
+                MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new MessageJumpToAbilitySection(entity.getId(), ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), abilityType), sectionIndex));
             }
         }
     }

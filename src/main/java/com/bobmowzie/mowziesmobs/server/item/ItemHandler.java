@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.item;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
 import com.bobmowzie.mowziesmobs.server.entity.EntityHandler;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.MaskType;
@@ -22,7 +22,7 @@ public class ItemHandler {
 
     public static Style TOOLTIP_STYLE = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GRAY));
 
-    public static final DeferredRegister<Item> REG = DeferredRegister.create(Registries.ITEM, MowziesMobs.MODID);
+    public static final DeferredRegister<Item> REG = DeferredRegister.create(Registries.ITEM, MMCommon.MODID);
 
     public static final DeferredHolder<Item, ItemFoliaathSeed> FOLIAATH_SEED = REG.register("foliaath_seed", () -> new ItemFoliaathSeed(new Item.Properties()));
     public static final DeferredHolder<Item, ItemMobRemover> MOB_REMOVER = REG.register("mob_remover", () -> new ItemMobRemover(new Item.Properties()));

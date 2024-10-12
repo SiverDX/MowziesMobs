@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.gui;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.entity.EntityHandler;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
@@ -19,12 +19,12 @@ public class CustomBossBar {
     public static Map<ResourceLocation, CustomBossBar> customBossBars = new HashMap<>();
     static { // FIXME 1.21 :: use a different key (resourcekey?) or use alternative to lookup registry entry
         customBossBars.put(Registries.ENTITY_TYPE.getKey(EntityHandler.UMVUTHI.get()), new CustomBossBar(
-                ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/gui/boss_bar/umvuthi_bar_base.png"),
-                ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/gui/boss_bar/umvuthi_bar_overlay.png"),
+                ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/gui/boss_bar/umvuthi_bar_base.png"),
+                ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/gui/boss_bar/umvuthi_bar_overlay.png"),
                 4, 8, 2, -12, -6, 256, 16, 21, ChatFormatting.GOLD));
         customBossBars.put(ForgeRegistries.ENTITY_TYPES.getKey(EntityHandler.FROSTMAW.get()), new CustomBossBar(
-                ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/gui/boss_bar/frostmaw_bar_base.png"),
-                ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/gui/boss_bar/frostmaw_bar_overlay.png"),
+                ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/gui/boss_bar/frostmaw_bar_base.png"),
+                ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/gui/boss_bar/frostmaw_bar_overlay.png"),
                 10, 32, 2, -4, -3, 256, 32, 25, ChatFormatting.WHITE));
     }
 

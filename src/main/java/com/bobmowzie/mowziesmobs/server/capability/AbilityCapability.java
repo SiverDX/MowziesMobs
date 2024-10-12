@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.capability;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.tools.geckolib.MowzieGeoModel;
 import com.bobmowzie.mowziesmobs.client.render.entity.player.GeckoPlayer;
 import com.bobmowzie.mowziesmobs.server.ability.Ability;
@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 public class AbilityCapability {
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "ability_cap");
+    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "ability_cap");
 
     public interface IAbilityCapability extends INBTSerializable<CompoundTag> {
 

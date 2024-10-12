@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.advancement;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
@@ -11,7 +11,7 @@ import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerPlayer;
 
 public class StealIceCrystalTrigger extends MMTrigger<AbstractCriterionTriggerInstance, StealIceCrystalTrigger.Listener> {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "steal_ice_crystal");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "steal_ice_crystal");
 
     public StealIceCrystalTrigger() {
     }

@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.datagen;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.tag.TagHandler;
 import com.bobmowzie.mowziesmobs.server.world.feature.structure.FrostmawStructure;
 import com.bobmowzie.mowziesmobs.server.world.feature.structure.UmvuthanaGroveStructure;
@@ -27,7 +27,7 @@ public class StructureHandler {
     public static final ResourceKey<Structure> MONASTERY = createStructureKey("monastery");
 
     private static ResourceKey<Structure> createStructureKey(String name) {
-        return ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, name));
+        return ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, name));
     }
 
     public static void bootstrap(BootstapContext<Structure> context) {

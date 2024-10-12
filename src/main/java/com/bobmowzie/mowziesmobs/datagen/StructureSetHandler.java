@@ -1,21 +1,15 @@
 package com.bobmowzie.mowziesmobs.datagen;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
-import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
-import com.bobmowzie.mowziesmobs.server.world.BiomeChecker;
-import com.bobmowzie.mowziesmobs.datagen.StructureHandler;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
-
-import java.util.*;
 
 public class StructureSetHandler {
 
@@ -25,7 +19,7 @@ public class StructureSetHandler {
     public static ResourceKey<StructureSet> MONASTERIES = createSetKey("monasteries");
 
     private static ResourceKey<StructureSet> createSetKey(String name) {
-        return ResourceKey.create(Registries.STRUCTURE_SET, ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, name));
+        return ResourceKey.create(Registries.STRUCTURE_SET, ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, name));
     }
 
     public static void bootstrap(BootstapContext<StructureSet> context) {

@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.entity.umvuthana;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.tools.MathUtils;
 import com.bobmowzie.mowziesmobs.client.model.tools.geckolib.MowzieAnimationController;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleDecal;
@@ -1067,7 +1067,7 @@ public abstract class EntityUmvuthana extends MowzieGeckoEntity {
             }
             if (getTicksInUse() == 6) {
                 getUser().playSound(MMSounds.ENTITY_UMVUTHANA_HEAL_START.get(rand.nextInt(3)).get(), 4, 1);
-                MowziesMobs.PROXY.playSunblockSound(getUser());
+                MMCommon.PROXY.playSunblockSound(getUser());
             }
 
             if (getTicksInUse() >= 6) {

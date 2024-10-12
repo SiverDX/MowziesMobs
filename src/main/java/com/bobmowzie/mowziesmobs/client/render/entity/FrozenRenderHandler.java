@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.render.entity;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.capability.CapabilityHandler;
 import com.bobmowzie.mowziesmobs.server.capability.FrozenCapability;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -39,7 +39,7 @@ import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 public enum FrozenRenderHandler {
     INSTANCE;
 
-    private static final ResourceLocation FROZEN_TEXTURE = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/frozen.png");
+    private static final ResourceLocation FROZEN_TEXTURE = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/entity/frozen.png");
 
     public static class LayerFrozen<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T,M> {
         private final LivingEntityRenderer<T, M> renderer;

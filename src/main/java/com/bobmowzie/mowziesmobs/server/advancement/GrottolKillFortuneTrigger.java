@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.advancement;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
@@ -11,7 +11,7 @@ import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerPlayer;
 
 public class GrottolKillFortuneTrigger extends MMTrigger<AbstractCriterionTriggerInstance, GrottolKillFortuneTrigger.Listener> {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "kill_grottol_fortune");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "kill_grottol_fortune");
 
     public GrottolKillFortuneTrigger() {
     }

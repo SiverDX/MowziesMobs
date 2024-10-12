@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.item;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.render.item.RenderUmvuthanaMaskArmor;
 import com.bobmowzie.mowziesmobs.client.render.item.RenderUmvuthanaMaskItem;
 import com.bobmowzie.mowziesmobs.server.capability.CapabilityHandler;
@@ -150,7 +150,7 @@ public class ItemUmvuthanaMask extends MowzieArmorItem implements UmvuthanaMask,
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         String s = ChatFormatting.stripFormatting(stack.getHoverName().getString());
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/item/umvuthana_mask_" + this.type.name + ".png").toString();
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/item/umvuthana_mask_" + this.type.name + ".png").toString();
     }
 
     @Override

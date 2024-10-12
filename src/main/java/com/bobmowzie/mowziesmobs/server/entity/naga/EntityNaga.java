@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.entity.naga;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.tools.ControlledAnimation;
 import com.bobmowzie.mowziesmobs.client.model.tools.dynamics.DynamicChain;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleVanillaCloudExtended;
@@ -272,7 +272,7 @@ public class EntityNaga extends MowzieLLibraryEntity implements RangedAttackMob,
                     setDeltaMovement(v.x, v.y, v.z);
                 }
 
-                if (getAnimationTick() == 22) MowziesMobs.PROXY.playNagaSwoopSound(entity);
+                if (getAnimationTick() == 22) MMCommon.PROXY.playNagaSwoopSound(entity);
 
                 if (getAnimationTick() == 7) playSound(MMSounds.ENTITY_NAGA_GRUNT_3.get(), 2, 1f);
                 if (getAnimationTick() == 22) playSound(MMSounds.ENTITY_NAGA_ROAR_1.get(), 3, 1f);

@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.model.armor;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.item.ItemGeomancerArmor;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -15,17 +15,17 @@ import software.bernie.geckolib.model.GeoModel;
 public class ModelGeomancerArmor extends GeoModel<ItemGeomancerArmor> {
     @Override
     public ResourceLocation getModelResource(ItemGeomancerArmor object) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/geomancer_armor.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "geo/geomancer_armor.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(ItemGeomancerArmor object) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/item/geomancer_armor.png");
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/item/geomancer_armor.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(ItemGeomancerArmor animatable) {
-        return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/empty.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "animations/empty.animation.json");
     }
 
     @Override

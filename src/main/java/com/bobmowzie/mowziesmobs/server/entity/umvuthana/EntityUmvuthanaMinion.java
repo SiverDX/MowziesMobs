@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.entity.umvuthana;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.ServerProxy;
 import com.bobmowzie.mowziesmobs.server.ai.EntityAIUmvuthanaTrade;
 import com.bobmowzie.mowziesmobs.server.ai.EntityAIUmvuthanaTradeLook;
@@ -188,7 +188,7 @@ public class EntityUmvuthanaMinion extends EntityUmvuthana implements LeaderSuns
 
     public void openGUI(Player playerEntity) {
         setCustomer(playerEntity);
-        MowziesMobs.PROXY.setReferencedMob(this);
+        MMCommon.PROXY.setReferencedMob(this);
         if (!this.level().isClientSide && getTarget() == null && isAlive()) {
             playerEntity.openMenu(new MenuProvider() {
                 @Override

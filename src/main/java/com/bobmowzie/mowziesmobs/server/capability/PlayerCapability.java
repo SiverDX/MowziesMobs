@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.capability;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.render.entity.player.GeckoPlayer;
 import com.bobmowzie.mowziesmobs.server.ability.Ability;
 import com.bobmowzie.mowziesmobs.server.ability.AbilityHandler;
@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerCapability {
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "player_cap");
+    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "player_cap");
 
     public interface IPlayerCapability extends INBTSerializable<CompoundTag> {
 
@@ -303,7 +303,7 @@ public class PlayerCapability {
             if (player.level().isClientSide()) {
                 if (Minecraft.getInstance().options.keyAttack.isDown() && !mouseLeftDown) {
                     mouseLeftDown = true;
-                    MowziesMobs.NETWORK.sendToServer(new MessageLeftMouseDown());
+                    MMCommon.NETWORK.sendToServer(new MessageLeftMouseDown());
                     for (int i = 0; i < powers.length; i++) {
                         powers[i].onLeftMouseDown(player);
                     }
@@ -318,7 +318,7 @@ public class PlayerCapability {
                 }
                 if (Minecraft.getInstance().options.keyUse.isDown() && !mouseRightDown) {
                     mouseRightDown = true;
-                    MowziesMobs.NETWORK.sendToServer(new MessageRightMouseDown());
+                    MMCommon.NETWORK.sendToServer(new MessageRightMouseDown());
                     for (int i = 0; i < powers.length; i++) {
                         powers[i].onRightMouseDown(player);
                     }
@@ -333,7 +333,7 @@ public class PlayerCapability {
                 }
                 if (!Minecraft.getInstance().options.keyAttack.isDown() && mouseLeftDown) {
                     mouseLeftDown = false;
-                    MowziesMobs.NETWORK.sendToServer(new MessageLeftMouseUp());
+                    MMCommon.NETWORK.sendToServer(new MessageLeftMouseUp());
                     for (int i = 0; i < powers.length; i++) {
                         powers[i].onLeftMouseUp(player);
                     }
@@ -348,7 +348,7 @@ public class PlayerCapability {
                 }
                 if (!Minecraft.getInstance().options.keyUse.isDown() && mouseRightDown) {
                     mouseRightDown = false;
-                    MowziesMobs.NETWORK.sendToServer(new MessageRightMouseUp());
+                    MMCommon.NETWORK.sendToServer(new MessageRightMouseUp());
                     for (int i = 0; i < powers.length; i++) {
                         powers[i].onRightMouseUp(player);
                     }

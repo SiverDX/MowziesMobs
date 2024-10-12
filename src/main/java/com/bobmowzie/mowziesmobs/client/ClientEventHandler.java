@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.gui.CustomBossBar;
 import com.bobmowzie.mowziesmobs.client.model.entity.ModelGeckoPlayerFirstPerson;
 import com.bobmowzie.mowziesmobs.client.model.entity.ModelGeckoPlayerThirdPerson;
@@ -272,7 +272,7 @@ public enum ClientEventHandler {
         customBossBar.renderBossBar(event);
     }
 
-    private static ResourceLocation SCULPTOR_BLOCK_GLOW = ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/sculptor_highlight.png");
+    private static ResourceLocation SCULPTOR_BLOCK_GLOW = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/entity/sculptor_highlight.png");
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onRenderLevelStage(RenderLevelStageEvent event) {
@@ -314,7 +314,7 @@ public enum ClientEventHandler {
     @SubscribeEvent
     public void onLevelTick(LevelTickEvent event) {
         if (event.getLevel().isClientSide()) {
-            MowziesMobs.PROXY.updateMarkedBlocks();
+            MMCommon.PROXY.updateMarkedBlocks();
             BossMusicPlayer.tick();
         }
     }

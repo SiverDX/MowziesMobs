@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.client.model.armor;
 
-import com.bobmowzie.mowziesmobs.MowziesMobs;
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.item.ItemSolVisage;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -10,17 +10,17 @@ public class SolVisageModel extends GeoModel<ItemSolVisage> {
 
 	@Override
 	public ResourceLocation getModelResource(ItemSolVisage object) {
-		return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "geo/sol_visage.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "geo/sol_visage.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(ItemSolVisage object) {
-		return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "textures/entity/umvuthi.png");
+		return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/entity/umvuthi.png");
 	}
 
 	@Override
 	public ResourceLocation getAnimationResource(ItemSolVisage animatable) {
-		return ResourceLocation.fromNamespaceAndPath(MowziesMobs.MODID, "animations/sol_visage.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "animations/sol_visage.animation.json");
 	}
 
 	@Override
