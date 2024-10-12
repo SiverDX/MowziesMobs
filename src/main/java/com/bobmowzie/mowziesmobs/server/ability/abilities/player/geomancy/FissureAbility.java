@@ -2,7 +2,6 @@ package com.bobmowzie.mowziesmobs.server.ability.abilities.player.geomancy;
 
 import com.bobmowzie.mowziesmobs.client.particle.ParticleDecal;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleHandler;
-import com.bobmowzie.mowziesmobs.client.particle.util.AdvancedParticleBase;
 import com.bobmowzie.mowziesmobs.client.particle.util.ParticleComponent;
 import com.bobmowzie.mowziesmobs.server.ability.Ability;
 import com.bobmowzie.mowziesmobs.server.ability.AbilitySection;
@@ -10,7 +9,7 @@ import com.bobmowzie.mowziesmobs.server.ability.AbilityType;
 import com.bobmowzie.mowziesmobs.server.ability.PlayerAbility;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 public class FissureAbility extends PlayerAbility {
     public FissureAbility(AbilityType<Player, ? extends Ability> abilityType, Player user) {

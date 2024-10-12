@@ -5,23 +5,21 @@ import com.bobmowzie.mowziesmobs.client.particle.ParticleOrb;
 import com.bobmowzie.mowziesmobs.server.ability.AbilityHandler;
 import com.bobmowzie.mowziesmobs.server.ability.AbilitySection;
 import com.bobmowzie.mowziesmobs.server.ability.AbilityType;
-import com.bobmowzie.mowziesmobs.server.ability.PlayerAbility;
 import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthi;
 import com.bobmowzie.mowziesmobs.server.potion.EffectHandler;
 import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import software.bernie.geckolib.animation.RawAnimation;
 
 import java.util.List;
 
@@ -49,7 +47,7 @@ public class SolarFlareAbility extends HeliomancyAbilityBase {
     @Override
     public boolean canUse() {
         if (getUser() == null || !getUser().getInventory().getSelected().isEmpty()) return false;
-        return getUser().hasEffect(EffectHandler.SUNS_BLESSING.get()) && super.canUse();
+        return getUser().hasEffect(EffectHandler.SUNS_BLESSING) && super.canUse();
     }
 
     @Override

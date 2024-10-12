@@ -2,10 +2,8 @@ package com.bobmowzie.mowziesmobs.server.ability.abilities.player.heliomancy;
 
 import com.bobmowzie.mowziesmobs.server.ability.AbilitySection;
 import com.bobmowzie.mowziesmobs.server.ability.AbilityType;
-import com.bobmowzie.mowziesmobs.server.ability.PlayerAbility;
 import com.bobmowzie.mowziesmobs.server.entity.EntityHandler;
 import com.bobmowzie.mowziesmobs.server.entity.effects.EntitySunstrike;
-import com.bobmowzie.mowziesmobs.server.potion.EffectHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,7 +12,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.animation.RawAnimation;
 
 public class SunstrikeAbility extends HeliomancyAbilityBase {
     private static final double REACH = 15;

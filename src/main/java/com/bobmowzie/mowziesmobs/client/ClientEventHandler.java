@@ -47,6 +47,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -148,8 +149,8 @@ public enum ClientEventHandler {
         }
     }
 
-    @SubscribeEvent // FIXME 1.21
-    public void onRenderTick(TickEvent.RenderTickEvent event) {
+    @SubscribeEvent
+    public void onRenderTick(RenderFrameEvent event) {
         Player player = Minecraft.getInstance().player;
 //        if (player != null) {
 //            PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
@@ -193,12 +194,12 @@ public enum ClientEventHandler {
         }
     }
 
-    @SubscribeEvent // FIXME 1.21
-    public void onRenderOverlay(RenderGuiOverlayEvent.Post e) {
+    @SubscribeEvent // FIXME 1.21 :: where is the frostbite
+    public void onRenderOverlay(RenderGuiLayerEvent.Post e) {
         final int startTime = 210;
         final int pointStart = 1200;
         final int timePerMillis = 22;
-        if (e.getOverlay() == VanillaGuiOverlay.FROSTBITE.type()) {
+        if (e.getName() == VanillaGuiOverlay.FROSTBITE.type()) {
             if (Minecraft.getInstance().player != null) {
                 FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(Minecraft.getInstance().player, CapabilityHandler.FROZEN_CAPABILITY);
                 if (frozenCapability != null && frozenCapability.getFrozen() && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON) {
@@ -210,12 +211,12 @@ public enum ClientEventHandler {
     }
 
     // Remove frozen overlay
-    @SubscribeEvent // FIXME 1.21
-    public void onRenderHUD(RenderGuiOverlayEvent.Pre event) {
+    @SubscribeEvent
+    public void onRenderHUD(RenderGuiLayerEvent.Pre event) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null && player.isPassenger()) {
             if (player.getVehicle() instanceof EntityFrozenController) {
-                if (event.getOverlay() == VanillaGuiOverlay.MOUNT_HEALTH.type()) {
+                if (event.getName() == VanillaGuiLayers.VEHICLE_HEALTH) {
                     event.setCanceled(true);
                 }
                 Minecraft.getInstance().gui.setOverlayMessage(Component.empty(), false);

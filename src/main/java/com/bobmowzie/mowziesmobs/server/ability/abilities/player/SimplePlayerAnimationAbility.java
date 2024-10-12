@@ -6,8 +6,8 @@ import com.bobmowzie.mowziesmobs.server.ability.AbilityType;
 import com.bobmowzie.mowziesmobs.server.ability.PlayerAbility;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.animation.Animation;
+import software.bernie.geckolib.animation.RawAnimation;
 
 public class SimplePlayerAnimationAbility extends PlayerAbility {
     private String animationName;

@@ -166,7 +166,7 @@ public final class ServerEventHandler {
 
             if (entity instanceof Mob && !(entity instanceof EntityUmvuthanaCrane)) {
                 Mob mob = (Mob) entity;
-                if (mob.getTarget() instanceof EntityUmvuthi && mob.getTarget().hasEffect(EffectHandler.SUNBLOCK.get())) {
+                if (mob.getTarget() instanceof EntityUmvuthi && mob.getTarget().hasEffect(EffectHandler.SUNBLOCK)) {
                     EntityUmvuthanaCrane sunblocker = mob.level().getNearestEntity(EntityUmvuthanaCrane.class, TargetingConditions.DEFAULT, mob, mob.getX(), mob.getY() + mob.getEyeHeight(), mob.getZ(), mob.getBoundingBox().inflate(40.0D, 15.0D, 40.0D));
                     mob.setTarget(sunblocker);
                 }
@@ -258,7 +258,7 @@ public final class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public void onLivingHurt(LivingHurtEvent event) {
+    public void onLivingHurt(LivingDamageEvent.Post event) {
         // Copied from LivingEntity's applyPotionDamageCalculations
         DamageSource source = event.getSource();
         LivingEntity livingEntity = event.getEntity();

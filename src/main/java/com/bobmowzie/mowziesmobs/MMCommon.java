@@ -24,7 +24,6 @@ import com.bobmowzie.mowziesmobs.server.world.feature.structure.StructureTypeHan
 import com.bobmowzie.mowziesmobs.server.world.feature.structure.jigsaw.JigsawHandler;
 import com.bobmowzie.mowziesmobs.server.world.feature.structure.processor.ProcessorHandler;
 import com.bobmowzie.mowziesmobs.server.world.spawn.SpawnHandler;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -39,7 +38,6 @@ import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import software.bernie.geckolib.GeckoLib;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 @EventBusSubscriber

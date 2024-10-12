@@ -1,6 +1,7 @@
 package com.bobmowzie.mowziesmobs.server.potion;
 
 import com.bobmowzie.mowziesmobs.MMCommon;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -17,7 +18,7 @@ public final class EffectHandler {
     public static final DeferredHolder<MobEffect, EffectPoisonResist> POISON_RESIST = REG.register("poison_resist", EffectPoisonResist::new);
     public static final DeferredHolder<MobEffect, EffectSunblock> SUNBLOCK = REG.register("sunblock", EffectSunblock::new);
 
-    public static void addOrCombineEffect(LivingEntity entity, MobEffect effect, int duration, int amplifier, boolean ambient, boolean showParticles) {
+    public static void addOrCombineEffect(LivingEntity entity, Holder<MobEffect> effect, int duration, int amplifier, boolean ambient, boolean showParticles) {
         if (effect == null) return;
         MobEffectInstance effectInst = entity.getEffect(effect);
         MobEffectInstance newEffect = new MobEffectInstance(effect, duration, amplifier, ambient, showParticles);

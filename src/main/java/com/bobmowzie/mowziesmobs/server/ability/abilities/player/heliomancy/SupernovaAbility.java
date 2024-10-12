@@ -18,7 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.animation.RawAnimation;
 
 import java.util.List;
 
@@ -114,13 +114,13 @@ public class SupernovaAbility extends HeliomancyAbilityBase {
                 EntitySuperNova superNova = new EntitySuperNova(EntityHandler.SUPER_NOVA.get(), getUser().level(), getUser(), getUser().getX(), getUser().getY() + getUser().getBbHeight()/2f, getUser().getZ());
                 getUser().level().addFreshEntity(superNova);
                 
-                MobEffectInstance sunsBlessingInstance = getUser().getEffect(EffectHandler.SUNS_BLESSING.get());
+                MobEffectInstance sunsBlessingInstance = getUser().getEffect(EffectHandler.SUNS_BLESSING);
                 if (sunsBlessingInstance != null) {
                     int duration = sunsBlessingInstance.getDuration();
-                    getUser().removeEffect(EffectHandler.SUNS_BLESSING.get());
+                    getUser().removeEffect(EffectHandler.SUNS_BLESSING);
                     int supernovaCost = ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SUNS_BLESSING.supernovaCost.get() * 60 * 20;
                     if (duration - supernovaCost > 0) {
-                        getUser().addEffect(new MobEffectInstance(EffectHandler.SUNS_BLESSING.get(), duration - supernovaCost, 0, false, false));
+                        getUser().addEffect(new MobEffectInstance(EffectHandler.SUNS_BLESSING, duration - supernovaCost, 0, false, false));
                     }
                 }
             }

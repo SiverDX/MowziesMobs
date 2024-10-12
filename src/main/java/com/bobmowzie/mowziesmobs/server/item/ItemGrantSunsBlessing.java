@@ -26,7 +26,7 @@ public class ItemGrantSunsBlessing extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
-        playerIn.addEffect(new MobEffectInstance(EffectHandler.SUNS_BLESSING.get(), -1, 0, false, false));
+        playerIn.addEffect(new MobEffectInstance(EffectHandler.SUNS_BLESSING, -1, 0, false, false));
         return super.use(worldIn, playerIn, hand);
     }
 

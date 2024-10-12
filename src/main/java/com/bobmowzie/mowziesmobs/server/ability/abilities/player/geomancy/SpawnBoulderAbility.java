@@ -25,9 +25,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import net.neoforged.neoforge.client.event.RenderFrameEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import software.bernie.geckolib.animation.RawAnimation;
 
 public class SpawnBoulderAbility extends PlayerAbility {
     private static int MAX_CHARGE = 60;
@@ -192,7 +192,7 @@ public class SpawnBoulderAbility extends PlayerAbility {
     }
 
     @Override
-    public void onRenderTick(TickEvent.RenderTickEvent event) {
+    public void onRenderTick(RenderFrameEvent event) {
         super.onRenderTick(event);
         if (isUsing() && getCurrentSection().sectionType == AbilitySection.AbilitySectionType.STARTUP && getTicksInSection() > 1) {
             Vec3 playerEyes = getUser().getEyePosition(Minecraft.getInstance().getFrameTime());

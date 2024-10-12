@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.animation.RawAnimation;
 
 
 public class RockSlingAbility extends PlayerAbility {

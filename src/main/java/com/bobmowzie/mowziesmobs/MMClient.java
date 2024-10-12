@@ -28,7 +28,7 @@ public class MMClient {
 
         NeoForge.EVENT_BUS.register(ClientEventHandler.INSTANCE);
         NeoForge.EVENT_BUS.register(FrozenRenderHandler.INSTANCE);
-        NeoForge.EVENT_BUS.register(AbilityClientEventHandler.INSTANCE);
+        NeoForge.EVENT_BUS.addListener(AbilityClientEventHandler::onRenderTick);
 
         container.registerConfig(ModConfig.Type.CLIENT, ConfigHandler.CLIENT_CONFIG);
     }

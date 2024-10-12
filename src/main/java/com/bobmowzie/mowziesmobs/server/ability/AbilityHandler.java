@@ -16,7 +16,7 @@ import com.bobmowzie.mowziesmobs.server.message.MessageUseAbility;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
@@ -90,7 +90,7 @@ public enum AbilityHandler {
             Ability instance = abilityCapability.getAbilityMap().get(abilityType);
             if (instance != null && instance.canUse()) {
                 abilityCapability.activateAbility(entity, abilityType);
-                MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new MessageUseAbility(entity.getId(), ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), abilityType)));
+                PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new MessageUseAbility(entity.getId(), ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), abilityType)));
             }
         }
     }

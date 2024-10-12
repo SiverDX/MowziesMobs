@@ -3,12 +3,12 @@ package com.bobmowzie.mowziesmobs.server.ability;
 import com.bobmowzie.mowziesmobs.server.capability.AbilityCapability;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
+import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 public class AbilityCommonEventHandler {
     @SubscribeEvent
@@ -103,7 +103,7 @@ public class AbilityCommonEventHandler {
     }
 
     @SubscribeEvent
-    public void onTakeDamage(LivingHurtEvent event) {
+    public void onTakeDamage(LivingDamageEvent.Post event) {
         LivingEntity player = event.getEntity();
         AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
         if (abilityCapability != null) {

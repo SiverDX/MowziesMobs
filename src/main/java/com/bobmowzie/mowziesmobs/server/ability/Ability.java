@@ -14,14 +14,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.neoforge.client.event.RenderFrameEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.RawAnimation;
 
 import java.util.List;
 import java.util.Random;
@@ -128,7 +126,7 @@ public class Ability<T extends LivingEntity> {
      * @return Whether or not the ability can be used
      */
     public boolean canUse() {
-        if (getUser().hasEffect(EffectHandler.FROZEN.get())) return false;
+        if (getUser().hasEffect(EffectHandler.FROZEN)) return false;
         boolean toReturn = (!isUsing() || canCancelSelf()) && cooldownTimer == 0;
         if (!runsInBackground()) toReturn = toReturn && (abilityCapability.getActiveAbility() == null || canCancelActiveAbility() || abilityCapability.getActiveAbility().canBeCanceledByAbility(this));
         return toReturn;
@@ -162,7 +160,7 @@ public class Ability<T extends LivingEntity> {
     }
 
     protected boolean canContinueUsing() {
-        return !getUser().hasEffect(EffectHandler.FROZEN.get());
+        return !getUser().hasEffect(EffectHandler.FROZEN);
     }
 
     public boolean isUsing() {
@@ -226,8 +224,8 @@ public class Ability<T extends LivingEntity> {
         return false;
     }
 
-    public void onTakeDamage(LivingHurtEvent event) {
-        if (isUsing() && event.getResult() != Event.Result.DENY && event.getAmount() > 0.0 && damageInterrupts()) AbilityHandler.INSTANCE.sendInterruptAbilityMessage(getUser(), getAbilityType());
+    public void onTakeDamage(LivingDamageEvent.Post event) {
+        if (isUsing() && event.getNewDamage() > 0 && damageInterrupts()) AbilityHandler.INSTANCE.sendInterruptAbilityMessage(getUser(), getAbilityType());
     }
 
     /**
@@ -342,7 +340,7 @@ public class Ability<T extends LivingEntity> {
     }
 
     // Client events
-    public void onRenderTick(TickEvent.RenderTickEvent event) {
+    public void onRenderTick(RenderFrameEvent event) {
 
     }
 }
