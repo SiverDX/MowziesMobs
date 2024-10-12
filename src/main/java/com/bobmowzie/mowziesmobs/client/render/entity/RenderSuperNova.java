@@ -50,7 +50,7 @@ public class RenderSuperNova extends EntityRenderer<EntitySuperNova> {
         matrixStackIn.pushPose();
         VertexConsumer ivertexbuilder = bufferIn.getBuffer(MMRenderType.getGlowingEffect(this.getTextureLocation(entityIn)));
         model.setupAnim(entityIn, 0, 0, entityIn.tickCount + partialTicks, 0, 0);
-        model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, -1);
         matrixStackIn.popPose();
     }
 }

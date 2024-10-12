@@ -34,7 +34,7 @@ public class RenderIceBall extends EntityRenderer<EntityIceBall> {
         matrixStackIn.translate(0, -0.5f, 0);
         VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));
         model.setupAnim(entityIn, 0, 0, entityIn.tickCount + partialTicks, 0, 0);
-        model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, -1);
         matrixStackIn.popPose();
     }
 }

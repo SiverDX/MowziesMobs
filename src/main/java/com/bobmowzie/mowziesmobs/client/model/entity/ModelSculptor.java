@@ -12,9 +12,9 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3d;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 import java.util.HashMap;

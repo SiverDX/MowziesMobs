@@ -15,7 +15,6 @@ import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
-import software.bernie.geckolib.util.RenderUtils;
 
 public class MowzieGeoArmorRenderer<T extends ArmorItem & GeoItem> extends GeoArmorRenderer<T> {
     public boolean usingCustomPlayerAnimations = false;
@@ -25,9 +24,9 @@ public class MowzieGeoArmorRenderer<T extends ArmorItem & GeoItem> extends GeoAr
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         if (currentEntity != null) {
-            super.renderToBuffer(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+            super.renderToBuffer(poseStack, buffer, packedLight, packedOverlay, color);
             usingCustomPlayerAnimations = false;
         }
     }

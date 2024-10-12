@@ -7,11 +7,8 @@ import com.bobmowzie.mowziesmobs.client.render.entity.player.GeckoPlayer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.animation.AnimationState;
 
-@OnlyIn(Dist.CLIENT)
 public class ModelGeckoPlayerFirstPerson extends MowzieGeoModel<GeckoPlayer> {
 	private ResourceLocation textureLocation;
 
@@ -69,6 +66,6 @@ public class ModelGeckoPlayerFirstPerson extends MowzieGeoModel<GeckoPlayer> {
 	}
 
 	public void setTextureFromPlayer(AbstractClientPlayer player) {
-		this.textureLocation = player.getSkinTextureLocation();
+		this.textureLocation = player.getSkin().texture();
 	}
 }

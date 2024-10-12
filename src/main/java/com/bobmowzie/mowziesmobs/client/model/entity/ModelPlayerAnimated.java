@@ -7,19 +7,16 @@ import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@OnlyIn(Dist.CLIENT)
 public class ModelPlayerAnimated<T extends LivingEntity> extends PlayerModel<T> {
     private final List<ModelPart> parts;
 
-    public ModelPlayerAnimated(ModelPart root, boolean smallArmsIn) {
+    public ModelPlayerAnimated(ModelPart root, boolean smallArmsIn) { // FIXME 1.21 :: ear is private
         super(root, smallArmsIn);
         ModelPartMatrix bodyMatrix = new ModelPartMatrix(body, false);
         ModelPartMatrix headMatrix = new ModelPartMatrix(head, false);

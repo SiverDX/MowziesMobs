@@ -1,9 +1,9 @@
 package com.bobmowzie.mowziesmobs.datagen;
 
 import com.bobmowzie.mowziesmobs.MMCommon;
-import net.minecraft.core.*;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -22,7 +22,7 @@ public class StructureSetHandler {
         return ResourceKey.create(Registries.STRUCTURE_SET, ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, name));
     }
 
-    public static void bootstrap(BootstapContext<StructureSet> context) {
+    public static void bootstrap(BootstrapContext<StructureSet> context) {
         HolderGetter<Structure> structures = context.lookup(Registries.STRUCTURE);
 
         context.register(WROUGHT_CHAMBERS, new StructureSet(structures.getOrThrow(StructureHandler.WROUGHT_CHAMBER), new RandomSpreadStructurePlacement(15, 5, RandomSpreadType.TRIANGULAR, 23217347)));

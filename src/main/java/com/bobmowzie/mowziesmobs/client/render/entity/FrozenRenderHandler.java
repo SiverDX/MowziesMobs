@@ -20,14 +20,15 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.PlayerModelPart;
-import net.minecraftforge.client.event.RenderHandEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.RenderHandEvent;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoRenderer;
@@ -54,10 +55,8 @@ public enum FrozenRenderHandler {
             FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(living, CapabilityHandler.FROZEN_CAPABILITY);
             if (frozenCapability != null && frozenCapability.getFrozen()) {
                 EntityModel model = this.renderer.getModel();
-
-                float transparency = 1;
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(FROZEN_TEXTURE));
-                model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, transparency);
+                model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, -1);
             }
         }
     }
@@ -73,10 +72,7 @@ public enum FrozenRenderHandler {
             FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(animatable, CapabilityHandler.FROZEN_CAPABILITY);
             if (frozenCapability != null && frozenCapability.getFrozen()) {
                 RenderType frozenRenderType = RenderType.entityTranslucent(FROZEN_TEXTURE);
-
-                getRenderer().reRender(getDefaultBakedModel(animatable),
-                        poseStack, bufferSource, animatable, renderType, bufferSource.getBuffer(frozenRenderType),
-                        partialTick, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+                getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, renderType, bufferSource.getBuffer(frozenRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY, -1);
             }
         }
     }
@@ -125,7 +121,7 @@ public enum FrozenRenderHandler {
         matrixStackIn.mulPose(Axis.YP.rotationDegrees(f * f6 * 70.0F));
         matrixStackIn.mulPose(Axis.ZP.rotationDegrees(f * f5 * -20.0F));
         AbstractClientPlayer abstractclientplayerentity = mc.player;
-        mc.getTextureManager().bindForSetup(abstractclientplayerentity.getSkinTextureLocation());
+        mc.getTextureManager().bindForSetup(abstractclientplayerentity.getSkin().texture());
         matrixStackIn.translate(f * -1.0F, 3.6F, 3.5D);
         matrixStackIn.mulPose(Axis.ZP.rotationDegrees(f * 120.0F));
         matrixStackIn.mulPose(Axis.XP.rotationDegrees(200.0F));
@@ -158,7 +154,7 @@ public enum FrozenRenderHandler {
         model.swimAmount = 0.0F;
         model.setupAnim(playerIn, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
         rendererArmwearIn.xRot = 0.0F;
-        rendererArmwearIn.render(matrixStackIn, bufferIn.getBuffer(RenderType.entityTranslucent(FROZEN_TEXTURE)), combinedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 0.8f);
+        rendererArmwearIn.render(matrixStackIn, bufferIn.getBuffer(RenderType.entityTranslucent(FROZEN_TEXTURE)), combinedLightIn, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(0.8f, 1, 1,1));
     }
 
     private void setModelVisibilities(AbstractClientPlayer clientPlayer, PlayerModel<AbstractClientPlayer> playermodel) {

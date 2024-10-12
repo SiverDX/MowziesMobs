@@ -12,10 +12,10 @@ import java.util.TreeMap;
 
 public class ModelRockSling extends GeoModel<EntityRockSling> {
     static Map<String, ResourceLocation> texMap;
-    private static final ResourceLocation TEXTURE_DIRT = new ResourceLocation("textures/block/dirt.png");
-    private static final ResourceLocation TEXTURE_STONE = new ResourceLocation("textures/block/stone.png");
-    private static final ResourceLocation TEXTURE_SANDSTONE = new ResourceLocation("textures/block/sandstone.png");
-    private static final ResourceLocation TEXTURE_CLAY = new ResourceLocation("textures/block/clay.png");
+    private static final ResourceLocation TEXTURE_DIRT = ResourceLocation.withDefaultNamespace("textures/block/dirt.png");
+    private static final ResourceLocation TEXTURE_STONE = ResourceLocation.withDefaultNamespace("textures/block/stone.png");
+    private static final ResourceLocation TEXTURE_SANDSTONE = ResourceLocation.withDefaultNamespace("textures/block/sandstone.png");
+    private static final ResourceLocation TEXTURE_CLAY = ResourceLocation.withDefaultNamespace("textures/block/clay.png");
 
     public ModelRockSling(){
         super();

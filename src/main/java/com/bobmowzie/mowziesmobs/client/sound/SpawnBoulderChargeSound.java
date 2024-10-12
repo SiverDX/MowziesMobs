@@ -9,10 +9,7 @@ import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class SpawnBoulderChargeSound extends AbstractTickableSoundInstance {
     private final LivingEntity user;
     private final SpawnBoulderAbility ability;

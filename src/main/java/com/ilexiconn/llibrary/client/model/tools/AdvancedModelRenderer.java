@@ -9,11 +9,10 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.minecraft.client.model.Model;
 import net.minecraft.core.Direction;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -26,7 +25,6 @@ import software.bernie.geckolib.util.Color;
  * @author gegy1000
  * @since 1.0.0
  */
-@OnlyIn(Dist.CLIENT)
 public class AdvancedModelRenderer extends BasicModelRenderer {
     private static final float MINIMUM_SCALE = 0.000001f;
 
@@ -274,17 +272,17 @@ public class AdvancedModelRenderer extends BasicModelRenderer {
 
     // Copied from parent class
     @Override
-    public void render(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void render(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         if (this.showModel) {
             if (!this.cubeList.isEmpty() || !this.childModels.isEmpty()) {
-                matrixStackIn.pushPose();
 
+                matrixStackIn.pushPose();
                 this.translateRotate(matrixStackIn);
-                if (!isHidden) this.doRender(matrixStackIn.last(), bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha * opacity);
+                if (!isHidden) this.doRender(matrixStackIn.last(), bufferIn, packedLightIn, packedOverlayIn, FastColor.ARGB32.red(color), FastColor.ARGB32.green(color), FastColor.ARGB32.blue(color), FastColor.ARGB32.alpha(color) * opacity);
 
                 // Render children
                 for(BasicModelRenderer modelrenderer : this.childModels) {
-                    modelrenderer.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+                    modelrenderer.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
                 }
 
                 matrixStackIn.popPose();

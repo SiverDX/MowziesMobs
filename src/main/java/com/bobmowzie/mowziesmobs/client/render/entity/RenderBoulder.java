@@ -14,18 +14,15 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Map;
 import java.util.TreeMap;
 
-@OnlyIn(Dist.CLIENT)
 public class RenderBoulder extends EntityRenderer<EntityBoulderBase> {
-    private static final ResourceLocation TEXTURE_DIRT = new ResourceLocation("textures/blocks/dirt.png");
-    private static final ResourceLocation TEXTURE_STONE = new ResourceLocation("textures/blocks/stone.png");
-    private static final ResourceLocation TEXTURE_SANDSTONE = new ResourceLocation("textures/blocks/sandstone.png");
-    private static final ResourceLocation TEXTURE_CLAY = new ResourceLocation("textures/blocks/clay.png");
+    private static final ResourceLocation TEXTURE_DIRT = ResourceLocation.withDefaultNamespace("textures/blocks/dirt.png");
+    private static final ResourceLocation TEXTURE_STONE = ResourceLocation.withDefaultNamespace("textures/blocks/stone.png");
+    private static final ResourceLocation TEXTURE_SANDSTONE = ResourceLocation.withDefaultNamespace("textures/blocks/sandstone.png");
+    private static final ResourceLocation TEXTURE_CLAY = ResourceLocation.withDefaultNamespace("textures/blocks/clay.png");
     Map<String, ResourceLocation> texMap;
 
     ModelBoulder model;
@@ -33,7 +30,7 @@ public class RenderBoulder extends EntityRenderer<EntityBoulderBase> {
     public RenderBoulder(EntityRendererProvider.Context mgr) {
         super(mgr);
         model = new ModelBoulder();
-        texMap = new TreeMap<String, ResourceLocation>();
+        texMap = new TreeMap<>();
         texMap.put(Blocks.STONE.getDescriptionId(), TEXTURE_STONE);
         texMap.put(Blocks.DIRT.getDescriptionId(), TEXTURE_DIRT);
         texMap.put(Blocks.CLAY.getDescriptionId(), TEXTURE_CLAY);

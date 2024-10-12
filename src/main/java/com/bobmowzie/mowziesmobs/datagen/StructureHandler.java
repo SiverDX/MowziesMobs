@@ -7,7 +7,7 @@ import com.bobmowzie.mowziesmobs.server.world.feature.structure.UmvuthanaGroveSt
 import com.bobmowzie.mowziesmobs.server.world.feature.structure.WroughtnautChamberStructure;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -30,22 +30,22 @@ public class StructureHandler {
         return ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, name));
     }
 
-    public static void bootstrap(BootstapContext<Structure> context) {
+    public static void bootstrap(BootstrapContext<Structure> context) {
         context.register(WROUGHT_CHAMBER, new WroughtnautChamberStructure(structure(TagHandler.HAS_MOWZIE_STRUCTURE, TerrainAdjustment.NONE, context)));
         context.register(UMVUTHANA_GROVE, new UmvuthanaGroveStructure(structure(TagHandler.HAS_MOWZIE_STRUCTURE, TerrainAdjustment.NONE, context)));
         context.register(FROSTMAW, new FrostmawStructure(structure(TagHandler.HAS_MOWZIE_STRUCTURE, TerrainAdjustment.BEARD_THIN, context)));
 //        context.register(CONFIGURED_MONASTERY, FeatureHandler.MONASTERY.get().configured(new JigsawConfiguration(PlainVillagePools.START, 0), TagHandler.HAS_MOWZIE_STRUCTURE));
     }
 
-    private static HolderSet<Biome> biomes(TagKey<Biome> biomeTag, BootstapContext<Structure> context) {
+    private static HolderSet<Biome> biomes(TagKey<Biome> biomeTag, BootstrapContext<Structure> context) {
         return context.lookup(Registries.BIOME).getOrThrow(biomeTag);
     }
 
-    private static Structure.StructureSettings structure(TagKey<Biome> biomeTag, Map<MobCategory, StructureSpawnOverride> spawnOverrides, GenerationStep.Decoration generationStep, TerrainAdjustment terrainAdjustment, BootstapContext<Structure> context) {
+    private static Structure.StructureSettings structure(TagKey<Biome> biomeTag, Map<MobCategory, StructureSpawnOverride> spawnOverrides, GenerationStep.Decoration generationStep, TerrainAdjustment terrainAdjustment, BootstrapContext<Structure> context) {
         return new Structure.StructureSettings(biomes(biomeTag, context), spawnOverrides, generationStep, terrainAdjustment);
     }
 
-    private static Structure.StructureSettings structure(TagKey<Biome> biomeTag, TerrainAdjustment terrainAdjustment, BootstapContext<Structure> context) {
+    private static Structure.StructureSettings structure(TagKey<Biome> biomeTag, TerrainAdjustment terrainAdjustment, BootstrapContext<Structure> context) {
         return structure(biomeTag, Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, terrainAdjustment, context);
     }
 }

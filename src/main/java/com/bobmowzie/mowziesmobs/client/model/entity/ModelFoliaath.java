@@ -7,10 +7,7 @@ import com.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.util.Mth;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class ModelFoliaath<T extends EntityFoliaath> extends MowzieEntityModel<T> {
     public AdvancedModelRenderer bigLeaf2Base;
     public AdvancedModelRenderer bigLeaf1Base;
@@ -231,7 +228,7 @@ public class ModelFoliaath<T extends EntityFoliaath> extends MowzieEntityModel<T
     }
 
     @Override
-    public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         float leafScale = 1.25F;
         bigLeaf2Base.rotationPointY -= 3.5;
         bigLeaf1Base.rotationPointY -= 3.5;
@@ -239,15 +236,15 @@ public class ModelFoliaath<T extends EntityFoliaath> extends MowzieEntityModel<T
         bigLeaf4Base.rotationPointY -= 3.5;
         matrixStackIn.pushPose();
         matrixStackIn.scale(leafScale, leafScale, leafScale);
-        bigLeaf2Base.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-        bigLeaf1Base.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-        bigLeaf3Base.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-        bigLeaf4Base.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        bigLeaf2Base.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
+        bigLeaf1Base.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
+        bigLeaf3Base.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
+        bigLeaf4Base.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
         matrixStackIn.popPose();
         matrixStackIn.pushPose();
         matrixStackIn.translate(0, 1.4F - 1.4F * activeProgress, 0);
         matrixStackIn.scale(activeProgress, activeProgress, activeProgress);
-        stem1Joint.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        stem1Joint.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
         matrixStackIn.popPose();
     }
 

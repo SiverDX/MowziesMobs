@@ -15,13 +15,10 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-@OnlyIn(Dist.CLIENT)
 public class RenderAxeAttack extends EntityRenderer<EntityAxeAttack> {
     public static ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/entity/wroughtnaut.png");
 

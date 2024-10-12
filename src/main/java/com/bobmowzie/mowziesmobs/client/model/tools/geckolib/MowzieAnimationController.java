@@ -1,21 +1,18 @@
 package com.bobmowzie.mowziesmobs.client.model.tools.geckolib;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.TestOnly;
+import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animatable.model.CoreGeoModel;
-import software.bernie.geckolib.core.animation.*;
-import software.bernie.geckolib.util.RenderUtils;
-
-import java.util.Queue;
+import software.bernie.geckolib.animation.Animation;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.model.GeoModel;
 
 public class MowzieAnimationController<T extends GeoAnimatable> extends AnimationController<T> {
     private double timingOffset;
 
-    public MowzieAnimationController(T animatable, String name, int transitionLength, AnimationStateHandler<T> animationHandler, double timingOffset) {
+    public MowzieAnimationController(T animatable, String name, int transitionLength, AnimationController.AnimationStateHandler<T> animationHandler, double timingOffset) {
         super(animatable, name, transitionLength, animationHandler);
         this.timingOffset = timingOffset;
     }
@@ -51,7 +48,7 @@ public class MowzieAnimationController<T extends GeoAnimatable> extends Animatio
 //        // I did this in a fugue state and I have no idea why it works
     }
 
-    public void setLastModel(CoreGeoModel<T> coreGeoModel) {
+    public void setLastModel(GeoModel<T> coreGeoModel) {
         this.lastModel = coreGeoModel;
     }
 

@@ -7,7 +7,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.world.entity.HumanoidArm;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib.util.Color;
 
 /**
  * Created by BobMowzie on 4/14/2017.
@@ -116,9 +115,8 @@ public class ModelAxeAttack<T extends EntityAxeAttack> extends AdvancedModelBase
     }
 
     @Override
-    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
-        Color color = new Color(packedColor);
-        axeBase.render(poseStack, buffer, packedLight, packedOverlay, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+        axeBase.render(poseStack, buffer, packedLight, packedOverlay, color);
     }
 
     public void setRotationAngles(EntityAxeAttack entity, float f5, float delta) {

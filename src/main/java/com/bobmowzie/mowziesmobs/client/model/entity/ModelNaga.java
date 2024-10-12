@@ -661,9 +661,9 @@ public class ModelNaga<T extends EntityNaga> extends MowzieEntityModel<T> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        this.root.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-        if (tail != null) tail.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha, tailDynamic);
+    public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
+        this.root.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
+        if (tail != null) tail.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color, tailDynamic);
         for (AdvancedModelRenderer AdvancedModelRenderer : tailOriginal) {
             AdvancedModelRenderer.showModel = false;
         }

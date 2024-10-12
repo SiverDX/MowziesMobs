@@ -14,11 +14,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib.cache.object.GeoBone;
 
-@OnlyIn(Dist.CLIENT)
 public class ModelGeckoBiped extends MowzieGeoModel<GeckoPlayer> {
 	private ResourceLocation textureLocation;
 
@@ -49,7 +46,7 @@ public class ModelGeckoBiped extends MowzieGeoModel<GeckoPlayer> {
 	}
 
 	public void setTextureFromPlayer(AbstractClientPlayer player) {
-		this.textureLocation = player.getSkinTextureLocation();
+		this.textureLocation = player.getSkin().texture();
 	}
 
 	public void setUseSmallArms(boolean useSmallArms) {

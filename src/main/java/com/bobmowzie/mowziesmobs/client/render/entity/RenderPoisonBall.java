@@ -33,7 +33,7 @@ public class RenderPoisonBall extends EntityRenderer<EntityPoisonBall> {
         matrixStackIn.mulPose(Axis.YN.rotationDegrees(entityYaw));
         VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(this.getTextureLocation(entityIn)));
         model.setupAnim(entityIn, 0, 0, entityIn.tickCount + partialTicks, 0, 0);
-        model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, -1);
         matrixStackIn.popPose();
     }
 }
