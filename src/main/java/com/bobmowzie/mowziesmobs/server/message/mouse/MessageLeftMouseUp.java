@@ -1,5 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.message.mouse;
 
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.ability.Ability;
 import com.bobmowzie.mowziesmobs.server.ability.AbilityHandler;
 import com.bobmowzie.mowziesmobs.server.ability.PlayerAbility;
@@ -7,56 +8,48 @@ import com.bobmowzie.mowziesmobs.server.capability.AbilityCapability;
 import com.bobmowzie.mowziesmobs.server.capability.CapabilityHandler;
 import com.bobmowzie.mowziesmobs.server.capability.PlayerCapability;
 import com.bobmowzie.mowziesmobs.server.power.Power;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.BiConsumer;
-import java.util.function.Supplier;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by BobMowzie on 5/25/2017.
  */
-public class MessageLeftMouseUp {
-    public MessageLeftMouseUp() {}
+public record MessageLeftMouseUp() implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<MessageLeftMouseUp> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "message_left_mouse_up"));
+    public static final StreamCodec<ByteBuf, MessageLeftMouseUp> STREAM_CODEC = StreamCodec.unit(new MessageLeftMouseUp());
 
-    public static void serialize(final MessageLeftMouseUp message, final FriendlyByteBuf buf) {
+    public static void handleServer(final MessageLeftMouseUp packet, final IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            PlayerCapability.IPlayerCapability capability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
 
-    }
+            if (capability != null) {
+                capability.setMouseLeftDown(false);
 
-    public static MessageLeftMouseUp deserialize(final FriendlyByteBuf buf) {
-        final MessageLeftMouseUp message = new MessageLeftMouseUp();
-        return message;
-    }
-
-    public static final class Handler implements BiConsumer<MessageLeftMouseUp, Supplier<NetworkEvent.Context>> {
-        @Override
-        public void accept(final MessageLeftMouseUp message, final Supplier<NetworkEvent.Context> contextSupplier) {
-            final NetworkEvent.Context context = contextSupplier.get();
-            final ServerPlayer player = context.getSender();
-            context.enqueueWork(() -> this.accept(message, player));
-            context.setPacketHandled(true);
-        }
-
-        private void accept(final MessageLeftMouseUp message, final ServerPlayer player) {
-            if (player != null) {
-                PlayerCapability.IPlayerCapability capability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
-                if (capability != null) {
-                    capability.setMouseLeftDown(false);
-                    Power[] powers = capability.getPowers();
-                    for (int i = 0; i < powers.length; i++) {
-                        powers[i].onLeftMouseUp(player);
-                    }
+                for (Power power : capability.getPowers()) {
+                    power.onLeftMouseUp(player);
                 }
-                AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
-                if (abilityCapability != null) {
-                    for (Ability ability : abilityCapability.getAbilities()) {
-                        if (ability instanceof PlayerAbility) {
-                            ((PlayerAbility) ability).onLeftMouseUp(player);
-                        }
+            }
+
+            AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
+
+            if (abilityCapability != null) {
+                for (Ability<?> ability : abilityCapability.getAbilities()) {
+                    if (ability instanceof PlayerAbility playerAbility) {
+                        playerAbility.onLeftMouseUp(player);
                     }
                 }
             }
-        }
+        });
+    }
+
+    @Override
+    public @NotNull CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

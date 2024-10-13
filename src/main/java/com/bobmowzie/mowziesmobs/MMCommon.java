@@ -47,8 +47,6 @@ public final class MMCommon {
     public static final Logger LOGGER = LogManager.getLogger();
     public static ServerProxy PROXY;
 
-    public static SimpleChannel NETWORK;
-
     public MMCommon(IEventBus modBus, ModContainer container) {
         GeckoLibUtil.addCustomBakedModelFactory(MODID, new MowzieModelFactory());
 
@@ -69,7 +67,7 @@ public final class MMCommon {
         LootTableHandler.LOOT_FUNCTION_TYPE_REG.register(modBus);
         CreativeTabHandler.register(modBus);
 
-        PROXY.init(modBus);
+        PROXY.init();
         modBus.<FMLCommonSetupEvent>addListener(this::init);
         modBus.<FMLLoadCompleteEvent>addListener(this::init);
         modBus.addListener(this::onModConfigEvent);
@@ -138,7 +136,6 @@ public final class MMCommon {
 
     public void init(final FMLCommonSetupEvent event) {
         SpawnHandler.registerSpawnPlacementTypes();
-        PROXY.initNetwork();
         AdvancementHandler.preInit();
         PotionTypeHandler.init();
 
@@ -152,7 +149,5 @@ public final class MMCommon {
         ItemHandler.initializeAttributes();
         ItemHandler.initializeDispenserBehaviors();
         BlockHandler.init();
-        final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        PROXY.onLateInit(bus);
     }
 }

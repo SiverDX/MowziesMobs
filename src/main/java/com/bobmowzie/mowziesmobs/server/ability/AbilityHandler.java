@@ -1,6 +1,5 @@
 package com.bobmowzie.mowziesmobs.server.ability;
 
-import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.ability.abilities.player.*;
 import com.bobmowzie.mowziesmobs.server.ability.abilities.player.geomancy.*;
 import com.bobmowzie.mowziesmobs.server.ability.abilities.player.heliomancy.SolarBeamAbility;
@@ -104,7 +103,7 @@ public enum AbilityHandler {
             Ability instance = abilityCapability.getAbilityMap().get(abilityType);
             if (instance.isUsing()) {
                 instance.interrupt();
-                MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new MessageInterruptAbility(entity.getId(), ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), abilityType)));
+                PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new MessageInterruptAbility(entity.getId(), ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), abilityType)));
             }
         }
     }
@@ -115,7 +114,7 @@ public enum AbilityHandler {
         }
         AbilityCapability.IAbilityCapability abilityCapability = getAbilityCapability(entity);
         if (abilityCapability != null) {
-            MMCommon.NETWORK.sendToServer(new MessagePlayerUseAbility(ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), ability)));
+            PacketDistributor.sendToServer(new MessagePlayerUseAbility(ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), ability)));
         }
     }
 
@@ -124,12 +123,15 @@ public enum AbilityHandler {
         if (entity.level().isClientSide) {
             return;
         }
+
         AbilityCapability.IAbilityCapability abilityCapability = getAbilityCapability(entity);
+
         if (abilityCapability != null) {
-            Ability instance = abilityCapability.getAbilityMap().get(abilityType);
+            Ability<?> instance = abilityCapability.getAbilityMap().get(abilityType);
+
             if (instance.isUsing()) {
                 instance.jumpToSection(sectionIndex);
-                MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new MessageJumpToAbilitySection(entity.getId(), ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), abilityType), sectionIndex));
+                PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new MessageJumpToAbilitySection(entity.getId(), ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), abilityType), sectionIndex));
             }
         }
     }

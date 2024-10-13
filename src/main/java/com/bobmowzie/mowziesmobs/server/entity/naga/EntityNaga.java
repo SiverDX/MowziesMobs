@@ -62,6 +62,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -324,11 +325,11 @@ public class EntityNaga extends MowzieLLibraryEntity implements RangedAttackMob,
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        getEntityData().define(ATTACKING, false);
-        getEntityData().define(BANKING, 0.0f);
-        getEntityData().define(PREV_BANKING, 0.0f);
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ATTACKING, false);
+        builder.define(BANKING, 0.0f);
+        builder.define(PREV_BANKING, 0.0f);
     }
 
     @Override

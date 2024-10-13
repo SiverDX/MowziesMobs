@@ -10,6 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
@@ -34,6 +35,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -66,9 +68,9 @@ public class EntitySunstrike extends Entity implements IEntityAdditionalSpawnDat
     }
 
     @Override
-    protected void defineSynchedData() {
-        getEntityData().define(VARIANT_LEAST, 0);
-        getEntityData().define(VARIANT_MOST, 0);
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        builder.define(VARIANT_LEAST, 0);
+        builder.define(VARIANT_MOST, 0);
     }
 
     public float getStrikeTime(float delta) {
@@ -282,12 +284,12 @@ public class EntitySunstrike extends Entity implements IEntityAdditionalSpawnDat
     }
 
     @Override
-    public void writeSpawnData(FriendlyByteBuf buffer) {
+    public void writeSpawnData(@NotNull RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(strikeTime);
     }
 
     @Override
-    public void readSpawnData(FriendlyByteBuf buffer) {
+    public void readSpawnData(@NotNull RegistryFriendlyByteBuf buffer) {
         setStrikeTime(buffer.readInt());
     }
 }

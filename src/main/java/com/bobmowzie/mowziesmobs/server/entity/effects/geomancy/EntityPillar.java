@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -134,11 +135,11 @@ public class EntityPillar extends EntityGeomancyBase {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        getEntityData().define(HEIGHT, 0.0f);
-        getEntityData().define(RISING, true);
-        getEntityData().define(FALLING, false);
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(HEIGHT, 0.0f);
+        builder.define(RISING, true);
+        builder.define(FALLING, false);
     }
 
     public float getHeight() {

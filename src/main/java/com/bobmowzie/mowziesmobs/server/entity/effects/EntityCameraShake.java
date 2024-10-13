@@ -15,6 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityCameraShake extends Entity {
     private static final EntityDataAccessor<Float> RADIUS = SynchedEntityData.defineId(EntityCameraShake.class, EntityDataSerializers.FLOAT);
@@ -52,11 +53,11 @@ public class EntityCameraShake extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        getEntityData().define(RADIUS, 10.0f);
-        getEntityData().define(MAGNITUDE, 1.0f);
-        getEntityData().define(DURATION, 0);
-        getEntityData().define(FADE_DURATION, 5);
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        builder.define(RADIUS, 10.0f);
+        builder.define(MAGNITUDE, 1.0f);
+        builder.define(DURATION, 0);
+        builder.define(FADE_DURATION, 5);
     }
 
     public float getRadius() {

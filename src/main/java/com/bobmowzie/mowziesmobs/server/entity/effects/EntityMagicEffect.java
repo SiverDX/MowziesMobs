@@ -21,6 +21,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,8 +53,8 @@ public abstract class EntityMagicEffect extends Entity implements ILinkedEntity 
     }
 
     @Override
-    protected void defineSynchedData() {
-        getEntityData().define(CASTER, Optional.empty());
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        builder.define(CASTER, Optional.empty());
     }
 
     public Optional<UUID> getCasterID() {
@@ -70,7 +72,7 @@ public abstract class EntityMagicEffect extends Entity implements ILinkedEntity 
             Entity entity = ((ServerLevel)this.level()).getEntity(this.getCasterID().get());
             if (entity instanceof LivingEntity) {
                 cachedCaster = (LivingEntity) entity;
-                MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> this), new MessageLinkEntities(this, cachedCaster));
+                PacketDistributor.sendToPlayersTrackingEntityAndSelf(this, MessageLinkEntities.fromEntity(this, cachedCaster));
             }
             return this.cachedCaster;
         } else {

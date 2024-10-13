@@ -31,11 +31,6 @@ public class EntityFrozenController extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
-
-    }
-
-    @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
 
     }

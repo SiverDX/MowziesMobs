@@ -60,6 +60,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by BobMowzie on 7/3/2018.
@@ -210,9 +211,9 @@ public class EntityGrottol extends MowzieLLibraryEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        getEntityData().define(DEEPSLATE, false);
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DEEPSLATE, false);
     }
 
     @Override

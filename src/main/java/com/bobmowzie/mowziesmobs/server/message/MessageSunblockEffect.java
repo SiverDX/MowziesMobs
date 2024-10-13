@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public record MessageSunblockEffect(int entityId, boolean hasSunBlock) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MessageSunblockEffect> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "message_sunblock_effect"));
-
     public static final StreamCodec<ByteBuf, MessageSunblockEffect> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT,
             MessageSunblockEffect::entityId,

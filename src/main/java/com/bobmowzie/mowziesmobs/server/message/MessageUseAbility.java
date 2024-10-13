@@ -15,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 
 public record MessageUseAbility(int entityId, int index) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MessageUseAbility> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "message_use_ability"));
-
     public static final StreamCodec<ByteBuf, MessageUseAbility> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT,
             MessageUseAbility::entityId,

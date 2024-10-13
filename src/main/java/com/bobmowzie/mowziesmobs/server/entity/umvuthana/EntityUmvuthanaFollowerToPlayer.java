@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -53,9 +54,9 @@ public class EntityUmvuthanaFollowerToPlayer extends EntityUmvuthanaFollower<Pla
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        getEntityData().define(MASK_STORED, new ItemStack(ItemHandler.UMVUTHANA_MASK_FURY.get(), 1));
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(MASK_STORED, new ItemStack(ItemHandler.UMVUTHANA_MASK_FURY.get(), 1));
     }
 
     @Override

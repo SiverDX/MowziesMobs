@@ -22,6 +22,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public final class GuiSculptorTrade extends AbstractContainerScreen<ContainerSculptorTrade> implements InventorySculptor.ChangeListener {
     private static final ResourceLocation TEXTURE_TRADE = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/gui/container/umvuthi_trade.png");
@@ -55,7 +56,7 @@ public final class GuiSculptorTrade extends AbstractContainerScreen<ContainerScu
 
     protected void actionPerformed(Button button) {
     	if (button == beginButton) {
-            MMCommon.NETWORK.sendToServer(new MessageSculptorTrade(sculptor));
+            PacketDistributor.sendToServer(new MessageSculptorTrade(sculptor.getId()));
     	}
     }
 

@@ -9,6 +9,7 @@ import com.bobmowzie.mowziesmobs.server.capability.CapabilityHandler;
 import com.bobmowzie.mowziesmobs.server.capability.FrozenCapability.IFrozenCapability;
 import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
 import com.bobmowzie.mowziesmobs.server.entity.EntityHandler;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -103,11 +105,6 @@ public class EntityIceBall extends EntityMagicEffect {
             }
         }
         if (tickCount > 50) discard() ;
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
     }
 
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {

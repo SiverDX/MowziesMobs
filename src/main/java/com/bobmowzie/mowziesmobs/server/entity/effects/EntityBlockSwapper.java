@@ -26,6 +26,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -90,10 +92,10 @@ public class EntityBlockSwapper extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        getEntityData().define(ORIG_BLOCK_STATE, Blocks.DIRT.defaultBlockState());
-        getEntityData().define(RESTORE_TIME, 20);
-        getEntityData().define(POS, new BlockPos(0, 0, 0));
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        builder.define(ORIG_BLOCK_STATE, Blocks.DIRT.defaultBlockState());
+        builder.define(RESTORE_TIME, 20);
+        builder.define(POS, new BlockPos(0, 0, 0));
     }
 
     public int getRestoreTime() {
@@ -199,9 +201,9 @@ public class EntityBlockSwapper extends Entity {
         }
 
         @Override
-        protected void defineSynchedData() {
-            super.defineSynchedData();
-            getEntityData().define(TUNNELER, Optional.empty());
+        protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+            super.defineSynchedData(builder);
+            builder.define(TUNNELER, Optional.empty());
         }
 
         public Optional<UUID> getTunnelerID() {
@@ -219,7 +221,7 @@ public class EntityBlockSwapper extends Entity {
                 Entity entity = ((ServerLevel)this.level()).getEntity(this.getTunnelerID().get());
                 if (entity instanceof LivingEntity) {
                     cachedTunneler = (LivingEntity) entity;
-                    MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> this), new MessageLinkEntities(this, cachedTunneler));
+                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(this, MessageLinkEntities.fromEntity(this, cachedTunneler));
                 }
                 return this.cachedTunneler;
             } else {

@@ -9,13 +9,13 @@ import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Created by BobMowzie on 4/14/2017.
  */
-public class EntityBoulderBase extends EntityGeomancyBase implements IEntityAdditionalSpawnData {
+public class EntityBoulderBase extends EntityGeomancyBase implements IEntityWithComplexSpawn {
     private static final byte ACTIVATE_ID = 67;
 
     public BlockState storedBlock;
@@ -201,12 +201,12 @@ public class EntityBoulderBase extends EntityGeomancyBase implements IEntityAddi
     }
 
     @Override
-    public void writeSpawnData(FriendlyByteBuf buffer) {
+    public void writeSpawnData(@NotNull RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(risingTick);
     }
 
     @Override
-    public void readSpawnData(FriendlyByteBuf buffer) {
+    public void readSpawnData(@NotNull RegistryFriendlyByteBuf buffer) {
         risingTick = buffer.readInt();
     }
 }

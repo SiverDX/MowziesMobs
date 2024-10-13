@@ -35,6 +35,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -122,11 +123,11 @@ public class EntityUmvuthanaMinion extends EntityUmvuthana implements LeaderSuns
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        getEntityData().define(TRADE, Optional.empty());
-        this.entityData.define(MISBEHAVED_PLAYER, Optional.empty());
-        this.entityData.define(IS_TRADING, false);
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(TRADE, Optional.empty());
+        builder.define(MISBEHAVED_PLAYER, Optional.empty());
+        builder.define(IS_TRADING, false);
 //        getDataManager().register(NUM_SALES, MAX_SALES);
     }
 

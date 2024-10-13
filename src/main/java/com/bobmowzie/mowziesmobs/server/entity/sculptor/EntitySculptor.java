@@ -33,12 +33,16 @@ import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -66,18 +70,23 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.scores.Team;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.CommonHooks;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector3d;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.GeoItem;
-import software.bernie.geckolib.core.animation.*;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.Animation;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -116,7 +125,7 @@ public class EntitySculptor extends MowzieGeckoEntity {
     public static final AbilityType<EntitySculptor, GuardAbility> GUARD_ABILITY = new AbilityType<>("guard", GuardAbility::new);
     public static final AbilityType<EntitySculptor, DisappearAbility> DISAPPEAR_ABILITY = new AbilityType<>("disappear", DisappearAbility::new);
 
-    public static final AbilityType<EntitySculptor, SimpleAnimationAbility<EntitySculptor>> TALK_ABILITY = new AbilityType<>("talk", (type, entity) -> new SimpleAnimationAbility<>(type, entity,RawAnimation.begin().thenPlay("talk"), 27, true) {
+    public static final AbilityType<EntitySculptor, SimpleAnimationAbility<EntitySculptor>> TALK_ABILITY = new AbilityType<>("talk", (type, entity) -> new SimpleAnimationAbility<>(type, entity, RawAnimation.begin().thenPlay("talk"), 27, true) {
         @Override
         public void start() {
             getUser().playSound(MMSounds.ENTITY_SCULPTOR_GREETING.get(), 1, 1);
@@ -272,13 +281,29 @@ public class EntitySculptor extends MowzieGeckoEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        Item tradeItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(ConfigHandler.COMMON.MOBS.SCULPTOR.whichItem.get()));
-        getEntityData().define(DESIRES, new ItemStack(tradeItem, ConfigHandler.COMMON.MOBS.SCULPTOR.howMany.get()));
-        getEntityData().define(IS_TRADING, false);
-        getEntityData().define(IS_FIGHTING, false);
-        getEntityData().define(TESTING_PLAYER, Optional.empty());
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+
+        // FIXME 1.21 :: might need a test - registry should be available since this is called in the entity constructor (meaning an entity was created)
+        HolderLookup.RegistryLookup<Item> lookup = CommonHooks.resolveLookup(Registries.ITEM);
+        ResourceLocation location = ResourceLocation.tryParse(ConfigHandler.COMMON.MOBS.SCULPTOR.whichItem.get());
+        Item tradeItem;
+
+        if (lookup == null || location == null) {
+            tradeItem = Items.AIR;
+        } else {
+            tradeItem = lookup.get(ResourceKey.create(Registries.ITEM, location)).map(Holder.Reference::value).orElse(Items.AIR);
+        }
+
+        if (tradeItem == Items.AIR) {
+            // Could be technically triggered if players add air to the config
+            MMCommon.LOGGER.warn("Could not properly resolve the trade item for [Sculptor]");
+        }
+
+        builder.define(DESIRES, new ItemStack(tradeItem, ConfigHandler.COMMON.MOBS.SCULPTOR.howMany.get()));
+        builder.define(IS_TRADING, false);
+        builder.define(IS_FIGHTING, false);
+        builder.define(TESTING_PLAYER, Optional.empty());
     }
 
     public static AttributeSupplier.Builder createAttributes() {

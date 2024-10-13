@@ -61,6 +61,7 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -552,15 +553,15 @@ public abstract class EntityUmvuthana extends MowzieGeckoEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        getEntityData().define(DANCING, false);
-        getEntityData().define(MASK, 0);
-        getEntityData().define(WEAPON, 0);
-        getEntityData().define(ACTIVE, true);
-        getEntityData().define(HEALPOSX, 0f);
-        getEntityData().define(HEALPOSY, 0f);
-        getEntityData().define(HEALPOSZ, 0f);
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DANCING, false);
+        builder.define(MASK, 0);
+        builder.define(WEAPON, 0);
+        builder.define(ACTIVE, true);
+        builder.define(HEALPOSX, 0f);
+        builder.define(HEALPOSY, 0f);
+        builder.define(HEALPOSZ, 0f);
     }
 
     public boolean getDancing() {

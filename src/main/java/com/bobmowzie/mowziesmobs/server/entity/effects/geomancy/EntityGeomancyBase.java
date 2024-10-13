@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -107,11 +108,11 @@ public abstract class EntityGeomancyBase extends EntityMagicEffect implements Ge
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        getEntityData().define(BLOCK_STATE, Blocks.DIRT.defaultBlockState());
-        getEntityData().define(DEATH_TIME, 1200);
-        getEntityData().define(TIER, 0);
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(BLOCK_STATE, Blocks.DIRT.defaultBlockState());
+        builder.define(DEATH_TIME, 1200);
+        builder.define(TIER, 0);
     }
 
     @Override

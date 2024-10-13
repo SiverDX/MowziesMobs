@@ -220,10 +220,12 @@ public final class ServerEventHandler {
 
             MMCommon.PROXY.playSunblockSound(event.getEntity());
         }
+
         if (event.getEffectInstance().getEffect() == EffectHandler.FROZEN) {
             if (!event.getEntity().level().isClientSide()) {
-                MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), true));
+                PacketDistributor.sendToPlayersTrackingEntityAndSelf(event.getEntity(), new MessageFreezeEffect(event.getEntity().getId(), true));
                 FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
+
                 if (frozenCapability != null) {
                     frozenCapability.onFreeze(event.getEntity());
                 }
@@ -233,14 +235,18 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public void onRemovePotionEffect(MobEffectEvent.Remove event) {
-    	if(event.getEffectInstance() == null)
-    		return;
-        if (!event.getEntity().level().isClientSide() && event.getEffectInstance().getEffect() == EffectHandler.SUNBLOCK.get()) {
-            MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageSunblockEffect(event.getEntity(), false));
+    	if (event.getEffectInstance() == null) {
+            return;
         }
-        if (!event.getEntity().level().isClientSide() && event.getEffectInstance().getEffect() == EffectHandler.FROZEN.get()) {
-            MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), false));
+
+        if (!event.getEntity().level().isClientSide() && event.getEffectInstance().getEffect() == EffectHandler.SUNBLOCK) {
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(event.getEntity(), new MessageSunblockEffect(event.getEntity().getId(), false));
+        }
+
+        if (!event.getEntity().level().isClientSide() && event.getEffectInstance().getEffect() == EffectHandler.FROZEN) {
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(event.getEntity(), new MessageFreezeEffect(event.getEntity().getId(), false));
             FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
+
             if (frozenCapability != null) {
                 frozenCapability.onUnfreeze(event.getEntity());
             }
@@ -250,12 +256,15 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public void onPotionEffectExpire(MobEffectEvent.Expired event) {
         MobEffectInstance effectInstance = event.getEffectInstance();
-        if (!event.getEntity().level().isClientSide() && effectInstance != null && effectInstance.getEffect() == EffectHandler.SUNBLOCK.get()) {
-            MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageSunblockEffect(event.getEntity(), false));
+
+        if (!event.getEntity().level().isClientSide() && effectInstance != null && effectInstance.getEffect() == EffectHandler.SUNBLOCK) {
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(event.getEntity(), new MessageSunblockEffect(event.getEntity().getId(), false));
         }
-        if (!event.getEntity().level().isClientSide() && effectInstance != null && effectInstance.getEffect() == EffectHandler.FROZEN.get()) {
-            MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), false));
+
+        if (!event.getEntity().level().isClientSide() && effectInstance != null && effectInstance.getEffect() == EffectHandler.FROZEN) {
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(event.getEntity(), new MessageFreezeEffect(event.getEntity().getId(), false));
             FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
+
             if (frozenCapability != null) {
                 frozenCapability.onUnfreeze(event.getEntity());
             }
@@ -267,8 +276,7 @@ public final class ServerEventHandler {
         // Copied from LivingEntity's applyPotionDamageCalculations
         DamageSource source = event.getSource();
         LivingEntity livingEntity = event.getEntity();
-        if (source == null || livingEntity == null) return;
-        float damage = event.getAmount();
+        float damage = event.getNewDamage();
         if (!source.is(DamageTypeTags.BYPASSES_RESISTANCE)) {
             if (livingEntity.hasEffect(EffectHandler.SUNBLOCK) && !source.is(DamageTypes.FELL_OUT_OF_WORLD)) {
                 int i = (livingEntity.getEffect(EffectHandler.SUNBLOCK).getAmplifier() + 2) * 5;
@@ -288,9 +296,10 @@ public final class ServerEventHandler {
         }
 
         if (event.getSource().is(DamageTypeTags.IS_FIRE)) {
-            event.getEntity().removeEffectNoUpdate(EffectHandler.FROZEN.get());
-            MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), false));
+            event.getEntity().removeEffectNoUpdate(EffectHandler.FROZEN);
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(event.getEntity(), new MessageFreezeEffect(event.getEntity().getId(), false));
             FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
+
             if (frozenCapability != null) {
                 frozenCapability.onUnfreeze(event.getEntity());
             }
@@ -309,12 +318,10 @@ public final class ServerEventHandler {
             }
         }
 
-        if (event.getEntity() != null) {
-            LivingEntity living = event.getEntity();
-            LivingCapability.ILivingCapability capability = CapabilityHandler.getCapability(living, CapabilityHandler.LIVING_CAPABILITY);
-            if (capability != null) {
-                capability.setLastDamage(event.getAmount());
-            }
+        LivingEntity living = event.getEntity();
+        LivingCapability.ILivingCapability capability = CapabilityHandler.getCapability(living, CapabilityHandler.LIVING_CAPABILITY);
+        if (capability != null) {
+            capability.setLastDamage(event.getNewDamage());
         }
     }
 
@@ -566,7 +573,7 @@ public final class ServerEventHandler {
         if (player.getMainHandItem().getItem() == ItemHandler.SPEAR.get()) {
             LivingEntity entityHit = ItemSpear.raytraceEntities(player.getCommandSenderWorld(), player, range);
             if (entityHit != null) {
-                MMCommon.NETWORK.sendToServer(new MessagePlayerAttackMob(entityHit));
+                PacketDistributor.sendToServer(MessagePlayerAttackMob.fromEntity(entityHit));
             }
         }
         if (playerCapability != null) {
@@ -578,18 +585,19 @@ public final class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public void onLivingDamage(LivingDamageEvent event) {
+    public void onLivingDamage(LivingDamageEvent.Post event) {
         LivingEntity entity = event.getEntity();
-        if (entity.getHealth() <= event.getAmount() && entity.hasEffect(EffectHandler.FROZEN)) {
+        if (entity.getHealth() <= event.getNewDamage() && entity.hasEffect(EffectHandler.FROZEN)) {
             entity.removeEffectNoUpdate(EffectHandler.FROZEN);
             FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
-            MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), false));
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(event.getEntity(), new MessageFreezeEffect(event.getEntity().getId(), false));
+
             if (frozenCapability != null) {
                 frozenCapability.onUnfreeze(entity);
             }
         }
 
-        if (event.getAmount() > 0.0 && event.getSource().getEntity() instanceof Player player) {
+        if (event.getNewDamage() > 0 && event.getSource().getEntity() instanceof Player player) {
             if (player.getItemBySlot(EquipmentSlot.CHEST).is(ItemHandler.GEOMANCER_ROBE.get())) {
                 spawnBoulderNearPlayer(player);
             }

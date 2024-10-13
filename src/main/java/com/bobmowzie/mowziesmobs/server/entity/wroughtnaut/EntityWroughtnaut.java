@@ -20,6 +20,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -568,8 +569,8 @@ public class EntityWroughtnaut extends MowzieLLibraryEntity implements Enemy {
     }
 
     @Override
-    public void writeSpawnData(FriendlyByteBuf buf) {
-        super.writeSpawnData(buf);
+    public void writeSpawnData(@NotNull RegistryFriendlyByteBuf buffer) {
+        super.writeSpawnData(buffer);
     }
 
     @Override

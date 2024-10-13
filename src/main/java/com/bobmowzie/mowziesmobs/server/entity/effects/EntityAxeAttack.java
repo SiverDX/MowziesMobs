@@ -30,6 +30,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,10 +58,9 @@ public class EntityAxeAttack extends EntityMagicEffect {
         setAxeStack(caster.getMainHandItem());
     }
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        getEntityData().define(VERTICAL, false);
-        getEntityData().define(AXE_STACK, ItemHandler.WROUGHT_AXE.get().getDefaultInstance());
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        builder.define(VERTICAL, false);
+        builder.define(AXE_STACK, ItemHandler.WROUGHT_AXE.get().getDefaultInstance());
     }
 
     @Override

@@ -37,6 +37,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -270,12 +271,12 @@ public class EntitySolarBeam extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        getEntityData().define(YAW, 0F);
-        getEntityData().define(PITCH, 0F);
-        getEntityData().define(DURATION, 0);
-        getEntityData().define(HAS_PLAYER, false);
-        getEntityData().define(CASTER, -1);
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        builder.define(YAW, 0F);
+        builder.define(PITCH, 0F);
+        builder.define(DURATION, 0);
+        builder.define(HAS_PLAYER, false);
+        builder.define(CASTER, -1);
     }
 
     public float getYaw() {

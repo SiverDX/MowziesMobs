@@ -59,6 +59,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.ItemHandlerHelper;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -222,11 +223,11 @@ public class EntityFrostmaw extends MowzieLLibraryEntity implements Enemy {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        getEntityData().define(ACTIVE, false);
-        getEntityData().define(HAS_CRYSTAL, true);
-        getEntityData().define(ALWAYS_ACTIVE, false);
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ACTIVE, false);
+        builder.define(HAS_CRYSTAL, true);
+        builder.define(ALWAYS_ACTIVE, false);
     }
 
     @Override

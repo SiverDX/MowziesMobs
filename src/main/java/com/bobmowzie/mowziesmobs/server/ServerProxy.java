@@ -1,68 +1,48 @@
 package com.bobmowzie.mowziesmobs.server;
 
-import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.entity.effects.EntitySolarBeam;
 import com.bobmowzie.mowziesmobs.server.entity.effects.EntitySunstrike;
 import com.bobmowzie.mowziesmobs.server.entity.naga.EntityNaga;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.trade.Trade;
-import com.bobmowzie.mowziesmobs.server.message.*;
-import com.bobmowzie.mowziesmobs.server.message.mouse.MessageLeftMouseDown;
-import com.bobmowzie.mowziesmobs.server.message.mouse.MessageLeftMouseUp;
-import com.bobmowzie.mowziesmobs.server.message.mouse.MessageRightMouseDown;
-import com.bobmowzie.mowziesmobs.server.message.mouse.MessageRightMouseUp;
-import com.ilexiconn.llibrary.server.network.AnimationMessage;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 public class ServerProxy {
-    private int nextMessageId;
+    // FIXME 1.21 :: probably needs item instead of itemstack
+    private static final StreamCodec<ByteBuf, Optional<Trade>> OPTIONAL_TRADE_CODEC = new StreamCodec<>() {
+        public @NotNull Optional<Trade> decode(@NotNull ByteBuf buffer) {
+            Item input = Item.byId(buffer.readInt());
 
-    public static final EntityDataSerializer<Optional<Trade>> OPTIONAL_TRADE = new EntityDataSerializer<Optional<Trade>>() {
-        @Override
-        public void write(FriendlyByteBuf buf, Optional<Trade> value) {
-            if (value.isPresent()) {
-                Trade trade = value.get();
-                buf.writeItem(trade.getInput());
-                buf.writeItem(trade.getOutput());
-                buf.writeInt(trade.getWeight());
-            } else {
-                buf.writeItem(ItemStack.EMPTY);
-            }
-        }
-
-        @Override
-        public Optional<Trade> read(FriendlyByteBuf buf) {
-            ItemStack input = buf.readItem();
-            if (input == ItemStack.EMPTY) {
+            if (input == Items.AIR) {
                 return Optional.empty();
             }
-            return Optional.of(new Trade(input, buf.readItem(), buf.readInt()));
+
+            return Optional.of(new Trade(input.getDefaultInstance(), Item.byId(buffer.readInt()).getDefaultInstance(), buffer.readInt()));
         }
 
-        @Override
-        public EntityDataAccessor<Optional<Trade>> createAccessor(int id) {
-            return new EntityDataAccessor<>(id, this);
-        }
-
-        @Override
-        public Optional<Trade> copy(Optional<Trade> value) {
-            return value.map(Trade::new);
+        public void encode(@NotNull ByteBuf buffer, @NotNull Optional<Trade> optional) {
+            optional.ifPresentOrElse(trade -> {
+                buffer.writeInt(Item.getId(trade.getInput().getItem()));
+                buffer.writeInt(Item.getId(trade.getOutput().getItem()));
+                buffer.writeInt(trade.getWeight());
+            }, () -> buffer.writeInt(Item.getId(Items.AIR)));
         }
     };
+
+    public static final EntityDataSerializer<Optional<Trade>> OPTIONAL_TRADE = EntityDataSerializer.forValueType(OPTIONAL_TRADE_CODEC);
 
     public void init() {
         EntityDataSerializers.registerSerializer(OPTIONAL_TRADE);
@@ -89,44 +69,12 @@ public class ServerProxy {
     public void playSolarBeamSound(EntitySolarBeam entity) {
     }
 
-    public void minecartParticles(ClientLevel world, AbstractMinecart minecart, float scale, double x, double y, double z, BlockState state, BlockPos pos) {
-    }
-
-    public void initNetwork() {
-        final String version = "1";
-        MMCommon.NETWORK = NetworkRegistry.ChannelBuilder.named(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "net"))
-                .networkProtocolVersion(() -> version)
-                .clientAcceptedVersions(version::equals)
-                .serverAcceptedVersions(version::equals)
-                .simpleChannel();
-        this.registerMessage(AnimationMessage.class, AnimationMessage::serialize, AnimationMessage::deserialize, new AnimationMessage.Handler());
-        this.registerMessage(MessageLeftMouseDown.class, MessageLeftMouseDown::serialize, MessageLeftMouseDown::deserialize, new MessageLeftMouseDown.Handler());
-        this.registerMessage(MessageLeftMouseUp.class, MessageLeftMouseUp::serialize, MessageLeftMouseUp::deserialize, new MessageLeftMouseUp.Handler());
-        this.registerMessage(MessageRightMouseDown.class, MessageRightMouseDown::serialize, MessageRightMouseDown::deserialize, new MessageRightMouseDown.Handler());
-        this.registerMessage(MessageRightMouseUp.class, MessageRightMouseUp::serialize, MessageRightMouseUp::deserialize, new MessageRightMouseUp.Handler());
-        this.registerMessage(MessageFreezeEffect.class, MessageFreezeEffect::serialize, MessageFreezeEffect::deserialize, new MessageFreezeEffect.Handler());
-        this.registerMessage(MessageUmvuthiTrade.class, MessageUmvuthiTrade::serialize, MessageUmvuthiTrade::deserialize, new MessageUmvuthiTrade.Handler());
-        this.registerMessage(MessageBlackPinkInYourArea.class, MessageBlackPinkInYourArea::serialize, MessageBlackPinkInYourArea::deserialize, new MessageBlackPinkInYourArea.Handler());
-        this.registerMessage(MessagePlayerAttackMob.class, MessagePlayerAttackMob::serialize, MessagePlayerAttackMob::deserialize, new MessagePlayerAttackMob.Handler());
-        this.registerMessage(MessagePlayerSolarBeam.class, MessagePlayerSolarBeam::serialize, MessagePlayerSolarBeam::deserialize, new MessagePlayerSolarBeam.Handler());
-        this.registerMessage(MessagePlayerSummonSunstrike.class, MessagePlayerSummonSunstrike::serialize, MessagePlayerSummonSunstrike::deserialize, new MessagePlayerSummonSunstrike.Handler());
-        this.registerMessage(MessageSunblockEffect.class, MessageSunblockEffect::serialize, MessageSunblockEffect::deserialize, new MessageSunblockEffect.Handler());
-        this.registerMessage(MessageUseAbility.class, MessageUseAbility::serialize, MessageUseAbility::deserialize, new MessageUseAbility.Handler());
-        this.registerMessage(MessagePlayerUseAbility.class, MessagePlayerUseAbility::serialize, MessagePlayerUseAbility::deserialize, new MessagePlayerUseAbility.Handler());
-        this.registerMessage(MessageInterruptAbility.class, MessageInterruptAbility::serialize, MessageInterruptAbility::deserialize, new MessageInterruptAbility.Handler());
-        this.registerMessage(MessageJumpToAbilitySection.class, MessageJumpToAbilitySection::serialize, MessageJumpToAbilitySection::deserialize, new MessageJumpToAbilitySection.Handler());
-        this.registerMessage(MessageSculptorTrade.class, MessageSculptorTrade::serialize, MessageSculptorTrade::deserialize, new MessageSculptorTrade.Handler());
-        this.registerMessage(MessageLinkEntities.class, MessageLinkEntities::serialize, MessageLinkEntities::deserialize, new MessageLinkEntities.Handler());
-        this.registerMessage(MessageUpdateBossBar.class, MessageUpdateBossBar::serialize, MessageUpdateBossBar::deserialize, new MessageUpdateBossBar.Handler());
-    }
-
-    private <MSG> void registerMessage(final Class<MSG> clazz, final BiConsumer<MSG, FriendlyByteBuf> encoder, final Function<FriendlyByteBuf, MSG> decoder, final BiConsumer<MSG, Supplier<NetworkEvent.Context>> consumer) {
-        MMCommon.NETWORK.registerMessage(this.nextMessageId++, clazz, encoder, decoder, consumer);
+    public void minecartParticles(ClientLevel world, AbstractMinecart minecart, float scale, double x, double y,
+                                  double z, BlockState state, BlockPos pos) {
     }
 
     public void setTPS(float tickRate) {
     }
-
 
     public Entity getReferencedMob() {
         return null;

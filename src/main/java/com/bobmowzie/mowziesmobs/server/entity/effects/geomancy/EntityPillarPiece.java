@@ -13,6 +13,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -77,9 +78,9 @@ public class EntityPillarPiece extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        getEntityData().define(PILLAR, Optional.empty());
-        getEntityData().define(TIER, 0);
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        builder.define(PILLAR, Optional.empty());
+        builder.define(TIER, 0);
     }
 
     @Override

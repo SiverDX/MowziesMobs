@@ -11,7 +11,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -47,6 +47,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public abstract class MowzieEntity extends PathfinderMob implements IEntityAdditionalSpawnData, IntermittentAnimatableEntity {
+public abstract class MowzieEntity extends PathfinderMob implements IEntityWithComplexSpawn, IntermittentAnimatableEntity {
     private static final byte START_IA_HEALTH_UPDATE_ID = 4;
     private static final byte MUSIC_PLAY_ID = 67;
     private static final byte MUSIC_STOP_ID = 68;
@@ -259,9 +260,13 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityAddit
         super.customServerAiStep();
     }
 
+    @Override
+    public void writeSpawnData(@NotNull RegistryFriendlyByteBuf buffer) {
+
+    }
 
     @Override
-    public void readSpawnData(FriendlyByteBuf buf) {
+    public void readSpawnData(@NotNull RegistryFriendlyByteBuf buffer) {
         yRotO = getYRot();
         yBodyRotO = yBodyRot = yHeadRotO = yHeadRot;
     }

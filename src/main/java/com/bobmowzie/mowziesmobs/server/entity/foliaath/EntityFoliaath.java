@@ -42,6 +42,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityFoliaath extends MowzieLLibraryEntity implements Enemy {
     public static final Animation DIE_ANIMATION = Animation.create(50);
@@ -104,10 +105,10 @@ public class EntityFoliaath extends MowzieLLibraryEntity implements Enemy {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        getEntityData().set(CAN_DESPAWN, true);
-        getEntityData().set(ACTIVATE_TARGET, 0);
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(CAN_DESPAWN, true);
+        builder.define(ACTIVATE_TARGET, 0);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

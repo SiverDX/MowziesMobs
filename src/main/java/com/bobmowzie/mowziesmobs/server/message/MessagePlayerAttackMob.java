@@ -1,50 +1,45 @@
 package com.bobmowzie.mowziesmobs.server.message;
 
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
+import com.bobmowzie.mowziesmobs.MMCommon;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.BiConsumer;
-import java.util.function.Supplier;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by BobMowzie on 10/28/2016.
  */
-public class MessagePlayerAttackMob {
-    private int entityID;
+public record MessagePlayerAttackMob(int entityId) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<MessagePlayerAttackMob> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "message_player_attack_mob"));
+    public static final StreamCodec<ByteBuf, MessagePlayerAttackMob> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.INT,
+            MessagePlayerAttackMob::entityId,
+            MessagePlayerAttackMob::new
+    );
 
-    public MessagePlayerAttackMob() {
-
+    public static MessagePlayerAttackMob fromEntity(LivingEntity target) {
+        return new MessagePlayerAttackMob(target.getId());
     }
 
-    public MessagePlayerAttackMob(LivingEntity target) {
-        entityID = target.getId();
+    public static void handleServer(final MessagePlayerAttackMob packet, final IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            Entity entity = player.level().getEntity(packet.entityId());
+
+            if (entity != null) {
+                player.attack(entity);
+            }
+        });
     }
 
-    public static void serialize(final MessagePlayerAttackMob message, final FriendlyByteBuf buf) {
-        buf.writeVarInt(message.entityID);
-    }
-
-    public static MessagePlayerAttackMob deserialize(final FriendlyByteBuf buf) {
-        final MessagePlayerAttackMob message = new MessagePlayerAttackMob();
-        message.entityID = buf.readVarInt();
-        return message;
-    }
-
-    public static class Handler implements BiConsumer<MessagePlayerAttackMob, Supplier<NetworkEvent.Context>> {
-        @Override
-        public void accept(final MessagePlayerAttackMob message, final Supplier<NetworkEvent.Context> contextSupplier) {
-            final NetworkEvent.Context context = contextSupplier.get();
-            final ServerPlayer player = context.getSender();
-            context.enqueueWork(() -> {
-                if (player != null) {
-                    Entity entity = player.level().getEntity(message.entityID);
-                    if (entity != null) player.attack(entity);
-                }
-            });
-            context.setPacketHandled(true);
-        }
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

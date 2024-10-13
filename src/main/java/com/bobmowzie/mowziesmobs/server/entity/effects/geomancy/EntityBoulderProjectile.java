@@ -212,9 +212,9 @@ public class EntityBoulderProjectile extends EntityBoulderBase {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        getEntityData().define(SHOOT_DIRECTION, new Vector3f(0, 0, 0));
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(SHOOT_DIRECTION, new Vector3f(0, 0, 0));
     }
 
     @Override

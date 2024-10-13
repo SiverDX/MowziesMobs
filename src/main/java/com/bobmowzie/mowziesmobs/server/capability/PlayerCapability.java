@@ -23,6 +23,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -32,6 +33,7 @@ import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -267,7 +269,7 @@ public class PlayerCapability {
 
             if (player.level().isClientSide()) {
                 if (player.getMainHandItem().getItem() instanceof ItemEarthrendGauntlet || player.getOffhandItem().getItem() instanceof ItemEarthrendGauntlet) {
-                    player.addEffect(new MobEffectInstance(EffectHandler.GEOMANCY.get(), 20, 0, false, false));
+                    player.addEffect(new MobEffectInstance(EffectHandler.GEOMANCY, 20, 0, false, false));
                 }
 
                 List<EntityUmvuthanaFollowerToPlayer> pack = umvuthanaPack;
@@ -303,7 +305,7 @@ public class PlayerCapability {
             if (player.level().isClientSide()) {
                 if (Minecraft.getInstance().options.keyAttack.isDown() && !mouseLeftDown) {
                     mouseLeftDown = true;
-                    MMCommon.NETWORK.sendToServer(new MessageLeftMouseDown());
+                    PacketDistributor.sendToServer(new MessageLeftMouseDown());
                     for (int i = 0; i < powers.length; i++) {
                         powers[i].onLeftMouseDown(player);
                     }
@@ -318,7 +320,7 @@ public class PlayerCapability {
                 }
                 if (Minecraft.getInstance().options.keyUse.isDown() && !mouseRightDown) {
                     mouseRightDown = true;
-                    MMCommon.NETWORK.sendToServer(new MessageRightMouseDown());
+                    PacketDistributor.sendToServer(new MessageRightMouseDown());
                     for (int i = 0; i < powers.length; i++) {
                         powers[i].onRightMouseDown(player);
                     }
@@ -333,7 +335,7 @@ public class PlayerCapability {
                 }
                 if (!Minecraft.getInstance().options.keyAttack.isDown() && mouseLeftDown) {
                     mouseLeftDown = false;
-                    MMCommon.NETWORK.sendToServer(new MessageLeftMouseUp());
+                    PacketDistributor.sendToServer(new MessageLeftMouseUp());
                     for (int i = 0; i < powers.length; i++) {
                         powers[i].onLeftMouseUp(player);
                     }
@@ -348,7 +350,7 @@ public class PlayerCapability {
                 }
                 if (!Minecraft.getInstance().options.keyUse.isDown() && mouseRightDown) {
                     mouseRightDown = false;
-                    MMCommon.NETWORK.sendToServer(new MessageRightMouseUp());
+                    PacketDistributor.sendToServer(new MessageRightMouseUp());
                     for (int i = 0; i < powers.length; i++) {
                         powers[i].onRightMouseUp(player);
                     }
@@ -407,11 +409,11 @@ public class PlayerCapability {
                 if (iceBreathAbility != null && iceBreathAbility.isUsing()) {
                     InteractionHand handIn = player.getUsedItemHand();
                     if (stack.getDamageValue() + 5 < stack.getMaxDamage()) {
-                        stack.hurtAndBreak(5, player, p -> p.broadcastBreakEvent(handIn));
+                        stack.hurtAndBreak(5, player, handIn == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
                     }
                     else {
                         if (ConfigHandler.COMMON.TOOLS_AND_ABILITIES.ICE_CRYSTAL.breakable.get()) {
-                            stack.hurtAndBreak(5, player, p -> p.broadcastBreakEvent(handIn));
+                            stack.hurtAndBreak(5, player, handIn == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
                         }
                         iceBreathAbility.end();
                     }

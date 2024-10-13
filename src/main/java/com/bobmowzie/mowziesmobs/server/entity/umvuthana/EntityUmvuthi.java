@@ -630,7 +630,7 @@ public class EntityUmvuthi extends MowzieGeckoEntity implements LeaderSunstrikeI
         builder.define(DIALOGUE, 0);
         builder.define(ANGRY, false);
 
-        // FIXME 1.21 :: might need a test - registry should be available since this is called in the entity consturctor (meaning an entity was created)
+        // FIXME 1.21 :: might need a test - registry should be available since this is called in the entity constructor (meaning an entity was created)
         HolderLookup.RegistryLookup<Item> lookup = CommonHooks.resolveLookup(Registries.ITEM);
         ResourceLocation location = ResourceLocation.tryParse(ConfigHandler.COMMON.MOBS.UMVUTHI.whichItem.get());
         Item tradeItem;

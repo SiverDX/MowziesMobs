@@ -23,6 +23,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public final class GuiUmvuthiTrade extends AbstractContainerScreen<ContainerUmvuthiTrade> implements InventoryUmvuthi.ChangeListener {
     private static final ResourceLocation TEXTURE_TRADE = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/gui/container/umvuthi_trade.png");
@@ -61,7 +62,7 @@ public final class GuiUmvuthiTrade extends AbstractContainerScreen<ContainerUmvu
     	if (button == grantButton) {
             hasTraded = true;
             updateButton();
-            MMCommon.NETWORK.sendToServer(new MessageUmvuthiTrade(umvuthi));
+            PacketDistributor.sendToServer(new MessageUmvuthiTrade(umvuthi.getId()));
             if (!Minecraft.getInstance().isLocalServer()) {
                 boolean satisfied = umvuthi.hasTradedWith(player);
                 if (!satisfied) {

@@ -4,6 +4,7 @@ import com.bobmowzie.mowziesmobs.server.capability.PlayerCapability;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -51,8 +52,7 @@ public abstract class Power {
 
     }
 
-    // FIXME 1.21
-    public void onTakeDamage(LivingHurtEvent event) {
+    public void onTakeDamage(LivingDamageEvent.Post event) {
 
     }
 
