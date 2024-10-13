@@ -12,7 +12,7 @@ public class MowzieEffect extends MobEffect {
         super(type, liquidColor);
     }
 
-    @Override
+    @Override // FIXME 1.21 :: removed - what was this used for?
     public boolean isDurationEffectTick(int id, int amplifier) {
         return true;
     }

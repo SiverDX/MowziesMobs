@@ -29,6 +29,6 @@ public class EffectGeomancy extends MowzieEffect {
         return (entity.getMainHandItem().is(ItemHandler.EARTHREND_GAUNTLET.get()) ||
                 entity.getMainHandItem().isEmpty() ||
                 entity.getOffhandItem().is(ItemHandler.EARTHREND_GAUNTLET.get()))
-                && entity.hasEffect(EffectHandler.GEOMANCY.get());
+                && entity.hasEffect(EffectHandler.GEOMANCY);
     }
 }

@@ -38,8 +38,11 @@ import com.bobmowzie.mowziesmobs.server.potion.EffectHandler;
 import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -49,6 +52,7 @@ import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.OldUsersConverter;
@@ -62,6 +66,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -79,18 +84,16 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.CommonHooks;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animation.*;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.*;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -174,11 +177,8 @@ public class EntityUmvuthi extends MowzieGeckoEntity implements LeaderSunstrikeI
     public Player blessingPlayer;
     private UmvuthanaHurtByTargetAI hurtByTargetAI;
 
-    @OnlyIn(Dist.CLIENT)
     public Vec3[] betweenHandPos;
-    @OnlyIn(Dist.CLIENT)
     public Vec3[] headPos;
-    @OnlyIn(Dist.CLIENT)
     public Vec3[] blessingPlayerPos;
 
     private static final TargetingConditions GIVE_ACHIEVEMENT_PRED = TargetingConditions.forCombat().ignoreInvisibilityTesting();
@@ -394,13 +394,13 @@ public class EntityUmvuthi extends MowzieGeckoEntity implements LeaderSunstrikeI
             boolean targetComingCloser = target.getDeltaMovement().dot(betweenEntitiesVec) > 0 && target.getDeltaMovement().lengthSqr() > 0.015;
 
             // Attacks
-            if (getActiveAbility() == null && !isNoAi() && random.nextInt(80) == 0 && (targetDistance > 5.5 || hasEffect(EffectHandler.SUNBLOCK.get())) && timeUntilUmvuthana <= 0 && getEntitiesNearby(EntityUmvuthana.class, 50).size() < 4) {
+            if (getActiveAbility() == null && !isNoAi() && random.nextInt(80) == 0 && (targetDistance > 5.5 || hasEffect(EffectHandler.SUNBLOCK)) && timeUntilUmvuthana <= 0 && getEntitiesNearby(EntityUmvuthana.class, 50).size() < 4) {
                 sendAbilityMessage(SPAWN_ABILITY);
                 timeUntilUmvuthana = UMVUTHANA_PAUSE;
             } else if (getActiveAbility() == null && !isNoAi() && getHealthRatio() <= 0.6 && timeUntilLaser <= 0 && (entityRelativeAngle < 60 || entityRelativeAngle > 300) && getSensing().hasLineOfSight(target) && targetDistance < EntitySolarBeam.RADIUS_UMVUTHI) {
                 sendAbilityMessage(SOLAR_BEAM_ABILITY);
                 timeUntilLaser = LASER_PAUSE;
-            } else if (getActiveAbility() == null && !isNoAi() && getHealthRatio() <= 0.6 && !hasEffect(EffectHandler.SUNBLOCK.get()) && timeUntilSupernova <= 0 && targetDistance <= 10.5) {
+            } else if (getActiveAbility() == null && !isNoAi() && getHealthRatio() <= 0.6 && !hasEffect(EffectHandler.SUNBLOCK) && timeUntilSupernova <= 0 && targetDistance <= 10.5) {
                 sendAbilityMessage(SUPERNOVA_ABILITY);
                 timeUntilSupernova = SUPERNOVA_PAUSE;
             } else if (getActiveAbility() == null && !isNoAi() && ((targetDistance <= 6f && targetComingCloser) || targetDistance < 4.f)) {
@@ -566,7 +566,7 @@ public class EntityUmvuthi extends MowzieGeckoEntity implements LeaderSunstrikeI
     @Override
     public boolean hurt(DamageSource source, float damage) {
     	if (source == level().damageSources().hotFloor()) return false;
-        if (hasEffect(EffectHandler.SUNBLOCK.get()) && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+        if (hasEffect(EffectHandler.SUNBLOCK) && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             if (source.getDirectEntity() != null) playSound(MMSounds.ENTITY_WROUGHT_UNDAMAGED.get(), 0.4F, 2);
             return false;
         }
@@ -624,17 +624,33 @@ public class EntityUmvuthi extends MowzieGeckoEntity implements LeaderSunstrikeI
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        getEntityData().define(DIRECTION, 0);
-        getEntityData().define(DIALOGUE, 0);
-        getEntityData().define(ANGRY, false);
-        Item tradeItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(ConfigHandler.COMMON.MOBS.UMVUTHI.whichItem.get()));
-        getEntityData().define(DESIRES, new ItemStack(tradeItem, ConfigHandler.COMMON.MOBS.UMVUTHI.howMany.get()));
-        getEntityData().define(TRADED_PLAYERS, new CompoundTag());
-        getEntityData().define(HEALTH_LOST, 0.f);
-        getEntityData().define(MISBEHAVED_PLAYER, Optional.empty());
-        getEntityData().define(IS_TRADING, false);
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DIRECTION, 0);
+        builder.define(DIALOGUE, 0);
+        builder.define(ANGRY, false);
+
+        // FIXME 1.21 :: might need a test - registry should be available since this is called in the entity consturctor (meaning an entity was created)
+        HolderLookup.RegistryLookup<Item> lookup = CommonHooks.resolveLookup(Registries.ITEM);
+        ResourceLocation location = ResourceLocation.tryParse(ConfigHandler.COMMON.MOBS.UMVUTHI.whichItem.get());
+        Item tradeItem;
+
+        if (lookup == null || location == null) {
+            tradeItem = Items.AIR;
+        } else {
+            tradeItem = lookup.get(ResourceKey.create(Registries.ITEM, location)).map(Holder.Reference::value).orElse(Items.AIR);
+        }
+
+        if (tradeItem == Items.AIR) {
+            // Could be technically triggered if players add air to the config
+            MMCommon.LOGGER.warn("Could not properly resolve the trade item for [Umvuthi]");
+        }
+
+        builder.define(DESIRES, new ItemStack(tradeItem, ConfigHandler.COMMON.MOBS.UMVUTHI.howMany.get()));
+        builder.define(TRADED_PLAYERS, new CompoundTag());
+        builder.define(HEALTH_LOST, 0.f);
+        builder.define(MISBEHAVED_PLAYER, Optional.empty());
+        builder.define(IS_TRADING, false);
     }
 
     public int getDirectionData() {
@@ -1269,7 +1285,6 @@ public class EntityUmvuthi extends MowzieGeckoEntity implements LeaderSunstrikeI
         );
         private static final ParticleComponent.KeyTrack superNovaKeyTrack2 = ParticleComponent.KeyTrack.oscillate(0, 7, 24);
 
-        @OnlyIn(Dist.CLIENT)
         public static void superNovaEffects(Ability activeAbility, Vec3[] pinLocation, Level level) {
             // Darken sky
             Player clientPlayer = Minecraft.getInstance().player;

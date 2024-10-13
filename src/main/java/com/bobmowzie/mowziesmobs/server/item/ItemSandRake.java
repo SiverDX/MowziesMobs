@@ -18,7 +18,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -45,11 +45,11 @@ public class ItemSandRake extends Item {
             if (player != null) {
                 BlockPlaceContext blockPlaceContext = new BlockPlaceContext(player, context.getHand(), context.getItemInHand(), new BlockHitResult(context.getClickLocation(), context.getClickedFace(), context.getClickedPos(), context.isInside()));
                 RakedSandBlock origBlock = null;
-                if (blockstate.is(Tags.Blocks.SAND_COLORLESS)) {
-                    origBlock = (RakedSandBlock) BlockHandler.RAKED_SAND.get();
+                if (blockstate.is(Tags.Blocks.SANDS_COLORLESS)) {
+                    origBlock = (RakedSandBlock) BlockHandler.RAKED_SAND.value();
                 }
-                else if (blockstate.is(Tags.Blocks.SAND_RED)) {
-                    origBlock = (RakedSandBlock) BlockHandler.RED_RAKED_SAND.get();
+                else if (blockstate.is(Tags.Blocks.SANDS_RED)) {
+                    origBlock = (RakedSandBlock) BlockHandler.RED_RAKED_SAND.value();
                 }
 
                 if (origBlock != null) {

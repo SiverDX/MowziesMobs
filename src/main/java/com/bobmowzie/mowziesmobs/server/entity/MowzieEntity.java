@@ -47,11 +47,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -75,7 +70,6 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityAddit
     public boolean hurtInterruptsAnimation = false;
     private final List<IntermittentAnimation<?>> intermittentAnimations = new ArrayList<>();
 
-    @OnlyIn(Dist.CLIENT)
     public Vec3[] socketPosArray;
 
     protected boolean prevOnGround;
@@ -174,7 +168,7 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityAddit
 
             // Block check
             BlockState block = world.getBlockState(spawnPos.below());
-            ResourceLocation blockName = ForgeRegistries.BLOCKS.getKey(block.getBlock());
+            ResourceLocation blockName = block.getBlock().builtInRegistryHolder().key().location();
             List<? extends String> allowedBlocks = spawnConfig.allowedBlocks.get();
             List<? extends String> allowedBlockTags = spawnConfig.allowedBlockTags.get();
             if (blockName == null) return false;
@@ -211,7 +205,13 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityAddit
 
     private static boolean isBlockTagAllowed(List<? extends String> allowedBlockTags, BlockState block) {
         for (String allowedBlockTag : allowedBlockTags) {
-            TagKey<Block> tagKey = TagKey.create(Registries.BLOCK, new ResourceLocation(allowedBlockTag));
+            ResourceLocation location = ResourceLocation.tryParse(allowedBlockTag);
+
+            if (location == null) {
+                continue;
+            }
+
+            TagKey<Block> tagKey = TagKey.create(Registries.BLOCK, location);
             if (block.is(tagKey)) return true;
         }
         return false;
@@ -483,7 +483,6 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityAddit
         return BossEvent.BossBarColor.PURPLE;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void setSocketPosArray(int index, Vec3 pos) {
         if (socketPosArray != null && socketPosArray.length > index) {
             socketPosArray[index] = pos;

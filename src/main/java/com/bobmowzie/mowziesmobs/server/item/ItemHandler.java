@@ -68,6 +68,7 @@ public class ItemHandler {
     public static final DeferredHolder<Item, DeferredSpawnEggItem> SCULPTOR_SPAWN_EGG = REG.register("sculptor_spawn_egg", () -> new DeferredSpawnEggItem(EntityHandler.SCULPTOR, 0xc4a137, 0xfff5e7, new Item.Properties()));
 
     public static void initializeAttributes() {
+        // FIXME 1.21 :: needs a different way to handle this (default attributes are now stored in the item components) - should work in 'ItemAttributeModifierEvent'?
         WROUGHT_AXE.get().getAttributesFromConfig();
         WROUGHT_HELMET.get().getAttributesFromConfig();
         UMVUTHANA_MASK_FURY.get().getAttributesFromConfig();

@@ -48,6 +48,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -111,7 +112,7 @@ public class EntityWroughtnaut extends MowzieLLibraryEntity implements Enemy {
         super(type, world);
         xpReward = 30;
         active = false;
-        setMaxUpStep(1);
+        setMaxUpStep(1); // FIXME 1.21 :: add as attribute modifier
 //        rightEyePos = new Vector3d(0, 0, 0);
 //        leftEyePos = new Vector3d(0, 0, 0);
 //        rightEyeRot = new Vector3d(0, 0, 0);
@@ -530,11 +531,11 @@ public class EntityWroughtnaut extends MowzieLLibraryEntity implements Enemy {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        getEntityData().define(REST_POSITION, Optional.empty());
-        getEntityData().define(ACTIVE, false);
-        getEntityData().define(ALWAYS_ACTIVE, false);
+    protected void defineSynchedData(@NotNull SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(REST_POSITION, Optional.empty());
+        builder.define(ACTIVE, false);
+        builder.define(ALWAYS_ACTIVE, false);
     }
 
     public Optional<BlockPos> getRestPos() {
@@ -606,7 +607,6 @@ public class EntityWroughtnaut extends MowzieLLibraryEntity implements Enemy {
         return ANIMATIONS;
     }
 
-    @Nullable
     @Override
     protected ResourceLocation getDefaultLootTable() {
         return LootTableHandler.FERROUS_WROUGHTNAUT;
