@@ -144,15 +144,15 @@ public final class ServerEventHandler {
         }
     }
 
-    private static final UUID DEFENSE_MODIFIER_BELT_UUID = UUID.fromString("970ecf8f-aba5-4f40-9092-a8cfaecfb32d");
-    private static final AttributeModifier DEFENSE_MODIFIER_BELT = new AttributeModifier(DEFENSE_MODIFIER_BELT_UUID, "Geomancy Belt defense boost", 4D, AttributeModifier.Operation.ADDITION);
-    private static final UUID KNOCKBACK_MODIFIER_BELT_UUID = UUID.fromString("bfacc1ed-0cf1-4827-9012-4f8554c369f6");
-    private static final AttributeModifier KNOCKBACK_MODIFIER_BELT = new AttributeModifier(KNOCKBACK_MODIFIER_BELT_UUID, "Geomancy Belt knockback resistance boost", 1D, AttributeModifier.Operation.ADDITION);
+    private static final ResourceLocation GEOMANCY_BELT_DEFENSE = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "geomancy_belt_defense_boost");
+    private static final AttributeModifier DEFENSE_MODIFIER_BELT = new AttributeModifier(GEOMANCY_BELT_DEFENSE, 4D, AttributeModifier.Operation.ADD_VALUE);
+    private static final ResourceLocation GEOMANCY_BELT_KNOCKBACK_RESISTANCE = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "geomancy_belt_knockback_resistance_boost");
+    private static final AttributeModifier KNOCKBACK_MODIFIER_BELT = new AttributeModifier(GEOMANCY_BELT_KNOCKBACK_RESISTANCE, 1D, AttributeModifier.Operation.ADD_VALUE);
 
     @SubscribeEvent
     public void onLivingTick(EntityTickEvent event) { // FIXME 1.21 :: was 'LivingTickEvent' -> use 'Pre' or 'Post'?
         if (event.getEntity() instanceof LivingEntity entity) {
-            if (entity.getEffect(EffectHandler.POISON_RESIST.get()) != null && entity.getEffect(MobEffects.POISON) != null) {
+            if (entity.getEffect(EffectHandler.POISON_RESIST) != null && entity.getEffect(MobEffects.POISON) != null) {
                 entity.removeEffectNoUpdate(MobEffects.POISON);
             }
 
@@ -189,18 +189,18 @@ public final class ServerEventHandler {
             AttributeInstance attributeInstanceArmor = entity.getAttribute(Attributes.ARMOR);
             AttributeInstance attributeInstanceKnockbackRes = entity.getAttribute(Attributes.KNOCKBACK_RESISTANCE);
             if (entity.getItemBySlot(EquipmentSlot.LEGS).is(ItemHandler.GEOMANCER_BELT.get()) && entity.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)) {
-                if (attributeInstanceArmor != null && !attributeInstanceArmor.hasModifier(DEFENSE_MODIFIER_BELT)) {
+                if (attributeInstanceArmor != null && !attributeInstanceArmor.hasModifier(GEOMANCY_BELT_DEFENSE)) {
                     attributeInstanceArmor.addTransientModifier(DEFENSE_MODIFIER_BELT);
                 }
-                if (attributeInstanceKnockbackRes != null && !attributeInstanceKnockbackRes.hasModifier(KNOCKBACK_MODIFIER_BELT)) {
+                if (attributeInstanceKnockbackRes != null && !attributeInstanceKnockbackRes.hasModifier(GEOMANCY_BELT_KNOCKBACK_RESISTANCE)) {
                     attributeInstanceKnockbackRes.addTransientModifier(KNOCKBACK_MODIFIER_BELT);
                 }
             }
             else {
-                if (attributeInstanceArmor != null && attributeInstanceArmor.hasModifier(DEFENSE_MODIFIER_BELT)) {
+                if (attributeInstanceArmor != null && attributeInstanceArmor.hasModifier(GEOMANCY_BELT_DEFENSE)) {
                     attributeInstanceArmor.removeModifier(DEFENSE_MODIFIER_BELT);
                 }
-                if (attributeInstanceKnockbackRes != null && attributeInstanceKnockbackRes.hasModifier(KNOCKBACK_MODIFIER_BELT)) {
+                if (attributeInstanceKnockbackRes != null && attributeInstanceKnockbackRes.hasModifier(GEOMANCY_BELT_KNOCKBACK_RESISTANCE)) {
                     attributeInstanceKnockbackRes.removeModifier(KNOCKBACK_MODIFIER_BELT);
                 }
             }
@@ -209,13 +209,18 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public void onAddPotionEffect(MobEffectEvent.Added event) {
-        if (event.getEffectInstance().getEffect() == EffectHandler.SUNBLOCK.get()) { // FIXME 1.21
+        if (event.getEffectInstance() == null) {
+            return;
+        }
+
+        if (event.getEffectInstance().getEffect() == EffectHandler.SUNBLOCK) {
             if (!event.getEntity().level().isClientSide()) {
-                MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageSunblockEffect(event.getEntity(), true));
+                PacketDistributor.sendToPlayersTrackingEntityAndSelf(event.getEntity(), new MessageSunblockEffect(event.getEntity().getId(), true));
             }
+
             MMCommon.PROXY.playSunblockSound(event.getEntity());
         }
-        if (event.getEffectInstance().getEffect() == EffectHandler.FROZEN.get()) {
+        if (event.getEffectInstance().getEffect() == EffectHandler.FROZEN) {
             if (!event.getEntity().level().isClientSide()) {
                 MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), true));
                 FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
@@ -265,8 +270,8 @@ public final class ServerEventHandler {
         if (source == null || livingEntity == null) return;
         float damage = event.getAmount();
         if (!source.is(DamageTypeTags.BYPASSES_RESISTANCE)) {
-            if (livingEntity.hasEffect(EffectHandler.SUNBLOCK.get()) && !source.is(DamageTypes.FELL_OUT_OF_WORLD)) {
-                int i = (livingEntity.getEffect(EffectHandler.SUNBLOCK.get()).getAmplifier() + 2) * 5;
+            if (livingEntity.hasEffect(EffectHandler.SUNBLOCK) && !source.is(DamageTypes.FELL_OUT_OF_WORLD)) {
+                int i = (livingEntity.getEffect(EffectHandler.SUNBLOCK).getAmplifier() + 2) * 5;
                 int j = 25 - i;
                 float f = damage * (float)j;
                 float f1 = damage;
@@ -337,15 +342,15 @@ public final class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public void onUseItem(LivingEntityUseItemEvent event) {
+    public void onUseItem(LivingEntityUseItemEvent.Start event) {
         LivingEntity living = event.getEntity();
-        if (event.isCancelable() && living.hasEffect(EffectHandler.FROZEN.get())) {
+        if (living.hasEffect(EffectHandler.FROZEN)) {
             event.setCanceled(true);
             return;
         }
 
         AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(living);
-        if (abilityCapability != null && event.isCancelable() && abilityCapability.itemUsePrevented(event.getItem())) {
+        if (abilityCapability != null && abilityCapability.itemUsePrevented(event.getItem())) {
             event.setCanceled(true);
             return;
         }
@@ -354,15 +359,14 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public void onPlaceBlock(BlockEvent.EntityPlaceEvent event) {
         Entity entity = event.getEntity();
-        if (entity instanceof LivingEntity) {
-            LivingEntity living = (LivingEntity) entity;
-            if (event.isCancelable() && living.hasEffect(EffectHandler.FROZEN.get())) {
+        if (entity instanceof LivingEntity living) {
+            if (living.hasEffect(EffectHandler.FROZEN)) {
                 event.setCanceled(true);
                 return;
             }
 
             AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(living);
-            if (abilityCapability != null && event.isCancelable() && abilityCapability.blockBreakingBuildingPrevented()) {
+            if (abilityCapability != null && abilityCapability.blockBreakingBuildingPrevented()) {
                 event.setCanceled(true);
                 return;
             }
@@ -411,13 +415,13 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public void onBreakBlock(BlockEvent.BreakEvent event) {
-        if (event.isCancelable() && event.getPlayer().hasEffect(EffectHandler.FROZEN.get())) {
+        if (event.getPlayer().hasEffect(EffectHandler.FROZEN)) {
             event.setCanceled(true);
             return;
         }
 
         AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getPlayer());
-        if (abilityCapability != null && event.isCancelable() && abilityCapability.blockBreakingBuildingPrevented()) {
+        if (abilityCapability != null && abilityCapability.blockBreakingBuildingPrevented()) {
             event.setCanceled(true);
             return;
         }
@@ -454,14 +458,14 @@ public final class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public void onPlayerInteract(PlayerInteractEvent.RightClickEmpty event) {
-        if (event.isCancelable() && event.getEntity().hasEffect(EffectHandler.FROZEN.get())) {
+    public void onPlayerInteract(PlayerInteractEvent.RightClickEmpty event) { // FIXME 1.21 :: cannot be cancelled
+        if (event.getEntity().hasEffect(EffectHandler.FROZEN.get())) {
             event.setCanceled(true);
             return;
         }
 
         AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
-        if (abilityCapability != null && event.isCancelable() && abilityCapability.interactingPrevented()) {
+        if (abilityCapability != null && abilityCapability.interactingPrevented()) {
             event.setCanceled(true);
             return;
         }
@@ -487,13 +491,13 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent.EntityInteract event) {
-        if (event.isCancelable() && event.getEntity().hasEffect(EffectHandler.FROZEN.get())) {
+        if (event.getEntity().hasEffect(EffectHandler.FROZEN)) {
             event.setCanceled(true);
             return;
         }
 
         AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
-        if (abilityCapability != null && event.isCancelable() && abilityCapability.interactingPrevented()) {
+        if (abilityCapability != null && abilityCapability.interactingPrevented()) {
             event.setCanceled(true);
             return;
         }
@@ -509,13 +513,13 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent.RightClickBlock event) {
-        if (event.isCancelable() && event.getEntity().hasEffect(EffectHandler.FROZEN.get())) {
+        if (event.getEntity().hasEffect(EffectHandler.FROZEN)) {
             event.setCanceled(true);
             return;
         }
 
         AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
-        if (abilityCapability != null && event.isCancelable() && abilityCapability.interactingPrevented()) {
+        if (abilityCapability != null && abilityCapability.interactingPrevented()) {
             event.setCanceled(true);
             return;
         }
@@ -536,7 +540,7 @@ public final class ServerEventHandler {
                 aggroUmvuthana(player);
             }
 
-            if (event.getSide() == LogicalSide.CLIENT && player.getInventory().getSelected().isEmpty() && player.hasEffect(EffectHandler.SUNS_BLESSING.get()) && player.level().getBlockState(event.getPos()).getMenuProvider(player.level(), event.getPos()) == null) {
+            if (player.level().isClientSide() && player.getInventory().getSelected().isEmpty() && player.hasEffect(EffectHandler.SUNS_BLESSING) && player.level().getBlockState(event.getPos()).getMenuProvider(player.level(), event.getPos()) == null) {
                 if (player.isShiftKeyDown()) {
                     AbilityHandler.INSTANCE.sendPlayerTryAbilityMessage(event.getEntity(), AbilityHandler.SOLAR_BEAM_ABILITY);
                 } else {
@@ -559,7 +563,7 @@ public final class ServerEventHandler {
         double range = 6.5;
         Player player = event.getEntity();
         PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
-        if (player.getMainHandItem() != null && player.getMainHandItem().getItem() == ItemHandler.SPEAR.get()) {
+        if (player.getMainHandItem().getItem() == ItemHandler.SPEAR.get()) {
             LivingEntity entityHit = ItemSpear.raytraceEntities(player.getCommandSenderWorld(), player, range);
             if (entityHit != null) {
                 MMCommon.NETWORK.sendToServer(new MessagePlayerAttackMob(entityHit));
@@ -576,8 +580,8 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public void onLivingDamage(LivingDamageEvent event) {
         LivingEntity entity = event.getEntity();
-        if (entity.getHealth() <= event.getAmount() && entity.hasEffect(EffectHandler.FROZEN.get())) {
-            entity.removeEffectNoUpdate(EffectHandler.FROZEN.get());
+        if (entity.getHealth() <= event.getAmount() && entity.hasEffect(EffectHandler.FROZEN)) {
+            entity.removeEffectNoUpdate(EffectHandler.FROZEN);
             FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
             MMCommon.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity), new MessageFreezeEffect(event.getEntity(), false));
             if (frozenCapability != null) {
@@ -594,13 +598,13 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent.RightClickItem event) {
-        if (event.isCancelable() && event.getEntity().hasEffect(EffectHandler.FROZEN.get())) {
+        if (event.getEntity().hasEffect(EffectHandler.FROZEN)) {
             event.setCanceled(true);
             return;
         }
 
         AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
-        if (abilityCapability != null && event.isCancelable() && abilityCapability.itemUsePrevented(event.getItemStack())) {
+        if (abilityCapability != null && abilityCapability.itemUsePrevented(event.getItemStack())) {
             event.setCanceled(true);
             return;
         }
@@ -617,13 +621,13 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public void onPlayerLeftClick(PlayerInteractEvent.LeftClickBlock event) {
         Player player = event.getEntity();
-        if (event.isCancelable() && player.hasEffect(EffectHandler.FROZEN.get())) {
+        if (player.hasEffect(EffectHandler.FROZEN)) {
             event.setCanceled(true);
             return;
         }
 
         AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
-        if (abilityCapability != null && event.isCancelable() && abilityCapability.blockBreakingBuildingPrevented()) {
+        if (abilityCapability != null && abilityCapability.blockBreakingBuildingPrevented()) {
             event.setCanceled(true);
             return;
         }
@@ -641,7 +645,7 @@ public final class ServerEventHandler {
     public void onLivingJump(LivingEvent.LivingJumpEvent event) {
          if (event.getEntity() instanceof LivingEntity) {
             LivingEntity entity = (LivingEntity) event.getEntity();
-            if (entity.hasEffect(EffectHandler.FROZEN.get()) && entity.onGround()) {
+            if (entity.hasEffect(EffectHandler.FROZEN) && entity.onGround()) {
                 entity.setDeltaMovement(entity.getDeltaMovement().multiply(1, 0, 1));
             }
         }
@@ -659,14 +663,14 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public void onPlayerAttack(AttackEntityEvent event) {
-        if (event.isCancelable() && event.getEntity().hasEffect(EffectHandler.FROZEN.get())) {
+        if (event.getEntity().hasEffect(EffectHandler.FROZEN)) {
             event.setCanceled(true);
             return;
         }
 
         if (event.getEntity() != null) {
             AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
-            if (abilityCapability != null && event.isCancelable() && abilityCapability.attackingPrevented()) {
+            if (abilityCapability != null && abilityCapability.attackingPrevented()) {
                 event.setCanceled(true);
                 return;
             }

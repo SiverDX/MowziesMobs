@@ -11,15 +11,14 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.event.EventHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class ItemBlowgun extends BowItem {
-    public static final Predicate<ItemStack> DARTS = (p_220002_0_) -> {
-        return p_220002_0_.getItem() == ItemHandler.DART.get();
-    };
+    public static final Predicate<ItemStack> DARTS = (p_220002_0_) -> p_220002_0_.getItem() == ItemHandler.DART.get();
 
     public ItemBlowgun(Item.Properties properties) {
         super(properties);
@@ -34,7 +33,7 @@ public class ItemBlowgun extends BowItem {
             ItemStack itemstack = playerentity.getProjectile(stack);
 
             int i = this.getUseDuration(stack) - timeLeft;
-            i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn, playerentity, i, !itemstack.isEmpty() || flag);
+            i = EventHooks.onArrowLoose(stack, worldIn, playerentity, i, !itemstack.isEmpty() || flag);
             if (i < 0) return;
 
             if (!itemstack.isEmpty() || flag) {
@@ -54,7 +53,7 @@ public class ItemBlowgun extends BowItem {
                             abstractarrowentity.setCritArrow(true);
                         }
 
-                        int j = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, stack);
+                        int j = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER, stack); // FIXME 1.21 :: registry lookup (make utility method to check enchantment level or sth.)
                         if (j > 0) {
                             abstractarrowentity.setBaseDamage(abstractarrowentity.getBaseDamage() + (double)j * 0.5D + 0.5D);
                         }

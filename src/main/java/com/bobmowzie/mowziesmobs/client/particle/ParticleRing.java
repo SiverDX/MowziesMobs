@@ -11,15 +11,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -146,7 +143,6 @@ public class ParticleRing extends TextureSheetParticle {
         return MMRenderType.PARTICLE_SHEET_TRANSLUCENT_NO_DEPTH;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static final class RingFactory implements ParticleProvider<RingData> {
         private final SpriteSet spriteSet;
 
@@ -236,52 +232,42 @@ public class ParticleRing extends TextureSheetParticle {
             return ParticleHandler.RING.get();
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getYaw() {
             return this.yaw;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getPitch() {
             return this.pitch;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getR() {
             return this.r;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getG() {
             return this.g;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getB() {
             return this.b;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getA() {
             return this.a;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getScale() {
             return this.scale;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public int getDuration() {
             return this.duration;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public boolean getFacesCamera() {
             return this.facesCamera;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public EnumRingBehavior getBehavior() {
             return this.behavior;
         }

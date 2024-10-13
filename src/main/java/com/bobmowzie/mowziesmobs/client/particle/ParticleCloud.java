@@ -9,13 +9,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Locale;
 
@@ -76,7 +73,6 @@ public class ParticleCloud extends TextureSheetParticle {
         super.render(buffer, renderInfo, partialTicks);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static final class CloudFactory implements ParticleProvider<CloudData> {
         private final SpriteSet spriteSet;
 
@@ -159,37 +155,30 @@ public class ParticleCloud extends TextureSheetParticle {
             return type;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getR() {
             return this.r;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getG() {
             return this.g;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getB() {
             return this.b;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getScale() {
             return this.scale;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public EnumCloudBehavior getBehavior() {
             return this.behavior;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public int getDuration() {
             return this.duration;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getAirDrag() {
             return this.airDrag;
         }

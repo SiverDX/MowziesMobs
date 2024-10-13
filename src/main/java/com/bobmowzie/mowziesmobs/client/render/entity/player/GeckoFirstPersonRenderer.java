@@ -76,7 +76,7 @@ public class GeckoFirstPersonRenderer extends ItemInHandRenderer implements GeoR
             AbstractClientPlayer entity = (AbstractClientPlayer) geckoPlayer.getPlayer();
             animationState.setData(DataTickets.ENTITY, entity);
             this.geoModel.addAdditionalStateData(geckoPlayer, instanceId, animationState::setData);
-            this.geoModel.handleAnimations(geckoPlayer, instanceId, animationState);
+            this.geoModel.handleAnimations(geckoPlayer, instanceId, animationState, partialTicks);
 
             RenderType rendertype = RenderType.itemEntityTranslucentCull(getTextureLocation(geckoPlayer));
             VertexConsumer ivertexbuilder = bufferIn.getBuffer(rendertype);
@@ -162,7 +162,7 @@ public class GeckoFirstPersonRenderer extends ItemInHandRenderer implements GeoR
 
     @Override
     public ResourceLocation getTextureLocation(GeckoPlayer geckoPlayer) {
-        return ((AbstractClientPlayer)geckoPlayer.getPlayer()).getSkinTextureLocation();
+        return ((AbstractClientPlayer)geckoPlayer.getPlayer()).getSkin().texture();
     }
 
     @Override
@@ -186,7 +186,7 @@ public class GeckoFirstPersonRenderer extends ItemInHandRenderer implements GeoR
     }
 
     @Override
-    public void renderRecursively(PoseStack matrixStack, GeckoPlayer animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferIn, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderRecursively(PoseStack matrixStack, GeckoPlayer animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferIn, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLightIn, int packedOverlayIn, int color) {
         matrixStack.pushPose();
         if (mirror) {
             MowzieRenderUtils.translateMirror(matrixStack, bone);
@@ -217,12 +217,12 @@ public class GeckoFirstPersonRenderer extends ItemInHandRenderer implements GeoR
         else {
             RenderUtils.translateAwayFromPivotPoint(matrixStack, bone);
         }
-        renderCubesOfBone(matrixStack, bone, buffer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        renderCubesOfBone(matrixStack, bone, buffer, packedLightIn, packedOverlayIn, color);
 
         if (!isReRender)
             applyRenderLayersForBone(matrixStack, animatable, bone, renderType, bufferIn, buffer, partialTick, packedLightIn, packedOverlayIn);
 
-        renderChildBones(matrixStack, animatable, bone, renderType, bufferIn, buffer, isReRender, partialTick, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        renderChildBones(matrixStack, animatable, bone, renderType, bufferIn, buffer, isReRender, partialTick, packedLightIn, packedOverlayIn, color);
         matrixStack.popPose();
     }
 }

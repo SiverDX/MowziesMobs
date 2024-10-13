@@ -72,41 +72,41 @@ public class MowzieGeoArmorRenderer<T extends ArmorItem & GeoItem> extends GeoAr
 
     @Override
     protected void applyBaseTransformations(HumanoidModel<?> baseModel) {
-        if (getHeadBone() != null) {
+        if (getHeadBone(model) != null) {
             ModelPart headPart = baseModel.head;
-            copyFrom(headPart, getHeadBone(), 0, 0, 0);
+            copyFrom(headPart, getHeadBone(model), 0, 0, 0);
         }
 
-        if (getBodyBone() != null) {
+        if (getBodyBone(model) != null) {
             ModelPart bodyPart = baseModel.body;
-            copyFrom(bodyPart, getBodyBone(), 0, 0, 0);
+            copyFrom(bodyPart, getBodyBone(model), 0, 0, 0);
         }
 
-        if (getRightArmBone() != null) {
+        if (getRightArmBone(model) != null) {
             ModelPart rightArmPart = baseModel.rightArm;
-            copyFrom(rightArmPart, getRightArmBone(), 5, 2, 0);
+            copyFrom(rightArmPart, getRightArmBone(model), 5, 2, 0);
         }
 
-        if (getLeftArmBone() != null) {
+        if (getLeftArmBone(model) != null) {
             ModelPart leftArmPart = baseModel.leftArm;
-            copyFrom(leftArmPart, getLeftArmBone(),  -5, 2, 0);
+            copyFrom(leftArmPart, getLeftArmBone(model),  -5, 2, 0);
         }
 
-        if (getRightLegBone() != null) {
+        if (getRightLegBone(model) != null) {
             ModelPart rightLegPart = baseModel.rightLeg;
-            copyFrom(rightLegPart, getRightLegBone(), 2, 12, 0);
+            copyFrom(rightLegPart, getRightLegBone(model), 2, 12, 0);
 
-            if (getRightBootBone() != null) {
-                copyFrom(rightLegPart, getRightBootBone(), 2, 12, 0);
+            if (getRightBootBone(model) != null) {
+                copyFrom(rightLegPart, getRightBootBone(model), 2, 12, 0);
             }
         }
 
-        if (getLeftLegBone() != null) {
+        if (getLeftLegBone(model) != null) {
             ModelPart leftLegPart = baseModel.leftLeg;
-            copyFrom(leftLegPart, getLeftLegBone(), -2, 12, 0);
+            copyFrom(leftLegPart, getLeftLegBone(model), -2, 12, 0);
 
-            if (getLeftBootBone() != null) {
-                copyFrom(leftLegPart, getLeftBootBone(), -2, 12, 0);
+            if (getLeftBootBone(model) != null) {
+                copyFrom(leftLegPart, getLeftBootBone(model), -2, 12, 0);
             }
         }
     }

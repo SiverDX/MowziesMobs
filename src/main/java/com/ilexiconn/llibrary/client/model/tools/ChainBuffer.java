@@ -5,14 +5,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * @author rafa_mv
  * @since 1.0.0
  */
-@OnlyIn(Dist.CLIENT)
 public class ChainBuffer {
     private int yawTimer;
     private float yawVariation;

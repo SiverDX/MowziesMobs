@@ -24,13 +24,13 @@ public record MessageUseAbility(int entityId, int index) implements CustomPacket
             MessageUseAbility::new
     );
 
-    public static void handleClient(final MessageUseAbility particles, final IPayloadContext context) {
+    public static void handleClient(final MessageUseAbility packet, final IPayloadContext context) {
         context.enqueueWork(() -> {
-            if (Minecraft.getInstance().level.getEntity(particles.entityId()) instanceof LivingEntity entity) {
+            if (Minecraft.getInstance().level.getEntity(packet.entityId()) instanceof LivingEntity entity) {
                 AbilityCapability.IAbilityCapability abilityCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.ABILITY_CAPABILITY);
 
                 if (abilityCapability != null) {
-                    abilityCapability.activateAbility(entity, abilityCapability.getAbilityTypesOnEntity(entity)[particles.index()]);
+                    abilityCapability.activateAbility(entity, abilityCapability.getAbilityTypesOnEntity(entity)[packet.index()]);
                 }
             }
         });

@@ -1,27 +1,25 @@
 package com.bobmowzie.mowziesmobs.client.particle;
 
-import com.bobmowzie.mowziesmobs.client.particle.util.*;
+import com.bobmowzie.mowziesmobs.client.particle.util.AdvancedParticleBase;
+import com.bobmowzie.mowziesmobs.client.particle.util.DecalParticleData;
+import com.bobmowzie.mowziesmobs.client.particle.util.ParticleComponent;
+import com.bobmowzie.mowziesmobs.client.particle.util.ParticleRotation;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ParticleDecal extends AdvancedParticleBase {
     protected int spriteSize = 8;
@@ -141,7 +139,6 @@ public class ParticleDecal extends AdvancedParticleBase {
         buffer.vertex(x - vector3d.x(), y - vector3d.y(), z - vector3d.z()).uv(u, v).color(r, g, b, alpha).uv2(lightColor).endVertex();
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static class Factory implements ParticleProvider<DecalParticleData> {
         private final SpriteSet spriteSet;
 

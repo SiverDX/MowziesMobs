@@ -10,13 +10,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Locale;
 
@@ -134,7 +131,6 @@ public class ParticleOrb extends TextureSheetParticle {
         super.render(buffer, renderInfo, partialTicks);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static final class OrbFactory implements ParticleProvider<OrbData> {
         private final SpriteSet spriteSet;
 
@@ -234,52 +230,42 @@ public class ParticleOrb extends TextureSheetParticle {
             return ParticleHandler.ORB.get();
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getR() {
             return this.r;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getG() {
             return this.g;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getB() {
             return this.b;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getScale() {
             return this.scale;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public int getDuration() {
             return this.duration;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getTargetX() {
             return this.targetX;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getTargetY() {
             return this.targetY;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getTargetZ() {
             return this.targetZ;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getSpeed() {
             return this.speed;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public int getMode() {
             return this.mode;
         }

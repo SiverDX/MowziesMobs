@@ -49,7 +49,7 @@ public class RenderAxeAttack extends EntityRenderer<EntityAxeAttack> {
                 matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f(player.getYRot() * (float) Math.PI/180f, new Vector3f(0, -1, 0))));
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entitySolid(TEXTURE));
                 model.setupAnim(axe, 0, 0, axe.tickCount + delta, 0, 0);
-                model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+                model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, -1);
                 matrixStackIn.popPose();
             }
         }

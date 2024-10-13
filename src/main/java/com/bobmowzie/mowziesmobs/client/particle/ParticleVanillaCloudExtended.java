@@ -6,15 +6,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Locale;
 
@@ -96,7 +93,6 @@ public class ParticleVanillaCloudExtended extends TextureSheetParticle {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static final class CloudFactory implements ParticleProvider<VanillaCloudData> {
         private final SpriteSet spriteSet;
 
@@ -175,37 +171,30 @@ public class ParticleVanillaCloudExtended extends TextureSheetParticle {
             return ParticleHandler.VANILLA_CLOUD_EXTENDED.get();
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getScale() {
             return this.scale;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getRed() {
             return this.red;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getGreen() {
             return this.green;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getBlue() {
             return this.blue;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getDrag() {
             return this.drag;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getDuration() {
             return this.duration;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public Vec3[] getDestination() {
             return this.destination;
         }

@@ -10,14 +10,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -94,7 +90,6 @@ public class ParticleSnowFlake extends TextureSheetParticle {
         super.render(buffer, renderInfo, partialTicks);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static final class SnowFlakeFactory implements ParticleProvider<ParticleSnowFlake.SnowflakeData> {
         private final SpriteSet spriteSet;
 
@@ -151,12 +146,10 @@ public class ParticleSnowFlake extends TextureSheetParticle {
             return ParticleHandler.SNOWFLAKE.get();
         }
 
-        @OnlyIn(Dist.CLIENT)
         public float getDuration() {
             return this.duration;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public boolean getSwirls() {
             return this.swirls;
         }

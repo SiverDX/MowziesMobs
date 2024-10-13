@@ -19,7 +19,7 @@ public class ModelRockSling extends GeoModel<EntityRockSling> {
 
     public ModelRockSling(){
         super();
-        texMap = new TreeMap<String, ResourceLocation>();
+        texMap = new TreeMap<>();
         texMap.put(Blocks.STONE.getDescriptionId(), TEXTURE_STONE);
         texMap.put(Blocks.DIRT.getDescriptionId(), TEXTURE_DIRT);
         texMap.put(Blocks.CLAY.getDescriptionId(), TEXTURE_CLAY);
