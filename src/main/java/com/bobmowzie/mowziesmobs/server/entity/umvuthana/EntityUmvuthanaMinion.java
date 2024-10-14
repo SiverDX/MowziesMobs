@@ -238,9 +238,9 @@ public class EntityUmvuthanaMinion extends EntityUmvuthana implements LeaderSuns
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.put("tradeStore", tradeStore.serialize());
+        compound.put("tradeStore", tradeStore.serialize(registryAccess()));
         if (isOfferingTrade()) {
-            compound.put("offeringTrade", getOfferingTrade().serialize());
+            compound.put("offeringTrade", getOfferingTrade().serialize(registryAccess()));
         }
         compound.putInt("timeOffering", timeOffering);
         compound.putInt("HomePosX", this.getRestrictCenter().getX());

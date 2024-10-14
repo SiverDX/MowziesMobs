@@ -1,5 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.entity.umvuthana.trade;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
@@ -49,10 +50,10 @@ public final class Trade {
         return 961 * input.hashCode() + 31 * output.hashCode() + weight;
     }
 
-    public CompoundTag serialize() {
+    public CompoundTag serialize(RegistryAccess access) {
         CompoundTag compound = new CompoundTag();
-        compound.put("input", input.save(new CompoundTag()));
-        compound.put("output", output.save(new CompoundTag()));
+        compound.put("input", input.save(access, new CompoundTag()));
+        compound.put("output", output.save(access, new CompoundTag()));
         compound.putInt("weight", weight);
         return compound;
     }

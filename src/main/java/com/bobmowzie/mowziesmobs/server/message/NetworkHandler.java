@@ -27,7 +27,6 @@ public class NetworkHandler {
         registrar.playToClient(MessageFreezeEffect.TYPE, MessageFreezeEffect.STREAM_CODEC, MessageFreezeEffect::handleClient);
         registrar.playToClient(MessageBlackPinkInYourArea.TYPE, MessageBlackPinkInYourArea.STREAM_CODEC, MessageBlackPinkInYourArea::handleClient);
 
-
         // -> Server
         registrar.playToServer(MessageUmvuthiTrade.TYPE, MessageUmvuthiTrade.STREAM_CODEC, MessageUmvuthiTrade::handleServer);
         registrar.playToServer(MessageSculptorTrade.TYPE, MessageSculptorTrade.STREAM_CODEC, MessageSculptorTrade::handleServer);

@@ -26,7 +26,7 @@ public class BossMusicPlayer {
         if (!ConfigHandler.CLIENT.playBossMusic.get()) return;
 
         // Get the music object for the boss theme from the entity
-        BossMusic requestedMusic = entity.getBossMusic();
+        BossMusic<?> requestedMusic = entity.getBossMusic();
 
         if (requestedMusic != null && entity.isAlive()) {
             Player player = Minecraft.getInstance().player;

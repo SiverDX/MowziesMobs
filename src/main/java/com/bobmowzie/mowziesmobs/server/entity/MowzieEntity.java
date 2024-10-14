@@ -1,5 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.entity;
 
+import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.model.tools.IntermittentAnimation;
 import com.bobmowzie.mowziesmobs.client.sound.BossMusic;
 import com.bobmowzie.mowziesmobs.client.sound.BossMusicPlayer;
@@ -13,8 +14,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -53,7 +52,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public abstract class MowzieEntity extends PathfinderMob implements IEntityWithComplexSpawn, IntermittentAnimatableEntity {
@@ -83,8 +81,8 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityWithC
 
     protected final MMBossInfoServer bossInfo = initBossInfo();
 
-    private static final UUID HEALTH_CONFIG_MODIFIER_UUID = UUID.fromString("eff1c400-910c-11ec-b909-0242ac120002");
-    private static final UUID ATTACK_CONFIG_MODIFIER_UUID = UUID.fromString("f76a7c90-910c-11ec-b909-0242ac120002");
+    private static final ResourceLocation HEALTH_CONFIG_MODIFIER = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "health_config_modifier");
+    private static final ResourceLocation ATTACK_CONFIG_MODIFIER = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "attack_config_modifier");
 
     private static final EntityDataAccessor<Boolean> STRAFING = SynchedEntityData.defineId(MowzieEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -102,14 +100,14 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityWithC
             AttributeInstance maxHealthAttr = getAttribute(Attributes.MAX_HEALTH);
             if (maxHealthAttr != null) {
                 double difference = maxHealthAttr.getBaseValue() * getCombatConfig().healthMultiplier.get() - maxHealthAttr.getBaseValue();
-                maxHealthAttr.addTransientModifier(new AttributeModifier(HEALTH_CONFIG_MODIFIER_UUID, "Health config multiplier", difference, AttributeModifier.Operation.ADDITION));
+                maxHealthAttr.addTransientModifier(new AttributeModifier(HEALTH_CONFIG_MODIFIER, difference, AttributeModifier.Operation.ADD_VALUE));
                 this.setHealth(this.getMaxHealth());
             }
 
             AttributeInstance attackDamageAttr = getAttribute(Attributes.ATTACK_DAMAGE);
             if (attackDamageAttr != null) {
                 double difference = attackDamageAttr.getBaseValue() * getCombatConfig().attackMultiplier.get() - attackDamageAttr.getBaseValue();
-                attackDamageAttr.addTransientModifier(new AttributeModifier(ATTACK_CONFIG_MODIFIER_UUID, "Attack config multiplier", difference, AttributeModifier.Operation.ADDITION));
+                attackDamageAttr.addTransientModifier(new AttributeModifier(ATTACK_CONFIG_MODIFIER, difference, AttributeModifier.Operation.ADD_VALUE));
             }
         }
     }
@@ -190,7 +188,7 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityWithC
             ChunkGeneratorStructureState generatorState = serverLevel.getChunkSource().getGeneratorState();
             ChunkPos chunkPos = new ChunkPos(spawnPos);
             for (String structureName : avoidStructures) {
-                Optional<StructureSet> structureSetOptional = structureSetRegistry.getOptional(new ResourceLocation(structureName));
+                Optional<StructureSet> structureSetOptional = structureSetRegistry.getOptional(ResourceLocation.tryParse(structureName));
                 if (structureSetOptional.isEmpty()) continue;
                 Optional<ResourceKey<StructureSet>> resourceKeyOptional = structureSetRegistry.getResourceKey(structureSetOptional.get());
                 if (resourceKeyOptional.isEmpty()) continue;
@@ -287,39 +285,50 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityWithC
         return doHurtTarget(entityIn, damageMultiplier, applyKnockbackMultiplier, false);
     }
 
-    public boolean doHurtTarget(Entity entityIn, float damageMultiplier, float applyKnockbackMultiplier, boolean canDisableShield) { // Copied from mob class
-        float f = (float)this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * damageMultiplier;
-        float f1 = (float)this.getAttribute(Attributes.ATTACK_KNOCKBACK).getValue();
-        if (entityIn instanceof LivingEntity) {
-            f += EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity)entityIn).getMobType());
-            f1 += (float)EnchantmentHelper.getKnockbackBonus(this);
+    /** Mostly a copy from {@link Mob#doHurtTarget(Entity)} */
+    public boolean doHurtTarget(Entity target, float damageMultiplier, float applyKnockbackMultiplier, boolean canDisableShield) {
+        float damage = (float) getAttributeValue(Attributes.ATTACK_DAMAGE) * damageMultiplier;
+        DamageSource damagesource = damageSources().mobAttack(this);
+
+        if (level() instanceof ServerLevel serverLevel) {
+            damage = EnchantmentHelper.modifyDamage(serverLevel, this.getWeaponItem(), target, damagesource, damage);
         }
 
-        int i = EnchantmentHelper.getFireAspect(this);
-        if (i > 0) {
-            entityIn.setSecondsOnFire(i * 4);
-        }
+        boolean wasHurt = target.hurt(damagesource, damage);
 
-        boolean flag = entityIn.hurt(damageSources().mobAttack(this), f);
-        if (flag) {
-            entityIn.setDeltaMovement(entityIn.getDeltaMovement().multiply(applyKnockbackMultiplier, 1.0, applyKnockbackMultiplier));
-            if (f1 > 0.0F && entityIn instanceof LivingEntity) {
-                ((LivingEntity)entityIn).knockback(f1 * 0.5F, Mth.sin(this.getYRot() * ((float)Math.PI / 180F)), -Mth.cos(this.getYRot() * ((float)Math.PI / 180F)));
-                this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+        if (wasHurt) {
+            if (target instanceof LivingEntity livingTarget) {
+                // FIXME 1.21 :: this no longer just increases the attribute value but rather the total result
+                float knockback = getKnockback(livingTarget, damagesource) * applyKnockbackMultiplier;
+
+                if (knockback > 0) {
+                    livingTarget.knockback(
+                            knockback * 0.5F,
+                            Mth.sin(getYRot() * (float) (Math.PI / 180.0)),
+                            -Mth.cos(getYRot() * (float) (Math.PI / 180.0))
+                    );
+
+                    setDeltaMovement(getDeltaMovement().multiply(0.6, 1, 0.6));
+                }
             }
 
-            if (entityIn instanceof Player) {
-                Player player = (Player)entityIn;
-                if (canDisableShield) this.maybeDisableShield(player, player.isUsingItem() ? player.getUseItem() : ItemStack.EMPTY);
+            if (canDisableShield && target instanceof Player player) {
+                maybeDisableShield(player, player.isUsingItem() ? player.getUseItem() : ItemStack.EMPTY);
             }
 
-            this.doEnchantDamageEffects(this, entityIn);
-            this.setLastHurtMob(entityIn);
+            if (level() instanceof ServerLevel serverLevel) {
+                // Handle fire aspect etc.
+                EnchantmentHelper.doPostAttackEffects(serverLevel, target, damagesource);
+            }
+
+            setLastHurtMob(target);
+            playAttackSound(); // FIXME 1.21 :: was not previously used
         }
 
-        return flag;
+        return wasHurt;
     }
 
+    // FIXME 1.21 :: seems to be handled in the player class now and called in 'LivingEntity#hurtServer'
     private void maybeDisableShield(Player player, ItemStack itemStackBlock) { // Copied from mob class
         if (!itemStackBlock.isEmpty() && itemStackBlock.is(Items.SHIELD)) {
             float f = 0.25F + (float)EnchantmentHelper.getBlockEfficiency(this) * 0.05F;
@@ -372,11 +381,11 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityWithC
     protected void tickDeath() { // Copied from entityLiving
         ++this.deathTime;
         int deathDuration = getDeathDuration();
-        if (this.deathTime >= deathDuration && !this.level().isClientSide()) {
+        if (this.deathTime >= deathDuration && level() instanceof ServerLevel serverLevel) {
             lastHurtByPlayer = killDataAttackingPlayer;
             lastHurtByPlayerTime = killDataRecentlyHit;
             if (dropAfterDeathAnim && killDataCause != null) {
-                dropAllDeathLoot(killDataCause);
+                dropAllDeathLoot(serverLevel, killDataCause);
             }
             this.level().broadcastEntityEvent(this, (byte)60);
             this.remove(Entity.RemovalReason.KILLED);
@@ -386,9 +395,9 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityWithC
     protected abstract int getDeathDuration();
 
     @Override
-    protected void dropAllDeathLoot(DamageSource source) {
+    protected void dropAllDeathLoot(@NotNull ServerLevel level, @NotNull DamageSource source) {
         if (!dropAfterDeathAnim || deathTime > 0) {
-            super.dropAllDeathLoot(source);
+            super.dropAllDeathLoot(level, source);
         }
     }
 
@@ -536,12 +545,7 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityWithC
         }
     }
 
-    public BossMusic getBossMusic() {
+    public BossMusic<?> getBossMusic() {
         return null;
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

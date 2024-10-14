@@ -58,6 +58,7 @@ public class MowzieJigsawManager {
         if (structurepoolelement == EmptyPoolElement.INSTANCE) {
             return Optional.empty();
         } else {
+            // FIXME 1.21 :: needs liquid setting parameter
             PoolElementStructurePiece poolelementstructurepiece = new PoolElementStructurePiece(structuremanager, structurepoolelement, genPos, structurepoolelement.getGroundLevelDelta(), rotation, structurepoolelement.getBoundingBox(structuremanager, genPos, rotation));
             BoundingBox pieceBoundingBox = poolelementstructurepiece.getBoundingBox();
             BlockPos offset = BlockPos.ZERO;
@@ -228,7 +229,7 @@ public class MowzieJigsawManager {
                 if (numPaths > 0) numPaths--;
             }
             String pool = selectPool(thisPieceJigsawBlock);
-            ResourceLocation poolResourceLocation = new ResourceLocation(pool);
+            ResourceLocation poolResourceLocation = ResourceLocation.tryParse(pool);
             Optional<StructureTemplatePool> poolOptional = this.pools.getOptional(poolResourceLocation);
             // If pool exists and is not empty
             if (poolOptional.isPresent() && (poolOptional.get().size() != 0 || Objects.equals(poolResourceLocation, Pools.EMPTY.location()))) {
@@ -345,7 +346,7 @@ public class MowzieJigsawManager {
                             if (!nextPieceBoundingBoxOrigin.isInside(blockInfo.pos().relative(JigsawBlock.getFrontFacing(blockInfo.state())))) {
                                 return 0;
                             } else {
-                                ResourceLocation resourcelocation2 = new ResourceLocation(blockInfo.nbt().getString("pool"));
+                                ResourceLocation resourcelocation2 = ResourceLocation.tryParse(blockInfo.nbt().getString("pool"));
                                 Optional<StructureTemplatePool> optional2 = this.pools.getOptional(resourcelocation2);
                                 Optional<StructureTemplatePool> optional3 = optional2.flatMap((p_210344_) -> {
                                     return this.pools.getOptional(p_210344_.getFallback().unwrapKey().get());
@@ -440,6 +441,7 @@ public class MowzieJigsawManager {
                                     k2 = nextPieceCandidate.getGroundLevelDelta();
                                 }
 
+                                // FIXME 1.21 :: needs liquid setting parameter
                                 PoolElementStructurePiece poolelementstructurepiece = new PoolElementStructurePiece(this.structureManager, nextPieceCandidate, blockpos5, k2, nextPieceRotation, nextPieceBoundingBoxPlaced);
                                 int l2;
                                 if (thisPieceIsRigid) {

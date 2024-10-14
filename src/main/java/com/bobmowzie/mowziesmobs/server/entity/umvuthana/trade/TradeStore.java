@@ -1,6 +1,7 @@
 package com.bobmowzie.mowziesmobs.server.entity.umvuthana.trade;
 
 import com.google.common.collect.ImmutableSet;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -21,7 +22,7 @@ public final class TradeStore {
     }
 
     public boolean hasStock() {
-        return trades.size() > 0;
+        return !trades.isEmpty();
     }
 
     public Trade get(RandomSource rng) {
@@ -38,11 +39,11 @@ public final class TradeStore {
         return null;
     }
 
-    public CompoundTag serialize() {
+    public CompoundTag serialize(RegistryAccess access) {
         CompoundTag compound = new CompoundTag();
         ListTag tradesList = new ListTag();
         for (Trade trade : trades) {
-            tradesList.add(trade.serialize());
+            tradesList.add(trade.serialize(access));
         }
         compound.put("trades", tradesList);
         return compound;

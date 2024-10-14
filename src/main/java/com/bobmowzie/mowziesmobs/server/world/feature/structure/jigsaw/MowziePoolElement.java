@@ -2,6 +2,7 @@ package com.bobmowzie.mowziesmobs.server.world.feature.structure.jigsaw;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class MowziePoolElement extends SinglePoolElement {
-    public static final Codec<MowziePoolElement> CODEC = RecordCodecBuilder.create((builder) -> builder
+    public static final MapCodec<MowziePoolElement> CODEC = RecordCodecBuilder.create((builder) -> builder
             .group(
                     templateCodec(),
                     processorsCodec(),
@@ -71,6 +72,7 @@ public class MowziePoolElement extends SinglePoolElement {
     protected MowziePoolElement(Either<ResourceLocation, StructureTemplate> p_210415_, Holder<StructureProcessorList> p_210416_, StructureTemplatePool.Projection p_210417_,
                                 BoundsParams bounds, ConditionsParams conditions, TagsParams tags,
                                 boolean twoWay, int genOrder, int priority) {
+        // FIXME 1.21 :: needs liquid setting parameter
         super(p_210415_, p_210416_, p_210417_);
         this.bounds = bounds;
         this.conditions = conditions;

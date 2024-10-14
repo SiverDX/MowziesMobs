@@ -11,10 +11,13 @@ import com.bobmowzie.mowziesmobs.server.item.ItemHandler;
 import com.bobmowzie.mowziesmobs.server.item.ItemUmvuthanaMask;
 import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
@@ -28,9 +31,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -38,7 +40,6 @@ import java.util.UUID;
 
 public class EntityUmvuthanaFollowerToPlayer extends EntityUmvuthanaFollower<Player> {
     private static final EntityDataAccessor<ItemStack> MASK_STORED = SynchedEntityData.defineId(EntityUmvuthanaFollowerToPlayer.class, EntityDataSerializers.ITEM_STACK);
-    @OnlyIn(Dist.CLIENT)
     public Vec3[] feetPos;
 
     public EntityUmvuthanaFollowerToPlayer(EntityType<? extends EntityUmvuthanaFollowerToPlayer> type, Level world) {
@@ -138,13 +139,14 @@ public class EntityUmvuthanaFollowerToPlayer extends EntityUmvuthanaFollower<Pla
         return false;
     }
 
-    @Nullable
     @Override
-    protected ResourceLocation getDefaultLootTable() {
-        return null;
+    protected @NotNull ResourceKey<LootTable> getDefaultLootTable() {
+        // FIXME 1.21 :: logic from 'EntityType'
+        ResourceLocation resourcelocation = BuiltInRegistries.ENTITY_TYPE.getKey(getType());
+        return ResourceKey.create(Registries.LOOT_TABLE, resourcelocation.withPrefix("entities/"));
     }
 
-    @Nullable
+    @Nullable // FIXME 1.21 :: unused -> maybe parent method was renamed or sth.
     public UUID getOwnerId() {
         return getLeader() == null ? null : getLeader().getUUID();
     }
@@ -179,14 +181,14 @@ public class EntityUmvuthanaFollowerToPlayer extends EntityUmvuthanaFollower<Pla
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         CompoundTag compoundnbt = compound.getCompound("storedMask");
-        this.setStoredMask(ItemStack.of(compoundnbt));
+        this.setStoredMask(ItemStack.parse(registryAccess(), compoundnbt).orElse(ItemStack.EMPTY));
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (!this.getStoredMask().isEmpty()) {
-            compound.put("storedMask", this.getStoredMask().save(new CompoundTag()));
+            compound.put("storedMask", this.getStoredMask().save(registryAccess(), new CompoundTag()));
         }
     }
 }

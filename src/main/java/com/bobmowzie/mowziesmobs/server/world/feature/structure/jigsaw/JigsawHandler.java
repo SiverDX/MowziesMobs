@@ -2,6 +2,7 @@ package com.bobmowzie.mowziesmobs.server.world.feature.structure.jigsaw;
 
 import com.bobmowzie.mowziesmobs.MMCommon;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +18,7 @@ public class JigsawHandler {
         FALLBACK_ELEMENT = register("fallback_element", FallbackPoolElement.CODEC);
     }
 
-    private static <P extends StructurePoolElement> StructurePoolElementType<P> register(String name, Codec<P> codec) {
+    private static <P extends StructurePoolElement> StructurePoolElementType<P> register(String name, MapCodec<P> codec) {
         return Registry.register(BuiltInRegistries.STRUCTURE_POOL_ELEMENT, ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, name), () -> codec);
     }
 }

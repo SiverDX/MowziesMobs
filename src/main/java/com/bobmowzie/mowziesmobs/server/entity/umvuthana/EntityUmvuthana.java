@@ -31,10 +31,12 @@ import com.bobmowzie.mowziesmobs.server.loot.LootTableHandler;
 import com.bobmowzie.mowziesmobs.server.potion.EffectHandler;
 import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -58,6 +60,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -661,22 +664,21 @@ public abstract class EntityUmvuthana extends MowzieGeckoEntity {
     }
 
     @Override
-    protected ResourceLocation getDefaultLootTable() {
-        switch (getMaskType()) {
+    protected @NotNull ResourceKey<LootTable> getDefaultLootTable() {
+        return switch (getMaskType()) {
             case BLISS:
-                return LootTableHandler.UMVUTHANA_BLISS;
+                yield LootTableHandler.UMVUTHANA_BLISS;
             case FEAR:
-                return LootTableHandler.UMVUTHANA_FEAR;
+                yield LootTableHandler.UMVUTHANA_FEAR;
             case FURY:
-                return LootTableHandler.UMVUTHANA_FURY;
+                yield LootTableHandler.UMVUTHANA_FURY;
             case MISERY:
-                return LootTableHandler.UMVUTHANA_MISERY;
+                yield LootTableHandler.UMVUTHANA_MISERY;
             case RAGE:
-                return LootTableHandler.UMVUTHANA_RAGE;
+                yield LootTableHandler.UMVUTHANA_RAGE;
             case FAITH:
-                return LootTableHandler.UMVUTHANA_FAITH;
-        }
-        return LootTableHandler.UMVUTHANA_FURY;
+                yield LootTableHandler.UMVUTHANA_FAITH;
+        };
     }
 
     @Override

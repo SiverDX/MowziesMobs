@@ -1,6 +1,7 @@
 package com.bobmowzie.mowziesmobs.server.world.feature.structure.processor;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.WorldGenRegion;
@@ -16,7 +17,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import java.util.List;
 
 public class BlockSwapProcessor extends StructureProcessor {
-    public static final Codec<BlockSwapProcessor> CODEC = RecordCodecBuilder.create(instance -> instance
+    public static final MapCodec<BlockSwapProcessor> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(
                     BlockState.CODEC.listOf().fieldOf("to_replace").forGetter(config -> config.toReplace),
                     BlockStateRandomizer.CODEC.fieldOf("replace_with").forGetter(config -> config.replaceWith),

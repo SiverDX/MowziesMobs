@@ -1,6 +1,6 @@
 package com.bobmowzie.mowziesmobs.server.world.feature.structure.jigsaw;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class FallbackPoolElement extends StructurePoolElement {
-    public static final Codec<FallbackPoolElement> CODEC = Codec.unit(() -> FallbackPoolElement.INSTANCE);
+    public static final MapCodec<FallbackPoolElement> CODEC = MapCodec.unit(() -> FallbackPoolElement.INSTANCE);
     public static final FallbackPoolElement INSTANCE = new FallbackPoolElement();
 
     private FallbackPoolElement() {

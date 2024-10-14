@@ -4,41 +4,40 @@ import com.bobmowzie.mowziesmobs.server.entity.effects.EntitySolarBeam;
 import com.bobmowzie.mowziesmobs.server.entity.effects.EntitySunstrike;
 import com.bobmowzie.mowziesmobs.server.entity.naga.EntityNaga;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.trade.Trade;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
 public class ServerProxy {
-    // FIXME 1.21 :: probably needs item instead of itemstack
-    private static final StreamCodec<ByteBuf, Optional<Trade>> OPTIONAL_TRADE_CODEC = new StreamCodec<>() {
-        public @NotNull Optional<Trade> decode(@NotNull ByteBuf buffer) {
-            Item input = Item.byId(buffer.readInt());
+    private static final StreamCodec<RegistryFriendlyByteBuf, Optional<Trade>> OPTIONAL_TRADE_CODEC = new StreamCodec<>() {
+        public @NotNull Optional<Trade> decode(@NotNull RegistryFriendlyByteBuf buffer) {
+            boolean hasTrade = buffer.readBoolean();
 
-            if (input == Items.AIR) {
+            if (!hasTrade) {
                 return Optional.empty();
             }
 
-            return Optional.of(new Trade(input.getDefaultInstance(), Item.byId(buffer.readInt()).getDefaultInstance(), buffer.readInt()));
+            return Optional.of(new Trade(ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer), ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer), buffer.readInt()));
         }
 
-        public void encode(@NotNull ByteBuf buffer, @NotNull Optional<Trade> optional) {
+        public void encode(@NotNull RegistryFriendlyByteBuf buffer, @NotNull Optional<Trade> optional) {
             optional.ifPresentOrElse(trade -> {
-                buffer.writeInt(Item.getId(trade.getInput().getItem()));
-                buffer.writeInt(Item.getId(trade.getOutput().getItem()));
+                buffer.writeBoolean(true);
+                ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, trade.getInput());
+                ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, trade.getOutput());
                 buffer.writeInt(trade.getWeight());
-            }, () -> buffer.writeInt(Item.getId(Items.AIR)));
+            }, () -> buffer.writeBoolean(false));
         }
     };
 
