@@ -58,7 +58,7 @@ public class EntityIceBreath extends EntityMagicEffect {
             Player player = (Player) getCaster();
             // FIXME 1.21 :: is the -0.5 still needed?
             absMoveTo(player.getX(), player.getEyeY() - 0.5f, player.getZ(), player.getYRot(), player.getXRot());
-            AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
+            AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
             if (abilityCapability != null && !abilityCapability.getAbilityFromType(AbilityHandler.ICE_BREATH_ABILITY).isUsing()) {
                 this.discard();
             }
@@ -142,7 +142,7 @@ public class EntityIceBreath extends EntityMagicEffect {
 
                 if (entityHit.hurt(damageSources().freeze(), damage) && entityHit instanceof LivingEntity) {
                     entityHit.setDeltaMovement(entityHit.getDeltaMovement().multiply(0.25, 1, 0.25));
-                    FrozenCapability.IFrozenCapability capability = CapabilityHandler.getCapability(entityHit, CapabilityHandler.FROZEN_CAPABILITY);
+                    FrozenCapability.Capability capability = CapabilityHandler.getCapability(entityHit, CapabilityHandler.FROZEN_CAPABILITY);
                     if (capability != null) capability.addFreezeProgress((LivingEntity) entityHit, 0.23f);
                 }
             }

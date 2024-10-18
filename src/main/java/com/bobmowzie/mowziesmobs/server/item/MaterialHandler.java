@@ -46,4 +46,17 @@ public class MaterialHandler {
             ArmorMaterials.IRON.value().toughness() * ConfigHandler.COMMON.TOOLS_AND_ABILITIES.WROUGHT_HELM.armorConfig.toughnessMultiplierValue,
             0.1f
     ));
+
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> GEOMANCER_ARMOR_MATERIAL = MM_ARMOR_MATERIALS.register("wrought_helm", () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+        map.put(ArmorItem.Type.HELMET, (int) (ArmorMaterials.DIAMOND.value().getDefense(ArmorItem.Type.HELMET) * ConfigHandler.COMMON.TOOLS_AND_ABILITIES.GEOMANCER_ARMOR.armorConfig.damageReductionMultiplierValue));
+        map.put(ArmorItem.Type.BODY, (int) (ArmorMaterials.DIAMOND.value().getDefense(ArmorItem.Type.BODY) * ConfigHandler.COMMON.TOOLS_AND_ABILITIES.GEOMANCER_ARMOR.armorConfig.damageReductionMultiplierValue));
+        map.put(ArmorItem.Type.LEGGINGS, (int) (ArmorMaterials.DIAMOND.value().getDefense(ArmorItem.Type.LEGGINGS) * ConfigHandler.COMMON.TOOLS_AND_ABILITIES.GEOMANCER_ARMOR.armorConfig.damageReductionMultiplierValue));
+        map.put(ArmorItem.Type.BOOTS, (int) (ArmorMaterials.DIAMOND.value().getDefense(ArmorItem.Type.BOOTS) * ConfigHandler.COMMON.TOOLS_AND_ABILITIES.GEOMANCER_ARMOR.armorConfig.damageReductionMultiplierValue));
+    }), ArmorMaterials.DIAMOND.value().enchantmentValue(),
+            ArmorMaterials.DIAMOND.value().equipSound(),
+            ArmorMaterials.DIAMOND.value().repairIngredient(),
+            List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "geomancer_armor"))), // FIXME 1.21 :: maybe doesn't need to exist since 'getArmorTexture' returns a custom texture anyway?
+            ArmorMaterials.DIAMOND.value().toughness() * ConfigHandler.COMMON.TOOLS_AND_ABILITIES.GEOMANCER_ARMOR.armorConfig.toughnessMultiplierValue,
+            0
+    ));
 }

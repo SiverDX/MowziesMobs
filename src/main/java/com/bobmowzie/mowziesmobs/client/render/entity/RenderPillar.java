@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.cache.object.GeoCube;
+import software.bernie.geckolib.util.RenderUtil;
 
 public class RenderPillar extends RenderGeomancyBase<EntityPillar> {
     private static final ResourceLocation TEXTURE_DIRT = ResourceLocation.withDefaultNamespace("textures/blocks/dirt.png");
@@ -66,10 +67,10 @@ public class RenderPillar extends RenderGeomancyBase<EntityPillar> {
     @Override
     public void renderRecursively(PoseStack poseStack, EntityPillar animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
         poseStack.pushPose();
-        RenderUtils.translateMatrixToBone(poseStack, bone);
-        RenderUtils.translateToPivotPoint(poseStack, bone);
-        RenderUtils.rotateMatrixAroundBone(poseStack, bone);
-        RenderUtils.scaleMatrixForBone(poseStack, bone);
+        RenderUtil.translateMatrixToBone(poseStack, bone);
+        RenderUtil.translateToPivotPoint(poseStack, bone);
+        RenderUtil.rotateMatrixAroundBone(poseStack, bone);
+        RenderUtil.scaleMatrixForBone(poseStack, bone);
         renderCubesOfBone(poseStack, bone, buffer, packedLight, packedOverlay, color);
         renderChildBones(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, color);
         poseStack.popPose();

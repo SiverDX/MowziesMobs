@@ -195,7 +195,8 @@ public class SpawnBoulderAbility extends PlayerAbility {
     public void onRenderTick(RenderFrameEvent event) {
         super.onRenderTick(event);
         if (isUsing() && getCurrentSection().sectionType == AbilitySection.AbilitySectionType.STARTUP && getTicksInSection() > 1) {
-            Vec3 playerEyes = getUser().getEyePosition(Minecraft.getInstance().getFrameTime());
+            // FIXME 1.21 :: replaced 'Minecraft#getFrameTime'
+            Vec3 playerEyes = getUser().getEyePosition(event.getPartialTick().getGameTimeDeltaTicks());
             Vec3 vec = playerEyes.subtract(lookPos).normalize();
             float yaw = (float) Math.atan2(vec.z, vec.x);
             float pitch = (float) Math.asin(vec.y);

@@ -258,7 +258,7 @@ public class ModelGeckoBiped extends MowzieGeoModel<GeckoPlayer> {
 //			this.bipedRightLeg().setRotX(MathHelper.lerp(this.swimAnimation, this.bipedRightLeg().getRotX(), 0.3F * MathHelper.cos(limbSwing * 0.33333334F)));
 //		}
 
-		AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(entityIn);
+		AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(entityIn);
 		if (abilityCapability != null && abilityCapability.getActiveAbility() != null) {
 			abilityCapability.codeAnimations(this, partialTick);
 		}

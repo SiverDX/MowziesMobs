@@ -84,7 +84,7 @@ public abstract class GeckoPlayer implements GeoEntity {
 		if (player == null) {
 			return PlayState.STOP;
 		}
-		AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
+		AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
 		if (abilityCapability == null) {
 			return PlayState.STOP;
 		}
@@ -101,7 +101,7 @@ public abstract class GeckoPlayer implements GeoEntity {
 	@Nullable
 	public static GeckoPlayer getGeckoPlayer(Player player, Perspective perspective) {
 		if (perspective == Perspective.FIRST_PERSON) return GeckoFirstPersonRenderer.GECKO_PLAYER_FIRST_PERSON;
-		PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
+		PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
 		if (playerCapability != null) {
 			return playerCapability.getGeckoPlayer();
 		}
@@ -109,7 +109,7 @@ public abstract class GeckoPlayer implements GeoEntity {
 	}
 
 	public static MowzieAnimationController<GeckoPlayer> getAnimationController(Player player, Perspective perspective) {
-		PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
+		PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
 		if (playerCapability != null) {
 			GeckoPlayer geckoPlayer;
 			if (perspective == Perspective.FIRST_PERSON) geckoPlayer = GeckoFirstPersonRenderer.GECKO_PLAYER_FIRST_PERSON;

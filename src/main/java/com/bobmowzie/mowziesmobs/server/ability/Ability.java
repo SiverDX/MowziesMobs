@@ -29,7 +29,7 @@ public class Ability<T extends LivingEntity> {
     protected int cooldownMax;
     private final AbilityType<T, ? extends Ability> abilityType;
     private final T user;
-    private final AbilityCapability.IAbilityCapability abilityCapability;
+    private final AbilityCapability.Capability abilityCapability;
 
     private int ticksInUse;
     private int ticksInSection;
@@ -133,7 +133,7 @@ public class Ability<T extends LivingEntity> {
     }
 
     /**
-     * Both sides check and behavior when user tries to use this ability. Ability only starts if this returns true.
+     * Both sides check and behavior when user tries to use this ability. Ability<?>only starts if this returns true.
      * Called after packet is received.
      * @return Whether or not the ability try succeeded
      */
@@ -145,8 +145,8 @@ public class Ability<T extends LivingEntity> {
         return false;
     }
 
-    public Ability getActiveAbility() {
-        AbilityCapability.IAbilityCapability capability = getAbilityCapability();
+    public Ability<?>getActiveAbility() {
+        AbilityCapability.Capability capability = getAbilityCapability();
         if (capability == null) return null;
         return getAbilityCapability().getActiveAbility();
     }
@@ -155,7 +155,7 @@ public class Ability<T extends LivingEntity> {
         return false;
     }
 
-    public boolean canBeCanceledByAbility(Ability ability) {
+    public boolean canBeCanceledByAbility(Ability<?>ability) {
         return false;
     }
 
@@ -278,7 +278,7 @@ public class Ability<T extends LivingEntity> {
         return cooldownMax;
     }
 
-    public AbilityCapability.IAbilityCapability getAbilityCapability() {
+    public AbilityCapability.Capability getAbilityCapability() {
         return abilityCapability;
     }
 

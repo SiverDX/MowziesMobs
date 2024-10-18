@@ -14,9 +14,9 @@ import java.util.List;
 
 public abstract class Power {
 
-    private final PlayerCapability.PlayerCapabilityImp capability;
+    private final PlayerCapability.Capability capability;
 
-    public Power(PlayerCapability.PlayerCapabilityImp capability) {
+    public Power(PlayerCapability.Capability capability) {
         this.capability = capability;
     }
 
@@ -88,7 +88,7 @@ public abstract class Power {
         return true;
     }
 
-    public PlayerCapability.PlayerCapabilityImp getProperties() {
+    public PlayerCapability.Capability getProperties() {
         return capability;
     }
 

@@ -67,13 +67,13 @@ public enum AbilityHandler {
     };
 
     @Nullable
-    public AbilityCapability.IAbilityCapability getAbilityCapability(LivingEntity entity) {
+    public AbilityCapability.Capability getAbilityCapability(LivingEntity entity) {
         return CapabilityHandler.getCapability(entity, CapabilityHandler.ABILITY_CAPABILITY);
     }
 
     @Nullable
-    public Ability getAbility(LivingEntity entity, AbilityType<?, ?> abilityType) {
-        AbilityCapability.IAbilityCapability abilityCapability = getAbilityCapability(entity);
+    public Ability<?>getAbility(LivingEntity entity, AbilityType<?, ?> abilityType) {
+        AbilityCapability.Capability abilityCapability = getAbilityCapability(entity);
         if (abilityCapability != null) {
             return abilityCapability.getAbilityMap().get(abilityType);
         }
@@ -84,9 +84,9 @@ public enum AbilityHandler {
         if (entity.level().isClientSide) {
             return;
         }
-        AbilityCapability.IAbilityCapability abilityCapability = getAbilityCapability(entity);
+        AbilityCapability.Capability abilityCapability = getAbilityCapability(entity);
         if (abilityCapability != null) {
-            Ability instance = abilityCapability.getAbilityMap().get(abilityType);
+            Ability<?>instance = abilityCapability.getAbilityMap().get(abilityType);
             if (instance != null && instance.canUse()) {
                 abilityCapability.activateAbility(entity, abilityType);
                 PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new MessageUseAbility(entity.getId(), ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), abilityType)));
@@ -98,9 +98,9 @@ public enum AbilityHandler {
         if (entity.level().isClientSide) {
             return;
         }
-        AbilityCapability.IAbilityCapability abilityCapability = getAbilityCapability(entity);
+        AbilityCapability.Capability abilityCapability = getAbilityCapability(entity);
         if (abilityCapability != null) {
-            Ability instance = abilityCapability.getAbilityMap().get(abilityType);
+            Ability<?>instance = abilityCapability.getAbilityMap().get(abilityType);
             if (instance.isUsing()) {
                 instance.interrupt();
                 PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new MessageInterruptAbility(entity.getId(), ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), abilityType)));
@@ -112,7 +112,7 @@ public enum AbilityHandler {
         if (!(entity.level().isClientSide && entity instanceof LocalPlayer)) {
             return;
         }
-        AbilityCapability.IAbilityCapability abilityCapability = getAbilityCapability(entity);
+        AbilityCapability.Capability abilityCapability = getAbilityCapability(entity);
         if (abilityCapability != null) {
             PacketDistributor.sendToServer(new MessagePlayerUseAbility(ArrayUtils.indexOf(abilityCapability.getAbilityTypesOnEntity(entity), ability)));
         }
@@ -124,7 +124,7 @@ public enum AbilityHandler {
             return;
         }
 
-        AbilityCapability.IAbilityCapability abilityCapability = getAbilityCapability(entity);
+        AbilityCapability.Capability abilityCapability = getAbilityCapability(entity);
 
         if (abilityCapability != null) {
             Ability<?> instance = abilityCapability.getAbilityMap().get(abilityType);

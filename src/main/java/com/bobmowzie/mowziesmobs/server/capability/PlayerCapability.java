@@ -1,6 +1,5 @@
 package com.bobmowzie.mowziesmobs.server.capability;
 
-import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.render.entity.player.GeckoPlayer;
 import com.bobmowzie.mowziesmobs.server.ability.Ability;
 import com.bobmowzie.mowziesmobs.server.ability.AbilityHandler;
@@ -16,9 +15,8 @@ import com.bobmowzie.mowziesmobs.server.message.mouse.MessageRightMouseUp;
 import com.bobmowzie.mowziesmobs.server.potion.EffectHandler;
 import com.bobmowzie.mowziesmobs.server.power.Power;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -34,83 +32,14 @@ import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerCapability {
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "player_cap");
-
-    public interface IPlayerCapability extends INBTSerializable<CompoundTag> {
-
-        Power[] getPowers();
-
-        void tick(PlayerTickEvent event);
-
-        void addedToWorld(EntityJoinLevelEvent event);
-
-        boolean isVerticalSwing();
-
-        void setVerticalSwing(boolean verticalSwing);
-
-        int getUntilSunstrike();
-
-        void setUntilSunstrike(int untilSunstrike);
-
-        int getUntilAxeSwing();
-
-        void setUntilAxeSwing(int untilAxeSwing);
-
-        void setAxeCanAttack(boolean axeCanAttack);
-
-        boolean getAxeCanAttack();
-
-        boolean isMouseRightDown();
-
-        void setMouseRightDown(boolean mouseRightDown);
-
-        boolean isMouseLeftDown();
-
-        void setMouseLeftDown(boolean mouseLeftDown);
-
-        boolean isPrevSneaking();
-
-        void setPrevSneaking(boolean prevSneaking);
-
-        int getTribeCircleTick();
-
-        void setTribeCircleTick(int tribeCircleTick);
-
-        List<EntityUmvuthanaFollowerToPlayer> getUmvuthanaPack();
-
-        void setUmvuthanaPack(List<EntityUmvuthanaFollowerToPlayer> umvuthanaPack);
-
-        int getTribePackRadius();
-
-        void setTribePackRadius(int tribePackRadius);
-
-        int getPackSize();
-
-        Vec3 getPrevMotion();
-
-        void removePackMember(EntityUmvuthanaFollowerToPlayer tribePlayer);
-
-        void addPackMember(EntityUmvuthanaFollowerToPlayer tribePlayer);
-
-        void setUsingSolarBeam(boolean b);
-
-        boolean getUsingSolarBeam();
-
-        float getPrevCooledAttackStrength();
-
-        void setPrevCooledAttackStrength(float cooledAttackStrength);
-
-        @OnlyIn(Dist.CLIENT) // FIXME 1.21 :: remove this
-        GeckoPlayer.GeckoPlayerThirdPerson getGeckoPlayer();
-    }
-
-    public static class PlayerCapabilityImp implements IPlayerCapability {
+    public static class Capability implements INBTSerializable<CompoundTag> {
         public boolean verticalSwing = false;
         public int untilSunstrike = 0;
         public int untilAxeSwing = 0;
@@ -216,17 +145,15 @@ public class PlayerCapability {
 
         public boolean getUsingSolarBeam() { return this.usingSolarBeam; }
 
-        @Override
         public float getPrevCooledAttackStrength() {
             return prevCooledAttackStrength;
         }
 
-        @Override
         public void setPrevCooledAttackStrength(float cooledAttackStrength) {
             prevCooledAttackStrength = cooledAttackStrength;
         }
 
-        @OnlyIn(Dist.CLIENT)
+        @OnlyIn(Dist.CLIENT) // FIXME 1.21 :: maybe cannot be removed due to the class potentially being parsed completely
         public GeckoPlayer.GeckoPlayerThirdPerson getGeckoPlayer() {
             return geckoPlayer;
         }
@@ -239,7 +166,6 @@ public class PlayerCapability {
 
         public Power[] powers = new Power[]{};
 
-        @Override
         public void addedToWorld(EntityJoinLevelEvent event) {
             // Create the geckoplayer instances when an entity joins the world
             // Normally, the animation controllers and lastModel field are only set when rendered for the first time, but this won't work for player animations
@@ -290,7 +216,7 @@ public class PlayerCapability {
                 }
             }
 
-            Ability iceBreathAbility = AbilityHandler.INSTANCE.getAbility(player, AbilityHandler.ICE_BREATH_ABILITY);
+            Ability<?> iceBreathAbility = AbilityHandler.INSTANCE.getAbility(player, AbilityHandler.ICE_BREATH_ABILITY);
             if (iceBreathAbility != null && !iceBreathAbility.isUsing()) {
                 for (ItemStack stack : player.getInventory().items) {
                     restoreIceCrystalStack(player, stack);
@@ -309,9 +235,9 @@ public class PlayerCapability {
                     for (int i = 0; i < powers.length; i++) {
                         powers[i].onLeftMouseDown(player);
                     }
-                    AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
+                    AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
                     if (abilityCapability != null) {
-                        for (Ability ability : abilityCapability.getAbilities()) {
+                        for (Ability<?> ability : abilityCapability.getAbilities()) {
                             if (ability instanceof PlayerAbility) {
                                 ((PlayerAbility)ability).onLeftMouseDown(player);
                             }
@@ -324,9 +250,9 @@ public class PlayerCapability {
                     for (int i = 0; i < powers.length; i++) {
                         powers[i].onRightMouseDown(player);
                     }
-                    AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
+                    AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
                     if (abilityCapability != null) {
-                        for (Ability ability : abilityCapability.getAbilities()) {
+                        for (Ability<?> ability : abilityCapability.getAbilities()) {
                             if (ability instanceof PlayerAbility) {
                                 ((PlayerAbility)ability).onRightMouseDown(player);
                             }
@@ -339,9 +265,9 @@ public class PlayerCapability {
                     for (int i = 0; i < powers.length; i++) {
                         powers[i].onLeftMouseUp(player);
                     }
-                    AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
+                    AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
                     if (abilityCapability != null) {
-                        for (Ability ability : abilityCapability.getAbilities()) {
+                        for (Ability<?> ability : abilityCapability.getAbilities()) {
                             if (ability instanceof PlayerAbility) {
                                 ((PlayerAbility)ability).onLeftMouseUp(player);
                             }
@@ -354,9 +280,9 @@ public class PlayerCapability {
                     for (int i = 0; i < powers.length; i++) {
                         powers[i].onRightMouseUp(player);
                     }
-                    AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
+                    AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
                     if (abilityCapability != null) {
-                        for (Ability ability : abilityCapability.getAbilities()) {
+                        for (Ability<?> ability : abilityCapability.getAbilities()) {
                             if (ability instanceof PlayerAbility) {
                                 ((PlayerAbility)ability).onRightMouseUp(player);
                             }
@@ -369,9 +295,9 @@ public class PlayerCapability {
                 for (int i = 0; i < powers.length; i++) {
                     powers[i].onSneakDown(player);
                 }
-                AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
+                AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
                 if (abilityCapability != null) {
-                    for (Ability ability : abilityCapability.getAbilities()) {
+                    for (Ability<?>ability : abilityCapability.getAbilities()) {
                         if (ability instanceof PlayerAbility) {
                             ((PlayerAbility) ability).onSneakDown(player);
                         }
@@ -382,9 +308,9 @@ public class PlayerCapability {
                 for (int i = 0; i < powers.length; i++) {
                     powers[i].onSneakUp(player);
                 }
-                AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
+                AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
                 if (abilityCapability != null) {
-                    for (Ability ability : abilityCapability.getAbilities()) {
+                    for (Ability<?>ability : abilityCapability.getAbilities()) {
                         if (ability instanceof PlayerAbility) {
                             ((PlayerAbility) ability).onSneakUp(player);
                         }
@@ -405,7 +331,7 @@ public class PlayerCapability {
         private void useIceCrystalStack(Player player) {
             ItemStack stack = player.getUseItem();
             if (stack.getItem() == ItemHandler.ICE_CRYSTAL.get()) {
-                Ability iceBreathAbility = AbilityHandler.INSTANCE.getAbility(player, AbilityHandler.ICE_BREATH_ABILITY);
+                Ability<?>iceBreathAbility = AbilityHandler.INSTANCE.getAbility(player, AbilityHandler.ICE_BREATH_ABILITY);
                 if (iceBreathAbility != null && iceBreathAbility.isUsing()) {
                     InteractionHand handIn = player.getUsedItemHand();
                     if (stack.getDamageValue() + 5 < stack.getMaxDamage()) {
@@ -463,7 +389,7 @@ public class PlayerCapability {
         }
 
         @Override
-        public CompoundTag serializeNBT() {
+        public CompoundTag serializeNBT(@NotNull HolderLookup.Provider lookup) {
             CompoundTag compound = new CompoundTag();
             compound.putInt("untilSunstrike", untilSunstrike);
             compound.putInt("untilAxeSwing", untilAxeSwing);
@@ -473,7 +399,7 @@ public class PlayerCapability {
         }
 
         @Override
-        public void deserializeNBT(CompoundTag compound) {
+        public void deserializeNBT(@NotNull HolderLookup.Provider lookup, CompoundTag compound) {
             untilSunstrike = compound.getInt("untilSunstrike");
             untilAxeSwing = compound.getInt("untilAxeSwing");
             prevTime = compound.getInt("prevTime");
@@ -481,24 +407,10 @@ public class PlayerCapability {
         }
     }
 
-    public static class PlayerProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag>
-    {
-        private final LazyOptional<PlayerCapability.IPlayerCapability> instance = LazyOptional.of(PlayerCapability.PlayerCapabilityImp::new);
-
+    public static class Provider implements ICapabilityProvider<Player, Void, PlayerCapability.Capability> {
         @Override
-        public CompoundTag serializeNBT() {
-            return instance.orElseThrow(NullPointerException::new).serializeNBT();
-        }
-
-        @Override
-        public void deserializeNBT(CompoundTag nbt) {
-            instance.orElseThrow(NullPointerException::new).deserializeNBT(nbt);
-        }
-
-        @Nonnull
-        @Override
-        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
-            return CapabilityHandler.PLAYER_CAPABILITY.orEmpty(cap, instance.cast());
+        public @Nullable PlayerCapability.Capability getCapability(Player player, Void context) {
+            return player.getCapability(CapabilityHandler.PLAYER_CAPABILITY);
         }
     }
 }

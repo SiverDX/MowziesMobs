@@ -18,8 +18,8 @@ public class BlockStateRandomizer {
                     BlockState.CODEC.fieldOf("default").forGetter((selector) -> selector.defaultState))
             .apply(instance, BlockStateRandomizer::new));
 
-    private Optional<List<Entry>> entries = Optional.empty();
-    private BlockState defaultState = Blocks.AIR.defaultBlockState();
+    private final Optional<List<Entry>> entries;
+    private final BlockState defaultState;
 
     public BlockStateRandomizer(Optional<List<Entry>> entries, BlockState defaultBlockState) {
         this.entries = entries;

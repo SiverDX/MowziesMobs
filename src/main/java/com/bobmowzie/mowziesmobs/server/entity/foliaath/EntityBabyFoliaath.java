@@ -164,10 +164,11 @@ public class EntityBabyFoliaath extends MowzieLLibraryEntity {
     }
 
     private boolean arePlayersCarryingMeat(List<Player> players) {
-        if (players.size() > 0) {
+        if (!players.isEmpty()) {
             for (Player player : players) {
-                FoodProperties food = player.getMainHandItem().getItem().getFoodProperties();
-                if (food != null && food.isMeat()) {
+                ItemStack stack = player.getMainHandItem();
+                // FIXME 1.21 :: add own tag?
+                if ((stack.is(Tags.Items.FOODS_RAW_MEAT) || stack.is(Tags.Items.FOODS_COOKED_MEAT)) && stack.getFoodProperties(null) != null) {
                     return true;
                 }
             }

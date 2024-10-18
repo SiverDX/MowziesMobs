@@ -22,6 +22,7 @@ import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.Structure.GenerationContext;
 import net.minecraft.world.level.levelgen.structure.pools.*;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.phys.AABB;
@@ -58,8 +59,8 @@ public class MowzieJigsawManager {
         if (structurepoolelement == EmptyPoolElement.INSTANCE) {
             return Optional.empty();
         } else {
-            // FIXME 1.21 :: needs liquid setting parameter
-            PoolElementStructurePiece poolelementstructurepiece = new PoolElementStructurePiece(structuremanager, structurepoolelement, genPos, structurepoolelement.getGroundLevelDelta(), rotation, structurepoolelement.getBoundingBox(structuremanager, genPos, rotation));
+            // FIXME 1.21 :: set to ignore waterlogging -> check if intention is correct
+            PoolElementStructurePiece poolelementstructurepiece = new PoolElementStructurePiece(structuremanager, structurepoolelement, genPos, structurepoolelement.getGroundLevelDelta(), rotation, structurepoolelement.getBoundingBox(structuremanager, genPos, rotation), LiquidSettings.IGNORE_WATERLOGGING);
             BoundingBox pieceBoundingBox = poolelementstructurepiece.getBoundingBox();
             BlockPos offset = BlockPos.ZERO;
             if (structurepoolelement instanceof MowziePoolElement) {
@@ -441,8 +442,8 @@ public class MowzieJigsawManager {
                                     k2 = nextPieceCandidate.getGroundLevelDelta();
                                 }
 
-                                // FIXME 1.21 :: needs liquid setting parameter
-                                PoolElementStructurePiece poolelementstructurepiece = new PoolElementStructurePiece(this.structureManager, nextPieceCandidate, blockpos5, k2, nextPieceRotation, nextPieceBoundingBoxPlaced);
+                                // FIXME 1.21 :: set to ignore waterlogging -> check if intention is correct
+                                PoolElementStructurePiece poolelementstructurepiece = new PoolElementStructurePiece(this.structureManager, nextPieceCandidate, blockpos5, k2, nextPieceRotation, nextPieceBoundingBoxPlaced, LiquidSettings.IGNORE_WATERLOGGING);
                                 int l2;
                                 if (thisPieceIsRigid) {
                                     l2 = thisPieceMinY + thisPieceHeightFromBottomToJigsawBlock;

@@ -104,33 +104,33 @@ public class EntityUmvuthanaFollowerToPlayer extends EntityUmvuthanaFollower<Pla
 
     @Override
     protected int getGroupCircleTick() {
-        PlayerCapability.IPlayerCapability capability = getPlayerCapability();
+        PlayerCapability.Capability capability = getPlayerCapability();
         if (capability == null) return 0;
         return capability.getTribeCircleTick();
     }
 
     @Override
     protected int getPackSize() {
-        PlayerCapability.IPlayerCapability capability = getPlayerCapability();
+        PlayerCapability.Capability capability = getPlayerCapability();
         if (capability == null) return 0;
         return capability.getPackSize();
     }
 
     @Override
     protected void addAsPackMember() {
-        PlayerCapability.IPlayerCapability capability = getPlayerCapability();
+        PlayerCapability.Capability capability = getPlayerCapability();
         if (capability == null) return;
         capability.addPackMember(this);
     }
 
     @Override
     protected void removeAsPackMember() {
-        PlayerCapability.IPlayerCapability capability = getPlayerCapability();
+        PlayerCapability.Capability capability = getPlayerCapability();
         if (capability == null) return;
         capability.removePackMember(this);
     }
 
-    private PlayerCapability.IPlayerCapability getPlayerCapability() {
+    private PlayerCapability.Capability getPlayerCapability() {
         return CapabilityHandler.getCapability(leader, CapabilityHandler.PLAYER_CAPABILITY);
     }
 

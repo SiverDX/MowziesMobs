@@ -33,10 +33,10 @@ public record MessageFreezeEffect(int entityId, boolean isFrozen) implements Cus
             Entity entity = Minecraft.getInstance().level.getEntity(packet.entityId());
 
             if (entity instanceof LivingEntity living) {
-                AbilityCapability.IAbilityCapability abilityCapability = CapabilityHandler.getCapability(living, CapabilityHandler.ABILITY_CAPABILITY);
+                AbilityCapability.Capability abilityCapability = CapabilityHandler.getCapability(living, CapabilityHandler.ABILITY_CAPABILITY);
 
                 if (abilityCapability != null) {
-                    FrozenCapability.IFrozenCapability capability = CapabilityHandler.getCapability(living, CapabilityHandler.FROZEN_CAPABILITY);
+                    FrozenCapability.Capability capability = CapabilityHandler.getCapability(living, CapabilityHandler.FROZEN_CAPABILITY);
 
                     if (capability != null) {
                         if (packet.isFrozen()) {

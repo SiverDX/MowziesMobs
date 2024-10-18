@@ -24,17 +24,18 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public abstract class EntityGeomancyBase extends EntityMagicEffect implements GeoEntity {
@@ -71,7 +72,7 @@ public abstract class EntityGeomancyBase extends EntityMagicEffect implements Ge
     // Change the specified block to its geomancy version. I.E. Grass blocks turn to dirt, stairs and slabs turn to base versions.
     public BlockState changeBlock(BlockState blockState) {
         if (!blockState.is(TagHandler.GEOMANCY_USEABLE)) {
-            ICopiedBlockProperties properties = (ICopiedBlockProperties) blockState.getBlock().properties;
+            ICopiedBlockProperties properties = (ICopiedBlockProperties) blockState.getBlock().properties();
             Block baseBlock = properties.getBaseBlock();
             if (baseBlock != null) {
                 blockState = baseBlock.defaultBlockState();
@@ -90,8 +91,8 @@ public abstract class EntityGeomancyBase extends EntityMagicEffect implements Ge
         else if (blockState.is(BlockTags.NYLIUM)) blockState = Blocks.NETHERRACK.defaultBlockState();
         else if (blockState.is(Tags.Blocks.ORES_IN_GROUND_NETHERRACK)) blockState = Blocks.NETHERRACK.defaultBlockState();
         else if (blockState.is(Tags.Blocks.ORES_IN_GROUND_STONE)) blockState = Blocks.STONE.defaultBlockState();
-        else if (blockState.is(Tags.Blocks.SAND_RED)) blockState = Blocks.RED_SANDSTONE.defaultBlockState();
-        else if (blockState.is(Tags.Blocks.SAND_COLORLESS)) blockState = Blocks.SANDSTONE.defaultBlockState();
+        else if (blockState.is(Tags.Blocks.SANDS_RED)) blockState = Blocks.RED_SANDSTONE.defaultBlockState();
+        else if (blockState.is(Tags.Blocks.SANDS_COLORLESS)) blockState = Blocks.SANDSTONE.defaultBlockState();
         else if (blockState.getBlock() == Blocks.SOUL_SAND) blockState = Blocks.SOUL_SOIL.defaultBlockState();
 
         return blockState;
@@ -141,7 +142,7 @@ public abstract class EntityGeomancyBase extends EntityMagicEffect implements Ge
     }
 
     @Override
-    public boolean ignoreExplosion() {
+    public boolean ignoreExplosion(Explosion explosion) {
         return true;
     }
 

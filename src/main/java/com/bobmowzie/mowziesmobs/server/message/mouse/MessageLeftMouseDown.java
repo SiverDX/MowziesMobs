@@ -26,7 +26,7 @@ public record MessageLeftMouseDown() implements CustomPacketPayload {
     public static void handleServer(final MessageLeftMouseDown packet, final IPayloadContext context) {
         context.enqueueWork(() -> {
             Player player = context.player();
-            PlayerCapability.IPlayerCapability capability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
+            PlayerCapability.Capability capability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
 
             if (capability != null) {
                 capability.setMouseLeftDown(true);
@@ -36,7 +36,7 @@ public record MessageLeftMouseDown() implements CustomPacketPayload {
                 }
             }
 
-            AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
+            AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
 
             if (abilityCapability != null) {
                 for (Ability<?> ability : abilityCapability.getAbilities()) {

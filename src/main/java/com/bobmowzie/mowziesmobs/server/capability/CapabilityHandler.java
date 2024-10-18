@@ -1,44 +1,42 @@
 package com.bobmowzie.mowziesmobs.server.capability;
 
+import com.bobmowzie.mowziesmobs.MMCommon;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraft.world.entity.EntityType;
+import net.neoforged.neoforge.capabilities.EntityCapability;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
 import javax.annotation.Nullable;
 
 public final class CapabilityHandler {
-    public static final Capability<FrozenCapability.IFrozenCapability> FROZEN_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
-    public static final Capability<LivingCapability.ILivingCapability> LIVING_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
-    public static final Capability<PlayerCapability.IPlayerCapability> PLAYER_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
-    public static final Capability<AbilityCapability.IAbilityCapability> ABILITY_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
+    public static final EntityCapability<FrozenCapability.Capability, Void> FROZEN_CAPABILITY = EntityCapability.createVoid(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "frozen_capability"), FrozenCapability.Capability.class);
+    public static final EntityCapability<LivingCapability.Capability, Void> LIVING_CAPABILITY = EntityCapability.createVoid(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "living_capability"), LivingCapability.Capability.class);
+    public static final EntityCapability<PlayerCapability.Capability, Void> PLAYER_CAPABILITY = EntityCapability.createVoid(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "player_capability"), PlayerCapability.Capability.class);
+    public static final EntityCapability<AbilityCapability.Capability, Void> ABILITY_CAPABILITY = EntityCapability.createVoid(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "ability_capability"), AbilityCapability.Capability.class);
+
+    // FIXME 1.21 :: unsure if data attachments ore capabilities are needed (do capabilities retain data? there is no copy on death flag like in attachments so maybe not?)
+//    public static final DeferredRegister<AttachmentType<?>> MM_ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES.key(), MMCommon.MODID);
+
+//    public static final DeferredHolder<AttachmentType<?>, AttachmentType<FrozenCapability.Capability>> FROZEN_CAPABILITY = MM_ATTACHMENT_TYPES.register("frozen_capability", () -> AttachmentType.serializable(FrozenCapability.Capability::new).build());
+//    public static final DeferredHolder<AttachmentType<?>, AttachmentType<LivingCapability.Capability>> LIVING_CAPABILITY = MM_ATTACHMENT_TYPES.register("living_capability", () -> AttachmentType.serializable(LivingCapability.Capability::new).copyOnDeath().build());
+//    public static final DeferredHolder<AttachmentType<?>, AttachmentType<PlayerCapability.Capability>> PLAYER_CAPABILITY = MM_ATTACHMENT_TYPES.register("player_capability", () -> AttachmentType.serializable(PlayerCapability.Capability::new).copyOnDeath().build());
+//    public static final DeferredHolder<AttachmentType<?>, AttachmentType<AbilityCapability.Capability>> ABILITY_CAPABILITY = MM_ATTACHMENT_TYPES.register("ability_capability", () -> AttachmentType.serializable(AbilityCapability.Capability::new).copyOnDeath().build());
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.register(FrozenCapability.IFrozenCapability.class);
-        event.register(LivingCapability.ILivingCapability.class);
-        event.register(PlayerCapability.IPlayerCapability.class);
-        event.register(AbilityCapability.IAbilityCapability.class);
-    }
+        event.registerEntity(PLAYER_CAPABILITY, EntityType.PLAYER, new PlayerCapability.Provider());
+        event.registerEntity(ABILITY_CAPABILITY, EntityType.PLAYER, new AbilityCapability.Provider());
 
-    public static void attachEntityCapability(AttachCapabilitiesEvent<Entity> e) {
-        if (e.getObject() instanceof LivingEntity) {
-            e.addCapability(LivingCapability.ID, new LivingCapability.LivingProvider());
-            e.addCapability(FrozenCapability.ID, new FrozenCapability.FrozenProvider());
-            if (e.getObject() instanceof Player) {
-                e.addCapability(PlayerCapability.ID, new PlayerCapability.PlayerProvider());
-                e.addCapability(AbilityCapability.ID, new AbilityCapability.AbilityProvider());
-            }
-        }
+        MMCommon.getLivingEntityTypes().forEach(type -> {
+            event.registerEntity(FROZEN_CAPABILITY, type, new FrozenCapability.Provider());
+            event.registerEntity(LIVING_CAPABILITY, type, new LivingCapability.Provider());
+        });
     }
 
     @Nullable
-    public static <T> T getCapability(Entity entity, Capability<T> capability) {
+    public static <T> T getCapability(Entity entity, EntityCapability<T, Void> capability) {
         if (entity == null) return null;
         if (entity.isRemoved()) return null;
-        return entity.getCapability(capability).isPresent() ? entity.getCapability(capability).orElseThrow(() -> new IllegalArgumentException("Lazy optional must not be empty")) : null;
+        return entity.getCapability(capability);
     }
 }

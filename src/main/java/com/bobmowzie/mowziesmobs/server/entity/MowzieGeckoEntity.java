@@ -34,7 +34,7 @@ public abstract class MowzieGeckoEntity extends MowzieEntity implements GeoEntit
 
     @Override
     protected int getDeathDuration() {
-        Ability deathAbility = getActiveAbility();
+        Ability<?>deathAbility = getActiveAbility();
         if (deathAbility instanceof SimpleAnimationAbility) return ((SimpleAnimationAbility) deathAbility).getDuration();
         return 20;
     }
@@ -63,8 +63,8 @@ public abstract class MowzieGeckoEntity extends MowzieEntity implements GeoEntit
     }
 
     protected <E extends GeoEntity> PlayState predicate(AnimationState<E> state) {
-        AbilityCapability.IAbilityCapability abilityCapability = getAbilityCapability();
-        FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(this, CapabilityHandler.FROZEN_CAPABILITY);
+        AbilityCapability.Capability abilityCapability = getAbilityCapability();
+        FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(this, CapabilityHandler.FROZEN_CAPABILITY);
         if (abilityCapability == null) {
             return PlayState.STOP;
         }
@@ -106,24 +106,24 @@ public abstract class MowzieGeckoEntity extends MowzieEntity implements GeoEntit
         return new AbilityType[]{};
     }
 
-    public AbilityCapability.IAbilityCapability getAbilityCapability() {
+    public AbilityCapability.Capability getAbilityCapability() {
         return AbilityHandler.INSTANCE.getAbilityCapability(this);
     }
 
-    public Ability getActiveAbility() {
-        AbilityCapability.IAbilityCapability capability = getAbilityCapability();
+    public Ability<?>getActiveAbility() {
+        AbilityCapability.Capability capability = getAbilityCapability();
         if (capability == null) return null;
         return getAbilityCapability().getActiveAbility();
     }
 
     public AbilityType getActiveAbilityType() {
-        Ability ability = getActiveAbility();
+        Ability<?>ability = getActiveAbility();
         if (ability == null) return null;
         return ability.getAbilityType();
     }
 
-    public Ability getAbility(AbilityType abilityType) {
-        AbilityCapability.IAbilityCapability capability = getAbilityCapability();
+    public Ability<?>getAbility(AbilityType abilityType) {
+        AbilityCapability.Capability capability = getAbilityCapability();
         if (capability == null) return null;
         return getAbilityCapability().getAbilityMap().get(abilityType);
     }

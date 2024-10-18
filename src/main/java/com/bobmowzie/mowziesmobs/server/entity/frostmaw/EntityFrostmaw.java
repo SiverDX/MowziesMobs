@@ -36,7 +36,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
@@ -115,7 +114,6 @@ public class EntityFrostmaw extends MowzieLLibraryEntity implements Enemy {
 
     public EntityFrostmaw(EntityType<? extends EntityFrostmaw> type, Level world) {
         super(type, world);
-        setMaxUpStep(1); // FIXME 1.21 :: set as attribute
         frame += random.nextInt(50);
         legSolver = new LegSolverQuadruped(1f, 2f, -1, 1.5f);
         if (world.isClientSide)
@@ -127,7 +125,7 @@ public class EntityFrostmaw extends MowzieLLibraryEntity implements Enemy {
 
         moveControl = new MMEntityMoveHelper(this, 7);
     }
-    
+
     @Override
     protected void registerGoals() {
         super.registerGoals();
@@ -213,7 +211,8 @@ public class EntityFrostmaw extends MowzieLLibraryEntity implements Enemy {
                 .add(Attributes.MAX_HEALTH, 250)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1)
                 .add(Attributes.FOLLOW_RANGE, 50)
-                .add(Attributes.MOVEMENT_SPEED, 0.3D);
+                .add(Attributes.MOVEMENT_SPEED, 0.3D)
+                .add(Attributes.STEP_HEIGHT, 1);
     }
 
     @Override
@@ -644,11 +643,10 @@ public class EntityFrostmaw extends MowzieLLibraryEntity implements Enemy {
         return 1;
     }
 
-    @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingData, @Nullable CompoundTag compound) {
+    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingData) {
         setHasCrystal(true);
-        return super.finalizeSpawn(world, difficulty, reason, livingData, compound);
+        return super.finalizeSpawn(world, difficulty, reason, livingData);
     }
 
     private void spawnSwipeParticles() {

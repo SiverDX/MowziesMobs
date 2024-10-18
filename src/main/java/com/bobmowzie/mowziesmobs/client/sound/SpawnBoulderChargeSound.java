@@ -23,7 +23,7 @@ public class SpawnBoulderChargeSound extends AbstractTickableSoundInstance {
         y = (float) user.getY();
         z = (float) user.getZ();
 
-        AbilityCapability.IAbilityCapability capability = AbilityHandler.INSTANCE.getAbilityCapability(user);
+        AbilityCapability.Capability capability = AbilityHandler.INSTANCE.getAbilityCapability(user);
         if (capability != null) {
             ability = (SpawnBoulderAbility) capability.getAbilityMap().get(AbilityHandler.SPAWN_BOULDER_ABILITY);
         }

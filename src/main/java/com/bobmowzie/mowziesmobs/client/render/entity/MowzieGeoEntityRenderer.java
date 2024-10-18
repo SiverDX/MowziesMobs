@@ -21,6 +21,7 @@ import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.util.RenderUtil;
 
 public abstract class MowzieGeoEntityRenderer<T extends MowzieGeckoEntity> extends GeoEntityRenderer<T> {
 
@@ -59,7 +60,7 @@ public abstract class MowzieGeoEntityRenderer<T extends MowzieGeckoEntity> exten
             for (GeckoDynamicChain chain : animatable.dynamicChains) {
                 if (!isReRender) {
                     chain.setChain();
-                    chain.updateChain(Minecraft.getInstance().getFrameTime(), 0.1f, 0.1f, 0.5f, 0.02f, 10, true);
+                    chain.updateChain(partialTick, 0.1f, 0.1f, 0.5f, 0.02f, 10, true); // FIXME 1.21 :: 'Minecraft#getFrameTime' replaced with partial tick
                 }
                 poseStack.pushPose();
                 if (chain.chainDynamic != null) {
@@ -97,7 +98,7 @@ public abstract class MowzieGeoEntityRenderer<T extends MowzieGeckoEntity> exten
             last.pose().mul(matrix4f);
             last.normal().mul(bone.getWorldSpaceNormal());
 
-            RenderUtils.translateAwayFromPivotPoint(poseStack, bone);
+            RenderUtil.translateAwayFromPivotPoint(poseStack, bone);
         }
         else {
             boolean rotOverride = false;
@@ -105,8 +106,8 @@ public abstract class MowzieGeoEntityRenderer<T extends MowzieGeckoEntity> exten
                 rotOverride = mowzieGeoBone.rotationOverride != null;
             }
 
-            RenderUtils.translateMatrixToBone(poseStack, bone);
-            RenderUtils.translateToPivotPoint(poseStack, bone);
+            RenderUtil.translateMatrixToBone(poseStack, bone);
+            RenderUtil.translateToPivotPoint(poseStack, bone);
 
             if (bone instanceof MowzieGeoBone mowzieGeoBone) {
                 if (!mowzieGeoBone.inheritRotation && !mowzieGeoBone.inheritTranslation) {
@@ -127,21 +128,21 @@ public abstract class MowzieGeoEntityRenderer<T extends MowzieGeckoEntity> exten
                 poseStack.last().pose().mul(mowzieGeoBone.rotationOverride);
                 poseStack.last().normal().mul(new Matrix3f(mowzieGeoBone.rotationOverride));
             } else {
-                RenderUtils.rotateMatrixAroundBone(poseStack, bone);
+                RenderUtil.rotateMatrixAroundBone(poseStack, bone);
             }
 
-            RenderUtils.scaleMatrixForBone(poseStack, bone);
+            RenderUtil.scaleMatrixForBone(poseStack, bone);
 
             if (bone.isTrackingMatrices()) {
                 Matrix4f poseState = new Matrix4f(poseStack.last().pose());
-                Matrix4f localMatrix = RenderUtils.invertAndMultiplyMatrices(poseState, this.entityRenderTranslations);
+                Matrix4f localMatrix = RenderUtil.invertAndMultiplyMatrices(poseState, this.entityRenderTranslations);
 
-                bone.setModelSpaceMatrix(RenderUtils.invertAndMultiplyMatrices(poseState, this.modelRenderTranslations));
-                bone.setLocalSpaceMatrix(RenderUtils.translateMatrix(localMatrix, getRenderOffset(this.animatable, 1).toVector3f()));
-                bone.setWorldSpaceMatrix(RenderUtils.translateMatrix(new Matrix4f(localMatrix), this.animatable.position().toVector3f()));
+                bone.setModelSpaceMatrix(RenderUtil.invertAndMultiplyMatrices(poseState, this.modelRenderTranslations));
+                bone.setLocalSpaceMatrix(RenderUtil.translateMatrix(localMatrix, getRenderOffset(this.animatable, 1).toVector3f()));
+                bone.setWorldSpaceMatrix(RenderUtil.translateMatrix(new Matrix4f(localMatrix), this.animatable.position().toVector3f()));
             }
 
-            RenderUtils.translateAwayFromPivotPoint(poseStack, bone);
+            RenderUtil.translateAwayFromPivotPoint(poseStack, bone);
         }
 
         renderCubesOfBone(poseStack, bone, buffer, packedLight, packedOverlay, color);

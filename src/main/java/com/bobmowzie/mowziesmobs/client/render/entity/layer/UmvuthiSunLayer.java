@@ -2,6 +2,7 @@ package com.bobmowzie.mowziesmobs.client.render.entity.layer;
 
 import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthi;
+import com.ilexiconn.llibrary.client.util.ClientUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -16,7 +17,7 @@ import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
-import software.bernie.geckolib.util.RenderUtils;
+import software.bernie.geckolib.util.RenderUtil;
 
 public class UmvuthiSunLayer extends GeoRenderLayer<EntityUmvuthi> {
     protected Matrix4f dispatchedMat = new Matrix4f();
@@ -146,7 +147,7 @@ public class UmvuthiSunLayer extends GeoRenderLayer<EntityUmvuthi> {
         if (umvuthi.shouldRenderSun()) {
             if (bone.isHidden()) return;
             poseStack.pushPose();
-            RenderUtils.translateToPivotPoint(poseStack, bone);
+            RenderUtil.translateToPivotPoint(poseStack, bone);
             if (bone.getName().equals("sun_render")) {
                 poseStack.translate(0.06d, 0d, -0.0d);
                 poseStack.scale(0.06f, 0.06f, 0.06f);
@@ -179,23 +180,21 @@ public class UmvuthiSunLayer extends GeoRenderLayer<EntityUmvuthi> {
         for(int i = 0; i < 4; i++) {
             for (Vec3 vec : POS) {
                 vec = vec.multiply(1f + (scale * i), 1f + (scale * i), 1f + (scale * i));
-                builder.vertex(matrix4f, (float) ((float) vec.x + (scale * i)), (float) ((float) vec.y+ (scale * i)), (float) ((float) vec.z+ (scale * i)))
-                        .color( 1f, 1f, .4f, 0.2f)
-                        .uv(0.0f, 0.5f)
-                        .overlayCoords(OverlayTexture.NO_OVERLAY)
-                        .uv2(15728880)
-                        .normal(matrix3f, 1f, 1f, 1f)
-                        .endVertex();
+                VertexConsumer consumer = builder.addVertex(matrix4f, (float) vec.x + (scale * i), (float) vec.y + (scale * i), (float) vec.z + (scale * i))
+                        .setColor(1f, 1f, .4f, 0.2f)
+                        .setUv(0.0f, 0.5f)
+                        .setOverlay(OverlayTexture.NO_OVERLAY)
+                        .setLight(15728880);
+                ClientUtils.transformNormals(consumer, matrix3f, 1, 1, 1);
             }
         }
         for (Vec3 vec : POS) {
-            builder.vertex(matrix4f, (float) ((float) vec.x * 1.2f * scaleMultiplier), (float) ((float) vec.y * 1.2f * scaleMultiplier), (float) ((float) vec.z * 1.2f * scaleMultiplier))
-                    .color(1f, 1f, 1f, 1f)
-                    .uv(0.0f, 0.5f)
-                    .overlayCoords(OverlayTexture.NO_OVERLAY)
-                    .uv2(15728880)
-                    .normal(matrix3f, 1f, 1f, 1f)
-                    .endVertex();
+            VertexConsumer consumer = builder.addVertex(matrix4f, (float) vec.x * 1.2f * scaleMultiplier, (float) vec.y * 1.2f * scaleMultiplier, (float) vec.z * 1.2f * scaleMultiplier)
+                    .setColor(1f, 1f, 1f, 1f)
+                    .setUv(0.0f, 0.5f)
+                    .setOverlay(OverlayTexture.NO_OVERLAY)
+                    .setLight(15728880);
+            ClientUtils.transformNormals(consumer, matrix3f, 1, 1, 1);
         }
     }
 }

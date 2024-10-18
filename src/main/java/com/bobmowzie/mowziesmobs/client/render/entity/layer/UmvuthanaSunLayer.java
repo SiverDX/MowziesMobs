@@ -3,6 +3,7 @@ package com.bobmowzie.mowziesmobs.client.render.entity.layer;
 import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.ability.AbilitySection;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthana;
+import com.ilexiconn.llibrary.client.util.ClientUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -18,7 +19,7 @@ import org.joml.Vector4f;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
-import software.bernie.geckolib.util.RenderUtils;
+import software.bernie.geckolib.util.RenderUtil;
 
 public class UmvuthanaSunLayer extends GeoRenderLayer<EntityUmvuthana> {
     protected final EntityRenderDispatcher entityRenderDispatcher;
@@ -34,7 +35,7 @@ public class UmvuthanaSunLayer extends GeoRenderLayer<EntityUmvuthana> {
         if (animatable.deathTime < 27 && animatable.active && !(animatable.getActiveAbilityType() == EntityUmvuthana.TELEPORT_ABILITY && animatable.getActiveAbility().getCurrentSection().sectionType != AbilitySection.AbilitySectionType.RECOVERY)) {
             if (bone.isHidden()) return;
             poseStack.pushPose();
-            RenderUtils.translateToPivotPoint(poseStack, bone);
+            RenderUtil.translateToPivotPoint(poseStack, bone);
             String boneName = "head";
             if (bone.getName().equals(boneName)) {
                 PoseStack.Pose matrixstack$entry = poseStack.last();
@@ -67,7 +68,8 @@ public class UmvuthanaSunLayer extends GeoRenderLayer<EntityUmvuthana> {
     }
 
     public void drawVertex(Matrix4f matrix, Matrix3f normals, VertexConsumer vertexBuilder, float offsetX, float offsetY, float offsetZ, float textureX, float textureY, float alpha, int packedLightIn) {
-        vertexBuilder.vertex(matrix, offsetX, offsetY, offsetZ).color(1f, 1f, 1f, 1.0f).uv(textureX, textureY).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normals, 1.0F, 1.0F, 1.0F).endVertex();
+        VertexConsumer consumer = vertexBuilder.addVertex(matrix, offsetX, offsetY, offsetZ).setColor(1f, 1f, 1f, 1.0f).setUv(textureX, textureY).setOverlay(OverlayTexture.NO_OVERLAY).setLight(15728880);
+        ClientUtils.transformNormals(consumer, normals, 1, 1, 1);
     }
 
 }

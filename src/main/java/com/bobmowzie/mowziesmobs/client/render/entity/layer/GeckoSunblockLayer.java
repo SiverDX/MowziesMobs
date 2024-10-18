@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.LivingEntity;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
@@ -25,14 +26,14 @@ public class GeckoSunblockLayer<T extends LivingEntity & GeoEntity> extends GeoR
 
     @Override
     public void render(PoseStack poseStack, T animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-        LivingCapability.ILivingCapability livingCapability = CapabilityHandler.getCapability(animatable, CapabilityHandler.LIVING_CAPABILITY);
+        LivingCapability.Capability livingCapability = CapabilityHandler.getCapability(animatable, CapabilityHandler.LIVING_CAPABILITY);
         if (livingCapability != null && livingCapability.getHasSunblock()) {
             float f = (float) animatable.tickCount + partialTick;
             RenderType renderTypeSwirl = RenderType.energySwirl(this.getTextureLocation(), this.xOffset(f), f * 0.01F);
 
             getRenderer().reRender(getDefaultBakedModel(animatable),
                     poseStack, bufferSource, animatable, renderTypeSwirl, bufferSource.getBuffer(renderTypeSwirl), partialTick,
-                    packedLight, OverlayTexture.NO_OVERLAY, 1F, 1F, 0.1F, 1.0F);
+                    packedLight, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(1, 1, 1, 0.1f));
         }
     }
 

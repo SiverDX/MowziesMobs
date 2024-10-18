@@ -63,10 +63,11 @@ public class ItemBlowgun extends BowItem {
                             abstractarrowentity.setBaseDamage(abstractarrowentity.getBaseDamage() + (double)j * 0.5D + 0.5D);
                         }
 
-                        int k = EnchantmentUtils.getLevel(Enchantments.PUNCH, player.level(), stack);
-                        if (k > 0) {
-                            abstractarrowentity.setKnockback(k);
-                        }
+                        // FIXME 1.21
+//                        int k = EnchantmentUtils.getLevel(Enchantments.PUNCH, player.level(), stack);
+//                        if (k > 0) {
+//                            abstractarrowentity.setKnockback(k);
+//                        }
 
                         if (EnchantmentUtils.getLevel(Enchantments.FLAME, player.level(), stack) > 0) {
                             abstractarrowentity.igniteForSeconds(100);

@@ -33,8 +33,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -138,7 +136,7 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityWithC
     }
 
     public static boolean spawnPredicate(EntityType type, LevelAccessor world, MobSpawnType reason, BlockPos spawnPos, RandomSource rand) {
-        ConfigHandler.SpawnConfig spawnConfig = SpawnHandler.spawnConfigs.get(type);
+        ConfigHandler.SpawnConfig spawnConfig = SpawnHandler.SPAWN_CONFIGS.get(type);
         if (spawnConfig != null) {
             if (rand.nextDouble() > spawnConfig.extraRarity.get()) return false;
 
@@ -304,9 +302,11 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityWithC
                 }
             }
 
+            /* FIXME 1.21 :: now checked when the player is attacked - this doesn't seem to be used anyway (as in it doesn't get called with 'true')
             if (canDisableShield && target instanceof Player player) {
                 maybeDisableShield(player, player.isUsingItem() ? player.getUseItem() : ItemStack.EMPTY);
             }
+            */
 
             if (level() instanceof ServerLevel serverLevel) {
                 // Handle fire aspect etc.
@@ -320,7 +320,18 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityWithC
         return wasHurt;
     }
 
-    // FIXME 1.21 :: seems to be handled in the player class now and called in 'LivingEntity#hurtServer'
+    /* FIXME 1.21 :: Should this still consider block efficiency (now an player-only attribute -> 'Attributes#MINING_EFFICIENCY') or sth. different?
+    @Override
+    public boolean canDisableShield() {
+        if (super.canDisableShield()) { // Checks main hand for axe
+            return true;
+        }
+
+        return getRandom().nextFloat() < 0.25;
+    }
+    */
+
+    /*
     private void maybeDisableShield(Player player, ItemStack itemStackBlock) { // Copied from mob class
         if (!itemStackBlock.isEmpty() && itemStackBlock.is(Items.SHIELD)) {
             float f = 0.25F + (float)EnchantmentHelper.getBlockEfficiency(this) * 0.05F;
@@ -330,6 +341,7 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityWithC
             }
         }
     }
+    */
 
     public float getHealthRatio() {
         return this.getHealth() / this.getMaxHealth();

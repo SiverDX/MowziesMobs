@@ -683,7 +683,7 @@ public class ModelNaga<T extends EntityNaga> extends MowzieEntityModel<T> {
         float nonHoverAnim = 1f - hoverAnim;
 
         float flapAnim = entity.prevFlapAnimFrac + (entity.flapAnimFrac - entity.prevFlapAnimFrac) * partial;
-        FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
+        FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
         boolean frozen = frozenCapability != null && frozenCapability.getFrozen();
         if (!frozen) {
             //Hover anim
@@ -777,7 +777,7 @@ public class ModelNaga<T extends EntityNaga> extends MowzieEntityModel<T> {
         this.setDefaultAngle(entity, limbSwing, limbSwingAmount, headYaw, headPitch, delta);
         float frame = entity.frame + delta;
 
-        FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
+        FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
         boolean frozen = frozenCapability != null && frozenCapability.getFrozen();
         if (!frozen) {
 
@@ -1237,7 +1237,8 @@ public class ModelNaga<T extends EntityNaga> extends MowzieEntityModel<T> {
             jawControls();
             wingFoldControls();
 
-            entity.dc.updateChain(Minecraft.getInstance().getFrameTime(), tailOriginal, tailDynamic, 0.5f, 0.5f, 0.5f, 0.97f, 30, true);
+            // FIXME 1.21 :: was previously 'Minecraft#getFrameTime' -> 'TickRateManager#isEntityFrozen(...)' needed?
+            entity.dc.updateChain(Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false), tailOriginal, tailDynamic, 0.5f, 0.5f, 0.5f, 0.97f, 30, true);
 
             computeWingWebbing();
 

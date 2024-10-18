@@ -25,7 +25,7 @@ public record MessagePlayerUseAbility(int index) implements CustomPacketPayload 
         context.enqueueWork(() -> {
             Player player = context.player();
 
-            AbilityCapability.IAbilityCapability abilityCapability = CapabilityHandler.getCapability(player, CapabilityHandler.ABILITY_CAPABILITY);
+            AbilityCapability.Capability abilityCapability = CapabilityHandler.getCapability(player, CapabilityHandler.ABILITY_CAPABILITY);
 
             if (abilityCapability != null) {
                 AbilityHandler.INSTANCE.sendAbilityMessage(player, abilityCapability.getAbilityTypesOnEntity(player)[packet.index()]);

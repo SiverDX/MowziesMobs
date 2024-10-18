@@ -13,19 +13,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-public class ItemWroughtHelm extends MowzieArmorItem {
-    public ItemWroughtHelm(Item.Properties properties) {
-        super(MaterialHandler.ARMOR_WROUGHT_HELM.value(), Type.HELMET, properties);
+public class ItemWroughtHelm extends ArmorItem {
+    public ItemWroughtHelm(Supplier<Item.Properties> properties) {
+        super(MaterialHandler.ARMOR_WROUGHT_HELM, Type.HELMET, properties.get());
     }
 
     @Override
@@ -40,26 +37,6 @@ public class ItemWroughtHelm extends MowzieArmorItem {
     }
 
     @Override
-    public boolean canBeDepleted() {
-        return ConfigHandler.COMMON.TOOLS_AND_ABILITIES.WROUGHT_HELM.breakable.get();
-    }
-
-    @Override
-    public int getDamage(ItemStack stack) {
-        return ConfigHandler.COMMON.TOOLS_AND_ABILITIES.WROUGHT_HELM.breakable.get() ? super.getDamage(stack): 0;
-    }
-
-    @Override
-    public int getMaxDamage(ItemStack stack) {
-        return ConfigHandler.COMMON.TOOLS_AND_ABILITIES.WROUGHT_HELM.breakable.get() ? super.getMaxDamage(stack): 0;
-    }
-
-    @Override
-    public void setDamage(ItemStack stack, int damage) {
-        if (ConfigHandler.COMMON.TOOLS_AND_ABILITIES.WROUGHT_HELM.breakable.get()) super.setDamage(stack, damage);
-    }
-
-    @Override
     public @Nullable ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
         return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/item/wrought_helmet.png");
     }
@@ -70,18 +47,8 @@ public class ItemWroughtHelm extends MowzieArmorItem {
         tooltip.add(Component.translatable(getDescriptionId() + ".text.0").setStyle(ItemHandler.TOOLTIP_STYLE));
     }
 
-    @Override
-    public ConfigHandler.ArmorConfig getConfig() {
-        return ConfigHandler.COMMON.TOOLS_AND_ABILITIES.WROUGHT_HELM.armorConfig;
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(ArmorRender.INSTANCE);
-    }
-
-    private static final class ArmorRender implements IClientItemExtensions {
-        private static final ArmorRender INSTANCE = new ArmorRender();
+    public static final class ArmorRender implements IClientItemExtensions {
+        public static final ArmorRender INSTANCE = new ArmorRender();
         private static HumanoidModel<?> MODEL;
 
         @Override

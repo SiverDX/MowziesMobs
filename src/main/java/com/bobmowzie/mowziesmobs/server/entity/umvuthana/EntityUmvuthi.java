@@ -38,10 +38,8 @@ import com.bobmowzie.mowziesmobs.server.potion.EffectHandler;
 import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -80,16 +78,13 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
-import net.neoforged.neoforge.common.CommonHooks;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animation.AnimationState;
@@ -624,24 +619,7 @@ public class EntityUmvuthi extends MowzieGeckoEntity implements LeaderSunstrikeI
         builder.define(DIRECTION, 0);
         builder.define(DIALOGUE, 0);
         builder.define(ANGRY, false);
-
-        // FIXME 1.21 :: might need a test - registry should be available since this is called in the entity constructor (meaning an entity was created)
-        HolderLookup.RegistryLookup<Item> lookup = CommonHooks.resolveLookup(Registries.ITEM);
-        ResourceLocation location = ResourceLocation.tryParse(ConfigHandler.COMMON.MOBS.UMVUTHI.whichItem.get());
-        Item tradeItem;
-
-        if (lookup == null || location == null) {
-            tradeItem = Items.AIR;
-        } else {
-            tradeItem = lookup.get(ResourceKey.create(Registries.ITEM, location)).map(Holder.Reference::value).orElse(Items.AIR);
-        }
-
-        if (tradeItem == Items.AIR) {
-            // Could be technically triggered if players add air to the config
-            MMCommon.LOGGER.warn("Could not properly resolve the trade item for [Umvuthi]");
-        }
-
-        builder.define(DESIRES, new ItemStack(tradeItem, ConfigHandler.COMMON.MOBS.UMVUTHI.howMany.get()));
+        builder.define(DESIRES, new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(ConfigHandler.COMMON.MOBS.UMVUTHI.whichItem.get())), ConfigHandler.COMMON.MOBS.UMVUTHI.howMany.get()));
         builder.define(TRADED_PLAYERS, new CompoundTag());
         builder.define(HEALTH_LOST, 0.f);
         builder.define(MISBEHAVED_PLAYER, Optional.empty());
@@ -899,7 +877,7 @@ public class EntityUmvuthi extends MowzieGeckoEntity implements LeaderSunstrikeI
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, SpawnGroupData livingData, CompoundTag compound) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, SpawnGroupData livingData) {
         if (reason == MobSpawnType.SPAWN_EGG) {
             // Try to guess which player spawned Umvuthi, rotate towards them
             List<Player> players = getPlayersNearby(5, 5, 5, 5);
@@ -921,7 +899,7 @@ public class EntityUmvuthi extends MowzieGeckoEntity implements LeaderSunstrikeI
             }
         }
         if (reason != MobSpawnType.STRUCTURE) restrictTo(blockPosition(), -1);
-        return super.finalizeSpawn(world, difficulty, reason, livingData, compound);
+        return super.finalizeSpawn(world, difficulty, reason, livingData);
     }
 
     @Override
@@ -1279,7 +1257,7 @@ public class EntityUmvuthi extends MowzieGeckoEntity implements LeaderSunstrikeI
         );
         private static final ParticleComponent.KeyTrack superNovaKeyTrack2 = ParticleComponent.KeyTrack.oscillate(0, 7, 24);
 
-        public static void superNovaEffects(Ability activeAbility, Vec3[] pinLocation, Level level) {
+        public static void superNovaEffects(Ability<?>activeAbility, Vec3[] pinLocation, Level level) {
             // Darken sky
             Player clientPlayer = Minecraft.getInstance().player;
             if (clientPlayer == null) return;

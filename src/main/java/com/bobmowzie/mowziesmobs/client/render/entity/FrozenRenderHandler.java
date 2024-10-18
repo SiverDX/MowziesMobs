@@ -52,7 +52,7 @@ public enum FrozenRenderHandler {
 
         @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, LivingEntity living, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-            FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(living, CapabilityHandler.FROZEN_CAPABILITY);
+            FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(living, CapabilityHandler.FROZEN_CAPABILITY);
             if (frozenCapability != null && frozenCapability.getFrozen()) {
                 EntityModel model = this.renderer.getModel();
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(FROZEN_TEXTURE));
@@ -69,7 +69,7 @@ public enum FrozenRenderHandler {
 
         @Override
         public void render(PoseStack poseStack, T animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-            FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(animatable, CapabilityHandler.FROZEN_CAPABILITY);
+            FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(animatable, CapabilityHandler.FROZEN_CAPABILITY);
             if (frozenCapability != null && frozenCapability.getFrozen()) {
                 RenderType frozenRenderType = RenderType.entityTranslucent(FROZEN_TEXTURE);
                 getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, renderType, bufferSource.getBuffer(frozenRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY, -1);
@@ -84,7 +84,7 @@ public enum FrozenRenderHandler {
         Player player = Minecraft.getInstance().player;
 
         if(player != null) {
-            FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(player, CapabilityHandler.FROZEN_CAPABILITY);
+            FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(player, CapabilityHandler.FROZEN_CAPABILITY);
             if (frozenCapability != null && frozenCapability.getFrozen()) {
                 boolean isMainHand = event.getHand() == InteractionHand.MAIN_HAND;
                 if (isMainHand && !player.isInvisible() && event.getItemStack().isEmpty()) {

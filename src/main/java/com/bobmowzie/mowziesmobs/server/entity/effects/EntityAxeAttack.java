@@ -35,6 +35,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.entity.PartEntity;
+import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -178,7 +180,7 @@ public class EntityAxeAttack extends EntityMagicEffect {
                 // Do raycast check to prevent damaging through walls
                 if (!raytraceCheckEntity(entityHit)) continue;
 
-                PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(getCaster(), CapabilityHandler.PLAYER_CAPABILITY);
+                PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(getCaster(), CapabilityHandler.PLAYER_CAPABILITY);
                 if (playerCapability != null) {
                     playerCapability.setAxeCanAttack(true);
                     if (getCaster() instanceof Player) attackTargetEntityWithCurrentItem(entityHit, (Player) getCaster(), damage / ItemHandler.WROUGHT_AXE.get().getAttackDamage(), applyKnockback);
@@ -311,15 +313,15 @@ public class EntityAxeAttack extends EntityMagicEffect {
                         EnchantmentHelper.doPostDamageEffects(player, targetEntity);
                         ItemStack itemstack1 = player.getMainHandItem();
                         Entity entity = targetEntity;
-                        if (targetEntity instanceof net.minecraftforge.entity.PartEntity) {
-                            entity = ((net.minecraftforge.entity.PartEntity<?>) targetEntity).getParent();
+                        if (targetEntity instanceof PartEntity<?> part) {
+                            entity = part.getParent();
                         }
 
                         if (!player.level().isClientSide && !itemstack1.isEmpty() && entity instanceof LivingEntity) {
                             ItemStack copy = itemstack1.copy();
                             itemstack1.hurtEnemy((LivingEntity)entity, player);
                             if (itemstack1.isEmpty()) {
-                                net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copy, InteractionHand.MAIN_HAND);
+                                EventHooks.onPlayerDestroyItem(player, copy, InteractionHand.MAIN_HAND);
                                 player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
                             }
                         }
@@ -328,7 +330,7 @@ public class EntityAxeAttack extends EntityMagicEffect {
                             float f5 = f4 - ((LivingEntity)targetEntity).getHealth();
                             player.awardStat(Stats.DAMAGE_DEALT, Math.round(f5 * 10.0F));
                             if (j > 0) {
-                                targetEntity.setSecondsOnFire(j * 4);
+                                targetEntity.igniteForSeconds(j * 4);
                             }
 
                             if (player.level() instanceof ServerLevel && f5 > 2.0F) {
@@ -355,14 +357,14 @@ public class EntityAxeAttack extends EntityMagicEffect {
     @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        setAxeStack(ItemStack.of(compound.getCompound("axe_stack")));
+        setAxeStack(ItemStack.parseOptional(registryAccess(), compound.getCompound("axe_stack")));
         setVertical(compound.getBoolean("vertical"));
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.put("axe_stack", getAxeStack().save(new CompoundTag()));
+        compound.put("axe_stack", getAxeStack().save(registryAccess(), new CompoundTag()));
         compound.putBoolean("vertical", getVertical());
     }
 }

@@ -24,11 +24,11 @@ public class BiomeChecker {
         }
         whitelist = new HashSet<>();
         for (String biomeString : biomeConfig.biomeWhitelist.get()) {
-            whitelist.add(new ResourceLocation(biomeString));
+            whitelist.add(ResourceLocation.tryParse(biomeString));
         }
         blacklist = new HashSet<>();
         for (String biomeString : biomeConfig.biomeBlacklist.get()) {
-            blacklist.add(new ResourceLocation(biomeString));
+            blacklist.add(ResourceLocation.tryParse(biomeString));
         }
     }
     

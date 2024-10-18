@@ -43,6 +43,7 @@ import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 import software.bernie.geckolib.renderer.GeoRenderer;
+import software.bernie.geckolib.util.RenderUtil;
 
 import java.util.HashMap;
 
@@ -168,7 +169,7 @@ public class GeckoRenderPlayer extends PlayerRenderer implements GeoRenderer<Gec
     }
 
     @Override
-    public void actuallyRender(PoseStack poseStack, GeckoPlayer animatable, BakedGeoModel model, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void actuallyRender(PoseStack poseStack, GeckoPlayer animatable, BakedGeoModel model, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
         AbstractClientPlayer entity = (AbstractClientPlayer) animatable.getPlayer();
         this.model.attackTime = this.getAttackAnim(entity, partialTick);
 
@@ -239,11 +240,11 @@ public class GeckoRenderPlayer extends PlayerRenderer implements GeoRenderer<Gec
             long instanceId = getInstanceId(animatable);
 
             AnimatableManager<GeckoPlayer> animatableManager = animatable.getAnimatableInstanceCache().getManagerForId(instanceId);
-            animationState.setData(DataTickets.TICK, animatable.getTick(animatable) + animatableManager.getFirstTickTime() + Minecraft.getInstance().getFrameTime());
+            animationState.setData(DataTickets.TICK, animatable.getTick(animatable) + animatableManager.getFirstTickTime() + partialTick); // FIXME 1.21 :: 'Minecraft#getFrameTime()' replaced with partialTick
             animationState.setData(DataTickets.ENTITY, entity);
             animationState.setData(DataTickets.ENTITY_MODEL_DATA, new EntityModelData(shouldSit, entity.isBaby(), -f2_netHeadYaw, -headPitch));
             this.getGeckoModel().addAdditionalStateData(animatable, instanceId, animationState::setData);
-            this.getGeckoModel().handleAnimations(animatable, instanceId, animationState);
+            this.getGeckoModel().handleAnimations(animatable, instanceId, animationState, partialTick);
         }
 
         if (this.geoModel.isInitialized()) {
@@ -288,7 +289,7 @@ public class GeckoRenderPlayer extends PlayerRenderer implements GeoRenderer<Gec
 //        this.modelRenderTranslations = new Matrix4f(poseStack.last().pose());
 
         if (!entity.isInvisibleTo(Minecraft.getInstance().player))
-            GeoRenderer.super.actuallyRender(poseStack, animatable, model, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+            GeoRenderer.super.actuallyRender(poseStack, animatable, model, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, color);
 
         ModelPlayerAnimated.copyFromGeckoModel(this.model, geoModel);
 
@@ -300,10 +301,10 @@ public class GeckoRenderPlayer extends PlayerRenderer implements GeoRenderer<Gec
     }
 
     public void renderEntity(AbstractClientPlayer entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
-        RenderNameTagEvent renderNameplateEvent = new net.minecraftforge.client.event.RenderNameTagEvent(entityIn, entityIn.getDisplayName(), this, matrixStackIn, bufferIn, packedLightIn, partialTicks);
+        RenderNameTagEvent renderNameplateEvent = new RenderNameTagEvent(entityIn, entityIn.getDisplayName(), this, matrixStackIn, bufferIn, packedLightIn, partialTicks);
         NeoForge.EVENT_BUS.post(renderNameplateEvent);
         if (renderNameplateEvent.canRender().isTrue() || renderNameplateEvent.canRender().isDefault() && this.shouldShowName(entityIn)) {
-            this.renderNameTag(entityIn, renderNameplateEvent.getContent(), matrixStackIn, bufferIn, packedLightIn);
+            this.renderNameTag(entityIn, renderNameplateEvent.getContent(), matrixStackIn, bufferIn, packedLightIn, partialTicks);
         }
     }
 
@@ -409,12 +410,12 @@ public class GeckoRenderPlayer extends PlayerRenderer implements GeoRenderer<Gec
     }
 
     @Override
-    public void renderRecursively(PoseStack poseStack, GeckoPlayer animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderRecursively(PoseStack poseStack, GeckoPlayer animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
         poseStack.pushPose();
-        RenderUtils.translateMatrixToBone(poseStack, bone);
-        RenderUtils.translateToPivotPoint(poseStack, bone);
-        RenderUtils.rotateMatrixAroundBone(poseStack, bone);
-        RenderUtils.scaleMatrixForBone(poseStack, bone);
+        RenderUtil.translateMatrixToBone(poseStack, bone);
+        RenderUtil.translateToPivotPoint(poseStack, bone);
+        RenderUtil.rotateMatrixAroundBone(poseStack, bone);
+        RenderUtil.scaleMatrixForBone(poseStack, bone);
         // Record xform matrices for relevant bones
         if (bone instanceof MowzieGeoBone) {
             MowzieGeoBone mowzieBone = (MowzieGeoBone)bone;
@@ -448,17 +449,17 @@ public class GeckoRenderPlayer extends PlayerRenderer implements GeoRenderer<Gec
                 poseStack.popPose();
             }
         }
-        RenderUtils.translateAwayFromPivotPoint(poseStack, bone);
-        renderCubesOfBone(poseStack, bone, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        RenderUtil.translateAwayFromPivotPoint(poseStack, bone);
+        renderCubesOfBone(poseStack, bone, buffer, packedLight, packedOverlay, color);
 
         if (!isReRender)
             applyRenderLayersForBone(poseStack, animatable, bone, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
 
-        renderChildBones(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+        renderChildBones(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, color);
         poseStack.popPose();
 
         for(RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> layerrenderer : this.layers) {
-            if (layerrenderer instanceof IGeckoRenderLayer) ((IGeckoRenderLayer)layerrenderer).renderRecursively(bone, poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+            if (layerrenderer instanceof IGeckoRenderLayer) ((IGeckoRenderLayer)layerrenderer).renderRecursively(bone, poseStack, buffer, packedLight, packedOverlay, color);
         }
     }
 

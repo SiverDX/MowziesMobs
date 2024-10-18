@@ -1,6 +1,5 @@
 package com.bobmowzie.mowziesmobs.server.capability;
 
-import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleCloud;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleHandler;
 import com.bobmowzie.mowziesmobs.client.particle.ParticleSnowFlake;
@@ -8,11 +7,10 @@ import com.bobmowzie.mowziesmobs.server.entity.EntityHandler;
 import com.bobmowzie.mowziesmobs.server.entity.frostmaw.EntityFrozenController;
 import com.bobmowzie.mowziesmobs.server.potion.EffectHandler;
 import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
-import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -22,85 +20,17 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.neoforge.capabilities.ICapabilityProvider;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public class FrozenCapability {
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "frozen_cap");
-
     public static int MAX_FREEZE_DECAY_DELAY = 10;
 
-    public interface IFrozenCapability extends INBTSerializable<CompoundTag> {
-        boolean getFrozen();
-
-        float getFreezeProgress();
-
-        void setFreezeProgress(float freezeProgress);
-
-        float getFrozenYaw();
-
-        void setFrozenYaw(float frozenYaw);
-
-        float getFrozenPitch();
-
-        void setFrozenPitch(float frozenPitch);
-
-        float getFrozenYawHead();
-
-        void setFrozenYawHead(float frozenYawHead);
-
-        float getFrozenRenderYawOffset();
-
-        void setFrozenRenderYawOffset(float frozenRenderYawOffset);
-
-        float getFrozenSwingProgress();
-
-        void setFrozenSwingProgress(float frozenSwingProgress);
-
-        float getFrozenWalkAnimSpeed();
-
-        void setFrozenWalkAnimSpeed(float frozenWalkAnimSpeed);
-
-        float getFrozenWalkAnimPosition();
-
-        void setFrozenWalkAnimPosition(float frozenWalkAnimPosition);
-
-        boolean prevHasAI();
-
-        void setPrevHasAI(boolean prevHasAI);
-
-        int getFreezeDecayDelay();
-
-        void setFreezeDecayDelay(int freezeDecayDelay);
-
-        boolean getPrevFrozen();
-
-        void setPrevFrozen(boolean prevFrozen);
-
-        UUID getPreAttackTarget();
-
-        void setPreAttackTarget(UUID livingEntity);
-
-        EntityFrozenController getFrozenController();
-
-        void setFrozenController(EntityFrozenController frozenController);
-
-        void addFreezeProgress(LivingEntity entity, float amount);
-
-        void onFreeze(LivingEntity entity);
-
-        void onUnfreeze(LivingEntity entity);
-
-        void tick(LivingEntity entity);
-    }
-
-    public static class FrozenCapabilityImp implements IFrozenCapability {
+    public static class Capability implements INBTSerializable<CompoundTag> {
         public boolean frozen;
         public float freezeProgress = 0;
         public float frozenYaw;
@@ -119,150 +49,121 @@ public class FrozenCapability {
         public boolean prevFrozen = false;
         public EntityFrozenController frozenController;
 
-        @Override
         public boolean getFrozen() {
             return frozen;
         }
 
-        @Override
         public float getFreezeProgress() {
             return freezeProgress;
         }
 
-        @Override
         public void setFreezeProgress(float freezeProgress) {
             this.freezeProgress = freezeProgress;
         }
 
-        @Override
         public float getFrozenYaw() {
             return frozenYaw;
         }
 
-        @Override
         public void setFrozenYaw(float frozenYaw) {
             this.frozenYaw = frozenYaw;
         }
 
-        @Override
         public float getFrozenPitch() {
             return frozenPitch;
         }
 
-        @Override
         public void setFrozenPitch(float frozenPitch) {
             this.frozenPitch = frozenPitch;
         }
 
-        @Override
         public float getFrozenYawHead() {
             return frozenYawHead;
         }
 
-        @Override
         public void setFrozenYawHead(float frozenYawHead) {
             this.frozenYawHead = frozenYawHead;
         }
 
-        @Override
         public float getFrozenRenderYawOffset() {
             return frozenRenderYawOffset;
         }
 
-        @Override
         public void setFrozenRenderYawOffset(float frozenRenderYawOffset) {
             this.frozenRenderYawOffset = frozenRenderYawOffset;
         }
 
-        @Override
         public float getFrozenSwingProgress() {
             return frozenSwingProgress;
         }
 
-        @Override
         public void setFrozenSwingProgress(float frozenSwingProgress) {
             this.frozenSwingProgress = frozenSwingProgress;
         }
 
-        @Override
         public float getFrozenWalkAnimSpeed() {
             return frozenWalkAnimSpeed;
         }
 
-        @Override
         public void setFrozenWalkAnimSpeed(float frozenWalkAnimPosition) {
             this.frozenWalkAnimSpeed = frozenWalkAnimPosition;
         }
 
-        @Override
         public float getFrozenWalkAnimPosition() {
             return frozenWalkAnimPosition;
         }
 
-        @Override
         public void setFrozenWalkAnimPosition(float frozenWalkAnimPosition) {
             this.frozenWalkAnimPosition = frozenWalkAnimPosition;
         }
 
-        @Override
         public boolean prevHasAI() {
             return prevHasAI;
         }
 
-        @Override
         public void setPrevHasAI(boolean prevHasAI) {
             this.prevHasAI = prevHasAI;
         }
 
-        @Override
         public int getFreezeDecayDelay() {
             return freezeDecayDelay;
         }
 
-        @Override
         public void setFreezeDecayDelay(int freezeDecayDelay) {
             this.freezeDecayDelay = freezeDecayDelay;
         }
 
-        @Override
         public boolean getPrevFrozen() {
             return prevFrozen;
         }
 
-        @Override
         public void setPrevFrozen(boolean prevFrozen) {
             this.prevFrozen = prevFrozen;
         }
 
-        @Override
         public UUID getPreAttackTarget() {
             return prevAttackTarget;
         }
 
-        @Override
         public void setPreAttackTarget(UUID livingEntity) {
             prevAttackTarget = livingEntity;
         }
 
-        @Override
         public EntityFrozenController getFrozenController() {
             return frozenController;
         }
 
-        @Override
         public void setFrozenController(EntityFrozenController frozenController) {
             this.frozenController = frozenController;
         }
 
-        @Override
         public void addFreezeProgress(LivingEntity entity, float amount) {
-            if (!entity.level().isClientSide && !entity.hasEffect(EffectHandler.FROZEN.get())) {
+            if (!entity.level().isClientSide && !entity.hasEffect(EffectHandler.FROZEN)) {
                 freezeProgress += amount;
                 freezeDecayDelay = MAX_FREEZE_DECAY_DELAY;
             }
         }
 
-        @Override
         public void onFreeze(LivingEntity entity) {
             if (entity != null) {
                 frozen = true;
@@ -301,12 +202,11 @@ public class FrozenCapability {
             }
         }
 
-        @Override
         public void onUnfreeze(LivingEntity entity) {
             if (entity != null) {
                 freezeProgress = 0;
                 if (frozen) {
-                    entity.removeEffectNoUpdate(EffectHandler.FROZEN.get());
+                    entity.removeEffectNoUpdate(EffectHandler.FROZEN);
                     frozen = false;
                     if (frozenController != null) {
                         Vec3 oldPosition = entity.position();
@@ -339,11 +239,10 @@ public class FrozenCapability {
             }
         }
 
-        @Override
         public void tick(LivingEntity entity) {
             // Freeze logic
-            if (getFreezeProgress() >= 1 && !entity.hasEffect(EffectHandler.FROZEN.get())) {
-                entity.addEffect(new MobEffectInstance(EffectHandler.FROZEN.get(), 50, 0, false, false));
+            if (getFreezeProgress() >= 1 && !entity.hasEffect(EffectHandler.FROZEN)) {
+                entity.addEffect(new MobEffectInstance(EffectHandler.FROZEN, 50, 0, false, false));
                 freezeProgress = 1f;
             } else if (freezeProgress > 0) {
                 entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 9, Mth.floor(freezeProgress * 5 + 1), false, false));
@@ -377,17 +276,17 @@ public class FrozenCapability {
             }
 
             if (freezeDecayDelay <= 0) {
-                freezeProgress -= 0.1;
+                freezeProgress -= 0.1f;
                 if (freezeProgress < 0) freezeProgress = 0;
             }
             else {
                 freezeDecayDelay--;
             }
-            prevFrozen = entity.hasEffect(EffectHandler.FROZEN.get());
+            prevFrozen = entity.hasEffect(EffectHandler.FROZEN);
         }
 
         @Override
-        public CompoundTag serializeNBT() {
+        public CompoundTag serializeNBT(@NotNull HolderLookup.Provider lookup) {
             CompoundTag compound = new CompoundTag();
             compound.putFloat("freezeProgress", getFreezeProgress());
             compound.putInt("freezeDecayDelay", getFreezeDecayDelay());
@@ -408,7 +307,7 @@ public class FrozenCapability {
         }
 
         @Override
-        public void deserializeNBT(CompoundTag compound) {
+        public void deserializeNBT(@NotNull HolderLookup.Provider lookup, CompoundTag compound) {
             setFreezeProgress(compound.getFloat("freezeProgress"));
             setFreezeDecayDelay(compound.getInt("freezeDecayDelay"));
             setFrozenWalkAnimSpeed(compound.getFloat("frozenWalkAnimSpeed"));
@@ -428,24 +327,14 @@ public class FrozenCapability {
         }
     }
 
-    public static class FrozenProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag>
-    {
-        private final LazyOptional<FrozenCapability.IFrozenCapability> instance = LazyOptional.of(FrozenCapability.FrozenCapabilityImp::new);
-
+    public static class Provider implements ICapabilityProvider<Entity, Void, FrozenCapability.Capability> {
         @Override
-        public CompoundTag serializeNBT() {
-            return instance.orElseThrow(NullPointerException::new).serializeNBT();
-        }
+        public @Nullable FrozenCapability.Capability getCapability(@NotNull Entity entity, Void context) {
+            if (entity instanceof LivingEntity) {
+                return entity.getCapability(CapabilityHandler.FROZEN_CAPABILITY);
+            }
 
-        @Override
-        public void deserializeNBT(CompoundTag nbt) {
-            instance.orElseThrow(NullPointerException::new).deserializeNBT(nbt);
-        }
-
-        @Nonnull
-        @Override
-        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
-            return CapabilityHandler.FROZEN_CAPABILITY.orEmpty(cap, instance.cast());
+            return null;
         }
     }
 }

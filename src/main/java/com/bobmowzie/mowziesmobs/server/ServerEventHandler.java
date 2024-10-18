@@ -90,7 +90,6 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public final class ServerEventHandler {
@@ -98,12 +97,12 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public void onJoinWorld(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof Player || event.getEntity() instanceof MowzieGeckoEntity) {
-            AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability((LivingEntity) event.getEntity());
+            AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability((LivingEntity) event.getEntity());
             if (abilityCapability != null) abilityCapability.instanceAbilities((LivingEntity) event.getEntity());
         }
 
         if (event.getEntity() instanceof Player) {
-            PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
+            PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
             if (playerCapability != null) playerCapability.addedToWorld(event);
         }
 
@@ -172,15 +171,15 @@ public final class ServerEventHandler {
                 }
             }
 
-            FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
+            FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
             if (frozenCapability != null) {
                 frozenCapability.tick(entity);
             }
-            LivingCapability.ILivingCapability livingCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.LIVING_CAPABILITY);
+            LivingCapability.Capability livingCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.LIVING_CAPABILITY);
             if (livingCapability != null) {
                 livingCapability.tick(entity);
             }
-            AbilityCapability.IAbilityCapability abilityCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.ABILITY_CAPABILITY);
+            AbilityCapability.Capability abilityCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.ABILITY_CAPABILITY);
             if (abilityCapability != null) {
                 abilityCapability.tick(entity);
             }
@@ -224,7 +223,7 @@ public final class ServerEventHandler {
         if (event.getEffectInstance().getEffect() == EffectHandler.FROZEN) {
             if (!event.getEntity().level().isClientSide()) {
                 PacketDistributor.sendToPlayersTrackingEntityAndSelf(event.getEntity(), new MessageFreezeEffect(event.getEntity().getId(), true));
-                FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
+                FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
 
                 if (frozenCapability != null) {
                     frozenCapability.onFreeze(event.getEntity());
@@ -245,7 +244,7 @@ public final class ServerEventHandler {
 
         if (!event.getEntity().level().isClientSide() && event.getEffectInstance().getEffect() == EffectHandler.FROZEN) {
             PacketDistributor.sendToPlayersTrackingEntityAndSelf(event.getEntity(), new MessageFreezeEffect(event.getEntity().getId(), false));
-            FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
+            FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
 
             if (frozenCapability != null) {
                 frozenCapability.onUnfreeze(event.getEntity());
@@ -263,7 +262,7 @@ public final class ServerEventHandler {
 
         if (!event.getEntity().level().isClientSide() && effectInstance != null && effectInstance.getEffect() == EffectHandler.FROZEN) {
             PacketDistributor.sendToPlayersTrackingEntityAndSelf(event.getEntity(), new MessageFreezeEffect(event.getEntity().getId(), false));
-            FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
+            FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
 
             if (frozenCapability != null) {
                 frozenCapability.onUnfreeze(event.getEntity());
@@ -298,14 +297,14 @@ public final class ServerEventHandler {
         if (event.getSource().is(DamageTypeTags.IS_FIRE)) {
             event.getEntity().removeEffectNoUpdate(EffectHandler.FROZEN);
             PacketDistributor.sendToPlayersTrackingEntityAndSelf(event.getEntity(), new MessageFreezeEffect(event.getEntity().getId(), false));
-            FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
+            FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.FROZEN_CAPABILITY);
 
             if (frozenCapability != null) {
                 frozenCapability.onUnfreeze(event.getEntity());
             }
         }
         if (event.getEntity() instanceof Player player) {
-            PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
+            PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
             if (playerCapability != null) {
                 Power[] powers = playerCapability.getPowers();
                 for (Power power : powers) {
@@ -319,7 +318,7 @@ public final class ServerEventHandler {
         }
 
         LivingEntity living = event.getEntity();
-        LivingCapability.ILivingCapability capability = CapabilityHandler.getCapability(living, CapabilityHandler.LIVING_CAPABILITY);
+        LivingCapability.Capability capability = CapabilityHandler.getCapability(living, CapabilityHandler.LIVING_CAPABILITY);
         if (capability != null) {
             capability.setLastDamage(event.getNewDamage());
         }
@@ -328,7 +327,7 @@ public final class ServerEventHandler {
     @SubscribeEvent
     public void onPlayerTick(PlayerTickEvent event) {
         Player player = event.getEntity();
-        PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
+        PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
         if (playerCapability != null) {
             playerCapability.tick(event);
 
@@ -356,7 +355,7 @@ public final class ServerEventHandler {
             return;
         }
 
-        AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(living);
+        AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(living);
         if (abilityCapability != null && abilityCapability.itemUsePrevented(event.getItem())) {
             event.setCanceled(true);
             return;
@@ -372,7 +371,7 @@ public final class ServerEventHandler {
                 return;
             }
 
-            AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(living);
+            AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(living);
             if (abilityCapability != null && abilityCapability.blockBreakingBuildingPrevented()) {
                 event.setCanceled(true);
                 return;
@@ -396,27 +395,15 @@ public final class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public void onFillBucket(FillBucketEvent event) {
-        LivingEntity living = event.getEntity();
-        if (living != null) {
-            if (event.isCancelable() && living.hasEffect(EffectHandler.FROZEN.get())) {
-                event.setCanceled(true);
-                return;
-            }
+    public void onFillBucket(PlayerInteractEvent.RightClickItem event) {
+        Item item = event.getItemStack().getItem();
 
-            AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
-            if (abilityCapability != null && event.isCancelable() && abilityCapability.interactingPrevented()) {
-                event.setCanceled(true);
-                return;
-            }
+        if (item == Items.LAVA_BUCKET) {
+            aggroUmvuthana(event.getEntity());
+        }
 
-            if (event.getEmptyBucket().getItem() == Items.LAVA_BUCKET) {
-                aggroUmvuthana(event.getEntity());
-            }
-
-            if (event.getEmptyBucket().getItem() == Items.WATER_BUCKET) {
-                cheatSculptor(event.getEntity());
-            }
+        if (item == Items.WATER_BUCKET) {
+            cheatSculptor(event.getEntity());
         }
     }
 
@@ -427,7 +414,7 @@ public final class ServerEventHandler {
             return;
         }
 
-        AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getPlayer());
+        AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getPlayer());
         if (abilityCapability != null && abilityCapability.blockBreakingBuildingPrevented()) {
             event.setCanceled(true);
             return;
@@ -460,28 +447,25 @@ public final class ServerEventHandler {
 
     private List<LivingEntity> getEntityBaseNearby(LivingEntity user, double distanceX, double distanceY, double distanceZ, double radius) {
         List<Entity> list = user.level().getEntities(user, user.getBoundingBox().inflate(distanceX, distanceY, distanceZ));
-        ArrayList<LivingEntity> nearEntities = list.stream().filter(entityNeighbor -> entityNeighbor instanceof LivingEntity && user.distanceTo(entityNeighbor) <= radius).map(entityNeighbor -> (LivingEntity) entityNeighbor).collect(Collectors.toCollection(ArrayList::new));
-        return nearEntities;
+        return list.stream().filter(entityNeighbor -> entityNeighbor instanceof LivingEntity && user.distanceTo(entityNeighbor) <= radius).map(entityNeighbor -> (LivingEntity) entityNeighbor).collect(Collectors.toCollection(ArrayList::new));
     }
 
     @SubscribeEvent
-    public void onPlayerInteract(PlayerInteractEvent.RightClickEmpty event) { // FIXME 1.21 :: cannot be cancelled
+    public void onPlayerInteract(PlayerInteractEvent.RightClickEmpty event) { // FIXME 1.21 :: cannot be cancelled (there is not really anything to cancel either, see 'Minecraft#startUseItem'
         if (event.getEntity().hasEffect(EffectHandler.FROZEN)) {
-            event.setCanceled(true);
             return;
         }
 
-        AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
+        AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
         if (abilityCapability != null && abilityCapability.interactingPrevented()) {
-            event.setCanceled(true);
             return;
         }
 
         Player player = event.getEntity();
-        PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
+        PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
         if (playerCapability != null) {
 
-            if (event.getLevel().isClientSide && player.getInventory().getSelected().isEmpty() && player.hasEffect(EffectHandler.SUNS_BLESSING.get())) {
+            if (event.getLevel().isClientSide && player.getInventory().getSelected().isEmpty() && player.hasEffect(EffectHandler.SUNS_BLESSING)) {
                 if (player.isShiftKeyDown()) {
                     AbilityHandler.INSTANCE.sendPlayerTryAbilityMessage(event.getEntity(), AbilityHandler.SOLAR_BEAM_ABILITY);
                 } else {
@@ -503,13 +487,13 @@ public final class ServerEventHandler {
             return;
         }
 
-        AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
+        AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
         if (abilityCapability != null && abilityCapability.interactingPrevented()) {
             event.setCanceled(true);
             return;
         }
 
-        PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
+        PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
         if (playerCapability != null) {
             Power[] powers = playerCapability.getPowers();
             for (Power power : powers) {
@@ -525,7 +509,7 @@ public final class ServerEventHandler {
             return;
         }
 
-        AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
+        AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
         if (abilityCapability != null && abilityCapability.interactingPrevented()) {
             event.setCanceled(true);
             return;
@@ -536,7 +520,7 @@ public final class ServerEventHandler {
             aggroUmvuthana(player);
         }
 
-        PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
+        PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
         if (playerCapability != null) {
 
             ItemStack item = event.getItemStack();
@@ -569,7 +553,7 @@ public final class ServerEventHandler {
     public void onPlayerLeftClick(PlayerInteractEvent.LeftClickEmpty event) {
         double range = 6.5;
         Player player = event.getEntity();
-        PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
+        PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
         if (player.getMainHandItem().getItem() == ItemHandler.SPEAR.get()) {
             LivingEntity entityHit = ItemSpear.raytraceEntities(player.getCommandSenderWorld(), player, range);
             if (entityHit != null) {
@@ -589,7 +573,7 @@ public final class ServerEventHandler {
         LivingEntity entity = event.getEntity();
         if (entity.getHealth() <= event.getNewDamage() && entity.hasEffect(EffectHandler.FROZEN)) {
             entity.removeEffectNoUpdate(EffectHandler.FROZEN);
-            FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
+            FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
             PacketDistributor.sendToPlayersTrackingEntityAndSelf(event.getEntity(), new MessageFreezeEffect(event.getEntity().getId(), false));
 
             if (frozenCapability != null) {
@@ -611,13 +595,13 @@ public final class ServerEventHandler {
             return;
         }
 
-        AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
+        AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
         if (abilityCapability != null && abilityCapability.itemUsePrevented(event.getItemStack())) {
             event.setCanceled(true);
             return;
         }
 
-        PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
+        PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
         if (playerCapability != null) {
             Power[] powers = playerCapability.getPowers();
             for (Power power : powers) {
@@ -634,13 +618,13 @@ public final class ServerEventHandler {
             return;
         }
 
-        AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
+        AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
         if (abilityCapability != null && abilityCapability.blockBreakingBuildingPrevented()) {
             event.setCanceled(true);
             return;
         }
 
-        PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
+        PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
         if (playerCapability != null) {
             Power[] powers = playerCapability.getPowers();
             for (Power power : powers) {
@@ -659,7 +643,7 @@ public final class ServerEventHandler {
         }
 
         if (event.getEntity() instanceof Player) {
-            PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
+            PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
             if (playerCapability != null) {
                 Power[] powers = playerCapability.getPowers();
                 for (Power power : powers) {
@@ -677,13 +661,13 @@ public final class ServerEventHandler {
         }
 
         if (event.getEntity() != null) {
-            AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
+            AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(event.getEntity());
             if (abilityCapability != null && abilityCapability.attackingPrevented()) {
                 event.setCanceled(true);
                 return;
             }
 
-            PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
+            PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
             if (playerCapability != null) {
                 playerCapability.setPrevCooledAttackStrength(event.getEntity().getAttackStrengthScale(0.5f));
 
@@ -721,7 +705,7 @@ public final class ServerEventHandler {
     public void checkCritEvent(CriticalHitEvent event) {
         ItemStack weapon = event.getEntity().getMainHandItem();
         Player attacker = event.getEntity();
-        PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
+        PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
         if (playerCapability != null && playerCapability.getPrevCooledAttackStrength() == 1.0f && !weapon.isEmpty() && event.getTarget() instanceof LivingEntity) {
             LivingEntity target = (LivingEntity)event.getTarget();
             if (weapon.getItem() instanceof ItemNagaFangDagger) {
@@ -794,8 +778,7 @@ public final class ServerEventHandler {
 //        }
 //    }
 
-    private static final UUID ATTACK_MODIFIER_BEADS_UUID = UUID.fromString("8320d16d-b0ef-4d42-a425-c619a4760eca");
-    private static final AttributeModifier ATTACK_MODIFIER_BEADS = new AttributeModifier(ATTACK_MODIFIER_BEADS_UUID, "Geomancy Beads attack boost", 3D, AttributeModifier.Operation.ADDITION);
+    private static final AttributeModifier ATTACK_MODIFIER_BEADS = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "geomancy_beads_attack_boost"), 3D, AttributeModifier.Operation.ADD_VALUE);
 
     @SubscribeEvent
     public void onEquipmentChanged(LivingEquipmentChangeEvent event) {
@@ -813,18 +796,6 @@ public final class ServerEventHandler {
                     attributeinstance.addTransientModifier(ATTACK_MODIFIER_BEADS);
                 }
             }
-        }
-    }
-
-    @SubscribeEvent
-    public void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof LivingEntity) {
-            event.addCapability(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "frozen"), new FrozenCapability.FrozenProvider());
-            event.addCapability(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "last_damage"), new LivingCapability.LivingProvider());
-            event.addCapability(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "ability"), new AbilityCapability.AbilityProvider());
-        }
-        if (event.getObject() instanceof Player) {
-            event.addCapability(ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "player"), new PlayerCapability.PlayerProvider());
         }
     }
 

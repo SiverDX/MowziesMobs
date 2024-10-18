@@ -177,7 +177,7 @@ public class SupernovaAbility extends HeliomancyAbilityBase {
 
     @Override
     public boolean canCancelActiveAbility() {
-        Ability ability = getActiveAbility();
+        Ability<?>ability = getActiveAbility();
         return ability != null && (ability.getAbilityType() == AbilityHandler.SOLAR_FLARE_ABILITY || ability.getAbilityType() == AbilityHandler.SOLAR_BEAM_ABILITY) && ability.getTicksInUse() < 5;
     }
 }

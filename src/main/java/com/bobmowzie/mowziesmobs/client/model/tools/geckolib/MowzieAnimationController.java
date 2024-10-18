@@ -25,7 +25,8 @@ public class MowzieAnimationController<T extends GeoAnimatable> extends Animatio
         setAnimation(animation);
         currentAnimation = this.animationQueue.poll();
         isJustStarting = true;
-        adjustTick(animatable.getTick(animatable) + Minecraft.getInstance().getPartialTick());
+        // FIXME 1.21 :: replaced 'Minecraft#getPartialTick'
+        adjustTick(animatable.getTick(animatable) + Minecraft.getInstance().getTimer().getRealtimeDeltaTicks());
         transitionLength = 0;
     }
 
@@ -65,7 +66,8 @@ public class MowzieAnimationController<T extends GeoAnimatable> extends Animatio
                 forceAnimationReset();
                 currentAnimation = this.animationQueue.poll();
                 isJustStarting = true;
-                adjustTick(animatable.getTick(animatable) + Minecraft.getInstance().getPartialTick());
+                // FIXME 1.21 :: replaced 'Minecraft#getPartialTick'
+                adjustTick(animatable.getTick(animatable) + Minecraft.getInstance().getTimer().getRealtimeDeltaTicks());
                 transitionLength = 0;
             }
         }

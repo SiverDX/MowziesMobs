@@ -28,7 +28,7 @@ public class ItemIceCrystal extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         ItemStack stack = playerIn.getItemInHand(handIn);
-        AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(playerIn);
+        AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(playerIn);
         if (abilityCapability != null) {
             playerIn.startUsingItem(handIn);
             if (stack.getDamageValue() + 5 < stack.getMaxDamage() || ConfigHandler.COMMON.TOOLS_AND_ABILITIES.ICE_CRYSTAL.breakable.get()) {
@@ -46,7 +46,7 @@ public class ItemIceCrystal extends Item {
     @Override
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
 //        if (entityLiving instanceof Player) {
-//            Ability iceBreathAbility = AbilityHandler.INSTANCE.getAbility(entityLiving, AbilityHandler.ICE_BREATH_ABILITY);
+//            Ability<?>iceBreathAbility = AbilityHandler.INSTANCE.getAbility(entityLiving, AbilityHandler.ICE_BREATH_ABILITY);
 //            if (iceBreathAbility != null && iceBreathAbility.isUsing()) {
 //                iceBreathAbility.end();
 //            }

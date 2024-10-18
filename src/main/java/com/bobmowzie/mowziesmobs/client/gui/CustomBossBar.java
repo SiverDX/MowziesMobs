@@ -6,7 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.BossEvent;
@@ -17,12 +17,12 @@ import java.util.Map;
 
 public class CustomBossBar {
     public static Map<ResourceLocation, CustomBossBar> customBossBars = new HashMap<>();
-    static { // FIXME 1.21 :: use a different key (resourcekey?) or use alternative to lookup registry entry
-        customBossBars.put(Registries.ENTITY_TYPE.getKey(EntityHandler.UMVUTHI.get()), new CustomBossBar(
+    static {
+        customBossBars.put(BuiltInRegistries.ENTITY_TYPE.getKey(EntityHandler.UMVUTHI.get()), new CustomBossBar(
                 ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/gui/boss_bar/umvuthi_bar_base.png"),
                 ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/gui/boss_bar/umvuthi_bar_overlay.png"),
                 4, 8, 2, -12, -6, 256, 16, 21, ChatFormatting.GOLD));
-        customBossBars.put(ForgeRegistries.ENTITY_TYPES.getKey(EntityHandler.FROSTMAW.get()), new CustomBossBar(
+        customBossBars.put(BuiltInRegistries.ENTITY_TYPE.getKey(EntityHandler.FROSTMAW.get()), new CustomBossBar(
                 ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/gui/boss_bar/frostmaw_bar_base.png"),
                 ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/gui/boss_bar/frostmaw_bar_overlay.png"),
                 10, 32, 2, -4, -3, 256, 32, 25, ChatFormatting.WHITE));

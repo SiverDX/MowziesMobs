@@ -17,16 +17,16 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import java.util.List;
 
 public class BlockSwapProcessor extends StructureProcessor {
-    public static final MapCodec<BlockSwapProcessor> CODEC = RecordCodecBuilder.create(instance -> instance
+    public static final MapCodec<BlockSwapProcessor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
             .group(
                     BlockState.CODEC.listOf().fieldOf("to_replace").forGetter(config -> config.toReplace),
                     BlockStateRandomizer.CODEC.fieldOf("replace_with").forGetter(config -> config.replaceWith),
                     Codec.BOOL.optionalFieldOf("copy_properties", true).forGetter(config -> config.copyProperties)
     ).apply(instance, instance.stable(BlockSwapProcessor::new)));
 
-    List<BlockState> toReplace;
-    BlockStateRandomizer replaceWith;
-    boolean copyProperties;
+    private final List<BlockState> toReplace;
+    private final BlockStateRandomizer replaceWith;
+    private final boolean copyProperties;
 
     public BlockSwapProcessor(List<BlockState> toReplace, BlockStateRandomizer replaceWith, boolean copyProperties) {
         this.toReplace = toReplace;

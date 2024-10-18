@@ -33,7 +33,7 @@ public record MessageJumpToAbilitySection(int entityId, int index, int sectionIn
             Entity entity = Minecraft.getInstance().level.getEntity(packet.entityId());
 
             if (entity instanceof LivingEntity living) {
-                AbilityCapability.IAbilityCapability abilityCapability = CapabilityHandler.getCapability(living, CapabilityHandler.ABILITY_CAPABILITY);
+                AbilityCapability.Capability abilityCapability = CapabilityHandler.getCapability(living, CapabilityHandler.ABILITY_CAPABILITY);
 
                 if (abilityCapability != null) {
                     AbilityType<?, ?> abilityType = abilityCapability.getAbilityTypesOnEntity(living)[packet.index()];

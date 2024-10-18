@@ -268,7 +268,7 @@ public class UmvuthanaGrovePieces {
                 barako.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
                 int i = rotation.rotate(3, 4);
                 barako.setDirection(i);
-                barako.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(barako.blockPosition()), MobSpawnType.STRUCTURE, null, null);
+                barako.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(barako.blockPosition()), MobSpawnType.STRUCTURE, null);
                 BlockPos offset = new BlockPos(0, 0, -18);
                 offset = offset.rotate(rotation);
                 BlockPos firePitPos = pos.offset(offset);

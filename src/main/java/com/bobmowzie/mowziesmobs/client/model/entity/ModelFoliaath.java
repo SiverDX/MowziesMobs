@@ -260,7 +260,7 @@ public class ModelFoliaath<T extends EntityFoliaath> extends MowzieEntityModel<T
         float frame = entity.frame + delta;
 
         float globalSpeed = 0.9f;
-        FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
+        FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
         boolean frozen = frozenCapability != null && frozenCapability.getFrozen();
         if (!frozen) {
             flap(stem1Base, 0.25F * globalSpeed, 0.15F * (activeComplete - stopDance), false, 0F, 0F, frame, 1F);

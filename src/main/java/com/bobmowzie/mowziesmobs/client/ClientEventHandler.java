@@ -19,12 +19,10 @@ import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
 import com.bobmowzie.mowziesmobs.server.entity.effects.EntityCameraShake;
 import com.bobmowzie.mowziesmobs.server.entity.frostmaw.EntityFrozenController;
 import com.bobmowzie.mowziesmobs.server.item.ItemBlowgun;
-import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -63,11 +61,11 @@ public enum ClientEventHandler {
         Player player = Minecraft.getInstance().player;
         if (player == null) return;
         boolean shouldAnimate = false;
-        AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
+        AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
         if (abilityCapability != null) shouldAnimate = abilityCapability.getActiveAbility() != null;
 //        shouldAnimate = (player.ticksExisted / 20) % 2 == 0;
         if (shouldAnimate) {
-            PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
+            PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
             if (playerCapability != null) {
                 GeckoPlayer.GeckoPlayerFirstPerson geckoPlayer = GeckoFirstPersonRenderer.GECKO_PLAYER_FIRST_PERSON;
                 if (geckoPlayer != null) {
@@ -98,10 +96,10 @@ public enum ClientEventHandler {
             Player player = (Player) event.getEntity();
             if (player == null) return;
             float delta = event.getPartialTick();
-            AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
+            AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(player);
 //            if ((player.tickCount / 20) % 2 == 0) {
             if (abilityCapability != null && abilityCapability.getActiveAbility() != null) {
-                PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
+                PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(event.getEntity(), CapabilityHandler.PLAYER_CAPABILITY);
                 if (playerCapability != null) {
                     GeckoPlayer.GeckoPlayerThirdPerson geckoPlayer = playerCapability.getGeckoPlayer();
                     if (geckoPlayer != null) {
@@ -124,7 +122,7 @@ public enum ClientEventHandler {
     @SubscribeEvent
     public void onPlayerTick(PlayerTickEvent event) {
         Player player = event.getEntity();
-        PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
+        PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
         if (playerCapability != null && player.level().isClientSide()) {
             GeckoPlayer geckoPlayer = playerCapability.getGeckoPlayer();
             if (geckoPlayer != null) geckoPlayer.tick();
@@ -153,7 +151,7 @@ public enum ClientEventHandler {
     public void onRenderTick(RenderFrameEvent event) {
         Player player = Minecraft.getInstance().player;
 //        if (player != null) {
-//            PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
+//            PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
 //            if (playerCapability != null && playerCapability.getGeomancy().canUse(player) && playerCapability.getGeomancy().isSpawningBoulder() && playerCapability.getGeomancy().getSpawnBoulderCharge() > 2) {
 //                Vector3d lookPos = playerCapability.getGeomancy().getLookPos();
 //                Vector3d playerEyes = player.getEyePosition(Minecraft.getInstance().getRenderPartialTicks());
@@ -167,7 +165,7 @@ public enum ClientEventHandler {
 //                player.prevRotationPitch = player.rotationPitch;
 //                player.prevRotationYawHead = player.rotationYawHead;
 //            }
-        FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(player, CapabilityHandler.FROZEN_CAPABILITY);
+        FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(player, CapabilityHandler.FROZEN_CAPABILITY);
         if (frozenCapability != null && frozenCapability.getFrozen() && frozenCapability.getPrevFrozen()) {
             player.setYRot(frozenCapability.getFrozenYaw());
             player.setXRot(frozenCapability.getFrozenPitch());
@@ -181,7 +179,7 @@ public enum ClientEventHandler {
     @SubscribeEvent
     public void onRenderLiving(RenderLivingEvent.Pre<?, ?> event) {
         LivingEntity entity = event.getEntity();
-        FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
+        FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.FROZEN_CAPABILITY);
         if (frozenCapability != null && frozenCapability.getFrozen() && frozenCapability.getPrevFrozen()) {
             entity.setYRot(entity.yRotO = frozenCapability.getFrozenYaw());
             entity.setXRot(entity.xRotO = frozenCapability.getFrozenPitch());
@@ -194,14 +192,15 @@ public enum ClientEventHandler {
         }
     }
 
-    @SubscribeEvent // FIXME 1.21 :: where is the frostbite
+    /* FIXME 1.21 :: not sure what this was but frostbite doesn't exist anymore (was that a forge-only hud?)
+    @SubscribeEvent
     public void onRenderOverlay(RenderGuiLayerEvent.Post e) {
         final int startTime = 210;
         final int pointStart = 1200;
         final int timePerMillis = 22;
         if (e.getName() == VanillaGuiOverlay.FROSTBITE.type()) {
             if (Minecraft.getInstance().player != null) {
-                FrozenCapability.IFrozenCapability frozenCapability = CapabilityHandler.getCapability(Minecraft.getInstance().player, CapabilityHandler.FROZEN_CAPABILITY);
+                FrozenCapability.Capability frozenCapability = CapabilityHandler.getCapability(Minecraft.getInstance().player, CapabilityHandler.FROZEN_CAPABILITY);
                 if (frozenCapability != null && frozenCapability.getFrozen() && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON) {
                     Window res = e.getWindow();
                     e.getGuiGraphics().blit(FROZEN_BLUR, 0, 0, 0, 0, res.getGuiScaledWidth(), res.getGuiScaledHeight(), res.getGuiScaledWidth(), res.getGuiScaledHeight());
@@ -209,6 +208,7 @@ public enum ClientEventHandler {
             }
         }
     }
+    */
 
     // Remove frozen overlay
     @SubscribeEvent
@@ -243,7 +243,7 @@ public enum ClientEventHandler {
     @SubscribeEvent
     public void onSetupCamera(ViewportEvent.ComputeCameraAngles event) {
         Player player = Minecraft.getInstance().player;
-        float delta = Minecraft.getInstance().getFrameTime();
+        float delta = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false); // FIXME 1.21 :: this is used for screens (incl. 'EnchantmentScreen#render' which previously also used 'Minecraft#getFrameTime()'
         float ticksExistedDelta = player.tickCount + delta;
         if (player != null) {
             if (ConfigHandler.CLIENT.doCameraShakes.get() && !Minecraft.getInstance().isPaused()) {
@@ -291,9 +291,11 @@ public enum ClientEventHandler {
                     event.getPoseStack().pushPose();
                     event.getPoseStack().translate((double) blockpos2.getX() - d0, (double) blockpos2.getY() - d1, (double) blockpos2.getZ() - d2);
                     PoseStack.Pose posestack$pose1 = event.getPoseStack().last();
-                    float f = (float) Minecraft.getInstance().player.tickCount + Minecraft.getInstance().getPartialTick();
+                    // FIXME 1.21 :: unsure if this is the correct replacement for 'Minecraft#getPartialTick()'
+                    // FIXME 1.21 :: for entities it seems to pass false when said entity is frozen
+                    float f = (float) Minecraft.getInstance().player.tickCount + Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
                     float blockOffset = (blockpos2.getX() + blockpos2.getY() + blockpos2.getZ()) * 0.25f;
-                    VertexConsumer vertexconsumer1 = new SheetedDecalTextureGenerator(Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(MMRenderType.highlight(SCULPTOR_BLOCK_GLOW, f * 0.02f + blockOffset, f * 0.01f + blockOffset)), posestack$pose1.pose(), posestack$pose1.normal(), 0.25F);
+                    VertexConsumer vertexconsumer1 = new SheetedDecalTextureGenerator(Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(MMRenderType.highlight(SCULPTOR_BLOCK_GLOW, f * 0.02f + blockOffset, f * 0.01f + blockOffset)), posestack$pose1, 0.25F);
                     ModelData modelData = level.getModelDataManager().getAt(blockpos2);
                     renderBreakingTexture(level.getBlockState(blockpos2), blockpos2, level, event.getPoseStack(), level.random, vertexconsumer1, modelData == null ? ModelData.EMPTY : modelData);
 

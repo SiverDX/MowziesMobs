@@ -1,7 +1,7 @@
 package com.bobmowzie.mowziesmobs.server.config;
 
 import com.bobmowzie.mowziesmobs.MMCommon;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -37,8 +37,7 @@ public final class ConfigHandler {
         return true;
     });
 
-    // FIXME 1.21 :: registry lookup
-    private static final Predicate<Object> ITEM_NAME_PREDICATE = RESOURCE_LOCATION_PREDICATE.and(s -> Registries.ITEM.containsKey(ResourceLocation.tryParse((String) s)));
+    private static final Predicate<Object> ITEM_NAME_PREDICATE = RESOURCE_LOCATION_PREDICATE.and(s -> BuiltInRegistries.ITEM.containsKey(ResourceLocation.tryParse((String) s)));
 
     static {
         COMMON = new Common(COMMON_BUILDER);

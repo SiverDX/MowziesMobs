@@ -29,7 +29,7 @@ public record MessageSunblockEffect(int entityId, boolean hasSunBlock) implement
     public static void handleClient(final MessageSunblockEffect packet, final IPayloadContext context) {
         context.enqueueWork(() -> {
             if (Minecraft.getInstance().level.getEntity(packet.entityId()) instanceof LivingEntity entity) {
-                LivingCapability.ILivingCapability livingCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.LIVING_CAPABILITY);
+                LivingCapability.Capability livingCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.LIVING_CAPABILITY);
 
                 if (livingCapability != null) {
                     livingCapability.setHasSunblock(packet.hasSunBlock());

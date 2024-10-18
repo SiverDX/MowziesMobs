@@ -14,10 +14,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tiers;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -26,14 +23,12 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Created by BobMowzie on 6/6/2017.
  */
-public class ItemEarthrendGauntlet extends MowzieToolItem implements GeoItem {
+public class ItemEarthrendGauntlet extends DiggerItem implements GeoItem {
     public static final String CONTROLLER_NAME = "controller";
     public static final String CONTROLLER_IDLE_NAME = "controller_idle";
 
@@ -46,28 +41,15 @@ public class ItemEarthrendGauntlet extends MowzieToolItem implements GeoItem {
     public static final String ATTACK_ANIM_NAME = "attack";
 
     public ItemEarthrendGauntlet(Properties properties) {
-        super(-2 + ConfigHandler.COMMON.TOOLS_AND_ABILITIES.EARTHREND_GAUNTLET.toolConfig.attackDamageValue, -4f + ConfigHandler.COMMON.TOOLS_AND_ABILITIES.EARTHREND_GAUNTLET.toolConfig.attackSpeedValue, Tiers.STONE, BlockTags.MINEABLE_WITH_PICKAXE, properties);
+        super(Tiers.STONE, BlockTags.MINEABLE_WITH_PICKAXE, properties);
 
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
     @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        super.initializeClient(consumer);
-        consumer.accept(new IClientItemExtensions() {
-            private final BlockEntityWithoutLevelRenderer renderer = new RenderEarthrendGauntlet();
-
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return renderer;
-            }
-        });
-    }
-
-    @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         ItemStack stack = playerIn.getItemInHand(handIn);
-        AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(playerIn);
+        AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(playerIn);
         if (abilityCapability != null) {
             playerIn.startUsingItem(handIn);
             if (stack.getDamageValue() + 5 < stack.getMaxDamage() || ConfigHandler.COMMON.TOOLS_AND_ABILITIES.EARTHREND_GAUNTLET.breakable.get()) {
@@ -97,8 +79,8 @@ public class ItemEarthrendGauntlet extends MowzieToolItem implements GeoItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
+        super.appendHoverText(stack, context, tooltip, flagIn);
         tooltip.add(Component.translatable(getDescriptionId() + ".text.0").setStyle(ItemHandler.TOOLTIP_STYLE));
         tooltip.add(Component.translatable(getDescriptionId() + ".text.1").setStyle(ItemHandler.TOOLTIP_STYLE));
         if (!ConfigHandler.COMMON.TOOLS_AND_ABILITIES.EARTHREND_GAUNTLET.breakable.get()) {
@@ -121,8 +103,8 @@ public class ItemEarthrendGauntlet extends MowzieToolItem implements GeoItem {
     }
 
     @Override
-    public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
-        AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(entity);
+    public boolean onEntitySwing(ItemStack stack, LivingEntity entity, InteractionHand hand) {
+        AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(entity);
         if (abilityCapability != null && abilityCapability.getActiveAbility() == null) {
             if (entity.getUseItem() != stack) {
                 if (entity.level() instanceof ServerLevel) {
@@ -130,7 +112,7 @@ public class ItemEarthrendGauntlet extends MowzieToolItem implements GeoItem {
                 }
             }
         }
-        return super.onEntitySwing(stack, entity);
+        return super.onEntitySwing(stack, entity, hand);
     }
 
     @Override
@@ -144,12 +126,16 @@ public class ItemEarthrendGauntlet extends MowzieToolItem implements GeoItem {
     }
 
     @Override
-    public ConfigHandler.ToolConfig getConfig() {
-        return ConfigHandler.COMMON.TOOLS_AND_ABILITIES.EARTHREND_GAUNTLET.toolConfig;
-    }
-
-    @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    public static class ClientExtensions implements IClientItemExtensions {
+        private final BlockEntityWithoutLevelRenderer renderer = new RenderEarthrendGauntlet();
+
+        @Override
+        public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+            return renderer;
+        }
     }
 }

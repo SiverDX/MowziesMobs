@@ -1,17 +1,13 @@
 package com.bobmowzie.mowziesmobs.server.item;
 
 import com.bobmowzie.mowziesmobs.client.render.item.RenderGeomancerArmor;
-import com.bobmowzie.mowziesmobs.server.config.ConfigHandler;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ArmorMaterials;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -23,21 +19,13 @@ import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
-import java.util.function.Consumer;
 
-public class ItemGeomancerArmor extends MowzieArmorItem implements GeoItem {
-    private static final ItemGeomancerArmor.GeomancerArmorMaterial GEOMANCER_ARMOR_MATERIAL = new ItemGeomancerArmor.GeomancerArmorMaterial();
-
+public class ItemGeomancerArmor extends ArmorItem implements GeoItem {
     public String controllerName = "controller";
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public ItemGeomancerArmor(Type slot, Properties builderIn) {
-        super(GEOMANCER_ARMOR_MATERIAL, slot, builderIn);
-    }
-
-    @Override
-    public ConfigHandler.ArmorConfig getConfig() {
-        return ConfigHandler.COMMON.TOOLS_AND_ABILITIES.GEOMANCER_ARMOR.armorConfig;
+        super(MaterialHandler.GEOMANCER_ARMOR_MATERIAL, slot, builderIn);
     }
 
     private PlayState predicate(AnimationState<ItemGeomancerArmor> state) {
@@ -60,61 +48,15 @@ public class ItemGeomancerArmor extends MowzieArmorItem implements GeoItem {
         tooltip.add(Component.translatable(getDescriptionId() + ".text.0").setStyle(ItemHandler.TOOLTIP_STYLE));
     }
 
-    private static class GeomancerArmorMaterial implements ArmorMaterial {
-
+    public static class ClientExtensions implements IClientItemExtensions {
         @Override
-        public int getDurabilityForType(Type equipmentSlotType) {
-            return ArmorMaterials.DIAMOND.getDurabilityForType(equipmentSlotType);
+        public HumanoidModel<?> getHumanoidArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot
+        equipmentSlot, HumanoidModel<?> original) {
+            if (this.armorRenderer == null)
+                this.armorRenderer = new RenderGeomancerArmor();
+            armorRenderer.prepForRender(entityLiving, itemStack, equipmentSlot, original);
+            return armorRenderer;
         }
-
-        @Override
-        public int getDefenseForType(Type equipmentSlotType) {
-            return (int) (ArmorMaterials.DIAMOND.getDefenseForType(equipmentSlotType) * ConfigHandler.COMMON.TOOLS_AND_ABILITIES.GEOMANCER_ARMOR.armorConfig.damageReductionMultiplierValue);
-        }
-
-        @Override
-        public int getEnchantmentValue() {
-            return ArmorMaterials.DIAMOND.getEnchantmentValue();
-        }
-
-        @Override
-        public SoundEvent getEquipSound() {
-            return ArmorMaterials.DIAMOND.getEquipSound();
-        }
-
-        @Override
-        public Ingredient getRepairIngredient() {
-            return ArmorMaterials.DIAMOND.getRepairIngredient();
-        }
-
-        @Override
-        public String getName() {
-            return "geomancer_armor";
-        }
-
-        @Override
-        public float getToughness() {
-            return ArmorMaterials.DIAMOND.getToughness() * ConfigHandler.COMMON.TOOLS_AND_ABILITIES.WROUGHT_HELM.armorConfig.toughnessMultiplierValue;
-        }
-
-        @Override
-        public float getKnockbackResistance() {
-            return 0;
-        }
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        super.initializeClient(consumer);
-        consumer.accept(new IClientItemExtensions() {
-            @Override
-            public HumanoidModel<?> getHumanoidArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
-                if (this.armorRenderer == null)
-                    this.armorRenderer = new RenderGeomancerArmor();
-                armorRenderer.prepForRender(entityLiving, itemStack, equipmentSlot, original);
-                return armorRenderer;
-            }
-            private GeoArmorRenderer<?> armorRenderer;
-        });
+        private GeoArmorRenderer<?> armorRenderer;
     }
 }

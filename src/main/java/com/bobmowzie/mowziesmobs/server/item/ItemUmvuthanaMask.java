@@ -15,6 +15,7 @@ import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -25,10 +26,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -40,16 +38,15 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Consumer;
 
-public class ItemUmvuthanaMask extends MowzieArmorItem implements UmvuthanaMask, GeoItem {
+public class ItemUmvuthanaMask extends ArmorItem implements UmvuthanaMask, GeoItem {
     private final MaskType type;
 
     public String controllerName = "controller";
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public ItemUmvuthanaMask(MaskType type, Item.Properties properties) {
-        super(MaterialHandler.UMVUTHANA_MASK_MATERIAL.value(), Type.HELMET, properties);
+        super(MaterialHandler.UMVUTHANA_MASK_MATERIAL, Type.HELMET, properties);
         this.type = type;
     }
 
@@ -78,7 +75,7 @@ public class ItemUmvuthanaMask extends MowzieArmorItem implements UmvuthanaMask,
     }
 
     private boolean spawnUmvuthana(MaskType mask, ItemStack stack, Player player, float durability) {
-        PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
+        PlayerCapability.Capability playerCapability = CapabilityHandler.getCapability(player, CapabilityHandler.PLAYER_CAPABILITY);
         if (playerCapability != null && playerCapability.getPackSize() < ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SOL_VISAGE.maxFollowers.get()) {
             player.playSound(MMSounds.ENTITY_UMVUTHI_BELLY.get(), 1.5f, 1);
             player.playSound(MMSounds.ENTITY_UMVUTHANA_BLOWDART.get(), 1.5f, 0.5f);
@@ -108,34 +105,12 @@ public class ItemUmvuthanaMask extends MowzieArmorItem implements UmvuthanaMask,
                 umvuthana.setHealth((1.0f - durability) * umvuthana.getMaxHealth());
                 umvuthana.setMask(mask);
                 umvuthana.setStoredMask(stack.copy());
-                if (stack.hasCustomHoverName())
+                if (stack.has(DataComponents.CUSTOM_NAME))
                     umvuthana.setCustomName(stack.getHoverName());
             }
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        super.initializeClient(consumer);
-        consumer.accept(new IClientItemExtensions() {
-            @Override
-            public HumanoidModel<?> getHumanoidArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
-                if (this.armorRenderer == null)
-                    this.armorRenderer = new RenderUmvuthanaMaskArmor();
-                if (equipmentSlot == EquipmentSlot.HEAD) armorRenderer.prepForRender(entityLiving, itemStack, equipmentSlot, original);
-                return armorRenderer;
-            }
-
-            private final BlockEntityWithoutLevelRenderer itemRenderer = new RenderUmvuthanaMaskItem();
-            private GeoArmorRenderer<?> armorRenderer;
-
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return itemRenderer;
-            }
-        });
     }
 
     public MaskType getMaskType() {
@@ -153,11 +128,6 @@ public class ItemUmvuthanaMask extends MowzieArmorItem implements UmvuthanaMask,
         super.appendHoverText(stack, context, tooltip, flagIn);
         tooltip.add(Component.translatable(getDescriptionId() + ".text.0").setStyle(ItemHandler.TOOLTIP_STYLE));
         tooltip.add(Component.translatable(getDescriptionId() + ".text.1").setStyle(ItemHandler.TOOLTIP_STYLE));
-    }
-
-    @Override
-    public ConfigHandler.ArmorConfig getConfig() {
-        return ConfigHandler.COMMON.TOOLS_AND_ABILITIES.UMVUTHANA_MASK.armorConfig;
     }
 
     private static final RawAnimation UMVUTHANA_ANIM = RawAnimation.begin().thenLoop("umvuthana");
@@ -181,5 +151,23 @@ public class ItemUmvuthanaMask extends MowzieArmorItem implements UmvuthanaMask,
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
+    }
+
+    public static class ClientExtensions implements IClientItemExtensions {
+        @Override
+        public HumanoidModel<?> getHumanoidArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
+            if (this.armorRenderer == null)
+                this.armorRenderer = new RenderUmvuthanaMaskArmor();
+            if (equipmentSlot == EquipmentSlot.HEAD) armorRenderer.prepForRender(entityLiving, itemStack, equipmentSlot, original);
+            return armorRenderer;
+        }
+
+        private final BlockEntityWithoutLevelRenderer itemRenderer = new RenderUmvuthanaMaskItem();
+        private GeoArmorRenderer<?> armorRenderer;
+
+        @Override
+        public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+            return itemRenderer;
+        }
     }
 }

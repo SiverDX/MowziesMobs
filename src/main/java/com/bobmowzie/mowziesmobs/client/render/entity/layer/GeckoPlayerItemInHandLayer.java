@@ -17,10 +17,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class GeckoPlayerItemInHandLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> implements IGeckoRenderLayer {
     private GeckoRenderPlayer renderPlayerAnimated;
 
@@ -35,9 +32,9 @@ public class GeckoPlayerItemInHandLayer extends RenderLayer<AbstractClientPlayer
         boolean flag = entitylivingbaseIn.getMainArm() == HumanoidArm.RIGHT;
         ItemStack mainHandStack = entitylivingbaseIn.getMainHandItem();
         ItemStack offHandStack = entitylivingbaseIn.getOffhandItem();
-        AbilityCapability.IAbilityCapability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(entitylivingbaseIn);
+        AbilityCapability.Capability abilityCapability = AbilityHandler.INSTANCE.getAbilityCapability(entitylivingbaseIn);
         if (abilityCapability != null && abilityCapability.getActiveAbility() != null) {
-            Ability ability = abilityCapability.getActiveAbility();
+            Ability<?>ability = abilityCapability.getActiveAbility();
             if (ability instanceof PlayerAbility) {
                 PlayerAbility playerAbility = (PlayerAbility) ability;
                 mainHandStack = playerAbility.heldItemMainHandOverride() != null ? playerAbility.heldItemMainHandOverride() : mainHandStack;

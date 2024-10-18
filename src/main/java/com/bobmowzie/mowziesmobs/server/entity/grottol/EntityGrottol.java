@@ -47,7 +47,6 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.Minecart;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -96,8 +95,6 @@ public class EntityGrottol extends MowzieLLibraryEntity {
     public EntityGrottol(EntityType<? extends EntityGrottol> type, Level world) {
         super(type, world);
         xpReward = 15;
-        setMaxUpStep(1.15F); // FIXME 1.21 :: use attribute
-
         moveControl = new MMEntityMoveHelper(this, 45);
     }
 
@@ -201,7 +198,8 @@ public class EntityGrottol extends MowzieLLibraryEntity {
     public static AttributeSupplier.Builder createAttributes() {
         return MowzieEntity.createAttributes()
                 .add(Attributes.MAX_HEALTH, 20)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 1);
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1)
+                .add(Attributes.STEP_HEIGHT, 1.15);
     }
 
     @Override
@@ -454,7 +452,7 @@ public class EntityGrottol extends MowzieLLibraryEntity {
     public boolean isBlockDiggable(BlockState blockState) {
         if (blockState.is(TagHandler.CAN_GROTTOL_DIG)) return true;
 
-        ICopiedBlockProperties properties = (ICopiedBlockProperties) blockState.getBlock().properties;
+        ICopiedBlockProperties properties = (ICopiedBlockProperties) blockState.getBlock().properties();
         Block baseBlock = properties.getBaseBlock();
         if (baseBlock != null) {
             return baseBlock.builtInRegistryHolder().is(TagHandler.CAN_GROTTOL_DIG);
@@ -484,8 +482,8 @@ public class EntityGrottol extends MowzieLLibraryEntity {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, SpawnGroupData spawnDataIn, CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, SpawnGroupData spawnDataIn) {
         if (getY() < 8 && reason != MobSpawnType.MOB_SUMMONED) setDeepslate(true);
-        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 }

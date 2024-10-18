@@ -25,7 +25,9 @@ import com.bobmowzie.mowziesmobs.server.world.feature.structure.StructureTypeHan
 import com.bobmowzie.mowziesmobs.server.world.feature.structure.jigsaw.JigsawHandler;
 import com.bobmowzie.mowziesmobs.server.world.feature.structure.processor.ProcessorHandler;
 import com.bobmowzie.mowziesmobs.server.world.spawn.SpawnHandler;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -40,6 +42,8 @@ import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib.util.GeckoLibUtil;
+
+import java.util.stream.Stream;
 
 @EventBusSubscriber
 @Mod(MMCommon.MODID)
@@ -75,11 +79,12 @@ public final class MMCommon {
         modBus.<FMLLoadCompleteEvent>addListener(this::init);
         modBus.addListener(this::onModConfigEvent);
         modBus.addListener(CapabilityHandler::registerCapabilities);
+        modBus.addListener(SpawnHandler::registerSpawnPlacementTypes);
 
         NeoForge.EVENT_BUS.register(this);
         NeoForge.EVENT_BUS.register(new ServerEventHandler());
         NeoForge.EVENT_BUS.register(new AbilityCommonEventHandler());
-        NeoForge.EVENT_BUS.addGenericListener(Entity.class, CapabilityHandler::attachEntityCapability);
+        NeoForge.EVENT_BUS.addListener(PotionTypeHandler::addMixes);
 
         container.registerConfig(ModConfig.Type.COMMON, ConfigHandler.COMMON_CONFIG);
     }
@@ -138,10 +143,6 @@ public final class MMCommon {
     }
 
     public void init(final FMLCommonSetupEvent event) {
-        SpawnHandler.registerSpawnPlacementTypes();
-        AdvancementHandler.preInit();
-        PotionTypeHandler.init();
-
         event.enqueueWork(() -> {
             JigsawHandler.registerJigsawElements();
             ProcessorHandler.registerStructureProcessors();
@@ -149,8 +150,11 @@ public final class MMCommon {
     }
 
     private void init(FMLLoadCompleteEvent event) {
-        ItemHandler.initializeAttributes();
         ItemHandler.initializeDispenserBehaviors();
         BlockHandler.init();
+    }
+
+    public static Stream<EntityType<? extends LivingEntity>> getLivingEntityTypes() {
+        return BuiltInRegistries.ENTITY_TYPE.stream().map(entityType -> (EntityType<? extends LivingEntity>) entityType);
     }
 }

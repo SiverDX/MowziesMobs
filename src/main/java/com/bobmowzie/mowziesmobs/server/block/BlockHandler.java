@@ -3,6 +3,7 @@ package com.bobmowzie.mowziesmobs.server.block;
 import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.item.ItemHandler;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.ColorRGBA;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
@@ -16,15 +17,15 @@ public final class BlockHandler {
 
     public static final DeferredRegister<Block> REG = DeferredRegister.create(Registries.BLOCK, MMCommon.MODID);
 
-    // FIXME 1.21 :: replace 'copy' with either 'ofFullCopy' or 'ofLegacyCopy'
-    public static final DeferredHolder<Block, Block> PAINTED_ACACIA = registerBlockAndItem("painted_acacia", () -> new Block(Block.Properties.copy(Blocks.ACACIA_PLANKS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-    public static final DeferredHolder<Block, Block> PAINTED_ACACIA_SLAB = registerBlockAndItem("painted_acacia_slab", () -> new SlabBlock(Block.Properties.copy(PAINTED_ACACIA.get())));
-    public static final DeferredHolder<Block, Block> THATCH = registerBlockAndItem("thatch_block", () -> new HayBlock(BlockBehaviour.Properties.copy(Blocks.HAY_BLOCK)));
-    public static final DeferredHolder<Block, Block> GONG = registerBlockAndItem("gong", () -> new GongBlock(BlockBehaviour.Properties.copy(Blocks.GOLD_BLOCK).requiresCorrectToolForDrops().strength(3.0F).sound(SoundType.ANVIL)));
-    public static final DeferredHolder<Block, Block> GONG_PART = REG.register("gong_part", () -> new GongBlock.GongPartBlock(BlockBehaviour.Properties.copy(Blocks.GOLD_BLOCK).requiresCorrectToolForDrops().strength(3.0F).sound(SoundType.ANVIL)));
-    public static final DeferredHolder<Block, Block> RAKED_SAND = registerBlockAndItem("raked_sand", () -> new RakedSandBlock(14406560, BlockBehaviour.Properties.copy(Blocks.SAND), Blocks.SAND.defaultBlockState()));
-    public static final DeferredHolder<Block, Block> RED_RAKED_SAND = registerBlockAndItem("red_raked_sand", () -> new RakedSandBlock(11098145, BlockBehaviour.Properties.copy(Blocks.RED_SAND), Blocks.RED_SAND.defaultBlockState()));
-    public static final DeferredHolder<Block, Block> CLAWED_LOG = registerBlockAndItem("clawed_log", () -> new Block(Block.Properties.copy(Blocks.ACACIA_PLANKS)));
+    // FIXME 1.21 :: Was previously just 'copy' - now there is 'ofFullCopy' or 'ofLegacyCopy'
+    public static final DeferredHolder<Block, Block> PAINTED_ACACIA = registerBlockAndItem("painted_acacia", () -> new Block(Block.Properties.ofLegacyCopy(Blocks.ACACIA_PLANKS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final DeferredHolder<Block, Block> PAINTED_ACACIA_SLAB = registerBlockAndItem("painted_acacia_slab", () -> new SlabBlock(Block.Properties.ofLegacyCopy(PAINTED_ACACIA.get())));
+    public static final DeferredHolder<Block, Block> THATCH = registerBlockAndItem("thatch_block", () -> new HayBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.HAY_BLOCK)));
+    public static final DeferredHolder<Block, Block> GONG = registerBlockAndItem("gong", () -> new GongBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.GOLD_BLOCK).requiresCorrectToolForDrops().strength(3.0F).sound(SoundType.ANVIL)));
+    public static final DeferredHolder<Block, Block> GONG_PART = REG.register("gong_part", () -> new GongBlock.GongPartBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.GOLD_BLOCK).requiresCorrectToolForDrops().strength(3.0F).sound(SoundType.ANVIL)));
+    public static final DeferredHolder<Block, Block> RAKED_SAND = registerBlockAndItem("raked_sand", () -> new RakedSandBlock(new ColorRGBA(14406560), BlockBehaviour.Properties.ofLegacyCopy(Blocks.SAND), Blocks.SAND.defaultBlockState()));
+    public static final DeferredHolder<Block, Block> RED_RAKED_SAND = registerBlockAndItem("red_raked_sand", () -> new RakedSandBlock(new ColorRGBA(11098145), BlockBehaviour.Properties.ofLegacyCopy(Blocks.RED_SAND), Blocks.RED_SAND.defaultBlockState()));
+    public static final DeferredHolder<Block, Block> CLAWED_LOG = registerBlockAndItem("clawed_log", () -> new Block(Block.Properties.ofLegacyCopy(Blocks.ACACIA_PLANKS)));
     //public static final RegistryObject<BlockGrottol> GROTTOL = REG.register("grottol", () -> new BlockGrottol(Block.Properties.copy(Material.STONE).noDrops()));
 
     public static DeferredHolder<Block, Block> registerBlockAndItem(String name, Supplier<Block> block){
