@@ -87,7 +87,7 @@ public class EntitySuperNova extends EntityMagicEffect {
                             Vec3 diff = livingEntity.position().subtract(position());
                             diff = diff.normalize();
                             livingEntity.knockback(0.4f, -diff.x, -diff.z);
-                            livingEntity.setSecondsOnFire(5);
+                            livingEntity.igniteForSeconds(5);
                         }
                     }
                 }

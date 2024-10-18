@@ -21,17 +21,14 @@ import com.bobmowzie.mowziesmobs.server.entity.effects.EntityIceBreath;
 import com.bobmowzie.mowziesmobs.server.item.ItemHandler;
 import com.bobmowzie.mowziesmobs.server.loot.LootTableHandler;
 import com.bobmowzie.mowziesmobs.server.potion.EffectHandler;
-import com.bobmowzie.mowziesmobs.server.potion.PotionTypeHandler;
 import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
 import com.ilexiconn.llibrary.server.animation.Animation;
 import com.ilexiconn.llibrary.server.animation.AnimationHandler;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
@@ -39,6 +36,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
@@ -60,7 +58,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -117,7 +115,7 @@ public class EntityFrostmaw extends MowzieLLibraryEntity implements Enemy {
 
     public EntityFrostmaw(EntityType<? extends EntityFrostmaw> type, Level world) {
         super(type, world);
-        setMaxUpStep(1);
+        setMaxUpStep(1); // FIXME 1.21 :: set as attribute
         frame += random.nextInt(50);
         legSolver = new LegSolverQuadruped(1f, 2f, -1, 1.5f);
         if (world.isClientSide)
@@ -168,9 +166,8 @@ public class EntityFrostmaw extends MowzieLLibraryEntity implements Enemy {
             @Override
             protected void onAttack(LivingEntity entityTarget, float damageMultiplier, float applyKnockbackMultiplier) {
                 super.onAttack(entityTarget, damageMultiplier, applyKnockbackMultiplier);
-                if (getAnimationTick() == 21 && entityTarget instanceof Player){
-                    Player player = (Player)entityTarget;
-                    if (player.isBlocking()) player.disableShield(true);
+                if (getAnimationTick() == 21 && entityTarget instanceof Player player) {
+                    if (player.isBlocking()) player.disableShield();
                 }
             }
         });
@@ -341,7 +338,7 @@ public class EntityFrostmaw extends MowzieLLibraryEntity implements Enemy {
                     for (LivingEntity entity: entitiesHit) {
                         if (entity != this && entity.position().distanceToSqr(slamPosX, getY(), slamPosZ) <= 9) {
                             doHurtTarget(entity, 4f, 1);
-                            if (entity.isBlocking()) entity.getUseItem().hurtAndBreak(400, entity, p -> p.broadcastBreakEvent(entity.getUsedItemHand()));
+                            if (entity.isBlocking()) entity.getUseItem().hurtAndBreak(400, entity, LivingEntity.getSlotForHand(entity.getUsedItemHand()));
                         }
                     }
                     EntityCameraShake.cameraShake(level(), new Vec3(slamPosX, getY(), slamPosZ), 30, 0.1f, 0, 20);
@@ -457,7 +454,7 @@ public class EntityFrostmaw extends MowzieLLibraryEntity implements Enemy {
                 }
 
                 if (shouldDodgeMeasure >= 16) shouldDodge = true;
-                if (getTarget().hasEffect(EffectHandler.FROZEN.get())) shouldDodge = false;
+                if (getTarget().hasEffect(EffectHandler.FROZEN)) shouldDodge = false;
                 if (targetDistance < 4 && shouldDodge && getAnimation() == NO_ANIMATION) {
                     shouldDodge = false;
                     dodgeCooldown = DODGE_COOLDOWN;
@@ -536,7 +533,11 @@ public class EntityFrostmaw extends MowzieLLibraryEntity implements Enemy {
                             AnimationHandler.INSTANCE.sendAnimationMessage(this, ACTIVATE_NO_CRYSTAL_ANIMATION);
                             setActive(true);
                         }
-                        if (player instanceof ServerPlayer) AdvancementHandler.STEAL_ICE_CRYSTAL_TRIGGER.trigger((ServerPlayer)player);
+
+                        if (player instanceof ServerPlayer serverPlayer) {
+                            AdvancementHandler.STEAL_ICE_CRYSTAL_TRIGGER.value().trigger(serverPlayer);
+                        }
+
                         break;
                     }
                 }

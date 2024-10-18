@@ -4,7 +4,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -14,10 +13,7 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
 
 public class EntityFallingBlock extends Entity {
     public static float GRAVITY = 0.1f;
@@ -57,10 +53,10 @@ public class EntityFallingBlock extends Entity {
     }
 
     @Override
-    public void onAddedToWorld() {
+    public void onAddedToLevel() {
         if (getDeltaMovement().x() > 0 || getDeltaMovement().z() > 0) setYRot((float) ((180f/Math.PI) * Math.atan2(getDeltaMovement().x(), getDeltaMovement().z())));
         setXRot(getXRot() + random.nextFloat() * 360);
-        super.onAddedToWorld();
+        super.onAddedToLevel();
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.bobmowzie.mowziesmobs.server.creativetab.CreativeTabHandler;
 import com.bobmowzie.mowziesmobs.server.entity.EntityHandler;
 import com.bobmowzie.mowziesmobs.server.inventory.ContainerHandler;
 import com.bobmowzie.mowziesmobs.server.item.ItemHandler;
+import com.bobmowzie.mowziesmobs.server.item.MaterialHandler;
 import com.bobmowzie.mowziesmobs.server.loot.LootTableHandler;
 import com.bobmowzie.mowziesmobs.server.potion.EffectHandler;
 import com.bobmowzie.mowziesmobs.server.potion.PotionTypeHandler;
@@ -53,6 +54,7 @@ public final class MMCommon {
         PROXY = FMLLoader.getDist().isClient() ? new ClientProxy() : new ServerProxy();
         BlockHandler.REG.register(modBus);
         EntityHandler.REG.register(modBus);
+        MaterialHandler.MM_ARMOR_MATERIALS.register(modBus);
         ItemHandler.REG.register(modBus);
         MMSounds.REG.register(modBus);
         BlockEntityHandler.REG.register(modBus);
@@ -65,6 +67,7 @@ public final class MMCommon {
         BiomeModifiersHandler.REG.register(modBus);
         LootTableHandler.LOOT_CONDITION_TYPE_REG.register(modBus);
         LootTableHandler.LOOT_FUNCTION_TYPE_REG.register(modBus);
+        AdvancementHandler.MM_TRIGGERS.register(modBus);
         CreativeTabHandler.register(modBus);
 
         PROXY.init();

@@ -2,7 +2,6 @@ package com.bobmowzie.mowziesmobs.server.entity.effects;
 
 import com.bobmowzie.mowziesmobs.server.entity.EntityHandler;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -12,9 +11,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityCameraShake extends Entity {
@@ -36,7 +32,6 @@ public class EntityCameraShake extends Entity {
         setPos(position.x(), position.y(), position.z());
     }
 
-    @OnlyIn(Dist.CLIENT)
     public float getShakeAmount(Player player, float delta) {
         float ticksDelta = tickCount + delta;
         float timeFrac = 1.0f - (ticksDelta - getDuration()) / (getFadeDuration() + 1.0f);

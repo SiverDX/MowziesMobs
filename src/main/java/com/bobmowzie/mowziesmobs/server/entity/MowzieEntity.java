@@ -25,7 +25,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.BossEvent;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -272,13 +271,6 @@ public abstract class MowzieEntity extends PathfinderMob implements IEntityWithC
     @Override
     public boolean doHurtTarget(Entity entityIn) {
         return this.doHurtTarget(entityIn, 1.0F, 1.0f);
-    }
-
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, SpawnGroupData spawnDataIn, CompoundTag dataTag) {
-//        System.out.println("Spawned " + getName().getString() + " at " + getPosition());
-//        System.out.println("Block " + world.getBlockState(getPosition().down()).toString());
-        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
     public boolean doHurtTarget(Entity entityIn, float damageMultiplier, float applyKnockbackMultiplier) {

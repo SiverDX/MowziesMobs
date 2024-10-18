@@ -20,6 +20,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.MobDespawnEvent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -189,11 +191,11 @@ public class EntityUmvuthanaRaptor extends EntityUmvuthana implements LeaderSuns
             this.discard() ;
         } else if (!this.isPersistenceRequired() && !this.requiresCustomPersistence()) {
             Entity entity = this.level().getNearestPlayer(this, -1.0D);
-            net.minecraftforge.eventbus.api.Event.Result result = net.minecraftforge.event.ForgeEventFactory.canEntityDespawn(this, (ServerLevelAccessor) level());
-            if (result == net.minecraftforge.eventbus.api.Event.Result.DENY) {
+            MobDespawnEvent.Result result = NeoForge.EVENT_BUS.post(new MobDespawnEvent(this, (ServerLevelAccessor) level())).getResult();
+            if (result == MobDespawnEvent.Result.DENY) {
                 noActionTime = 0;
                 entity = null;
-            } else if (result == net.minecraftforge.eventbus.api.Event.Result.ALLOW) {
+            } else if (result == MobDespawnEvent.Result.ALLOW) { // FIXME 1.21 :: also trigger for DEFAULT?
                 this.discard() ;
                 entity = null;
             }
@@ -216,16 +218,16 @@ public class EntityUmvuthanaRaptor extends EntityUmvuthana implements LeaderSuns
             this.noActionTime = 0;
         }
 
-
+        // FIXME 1.21 :: why is there duplicate but slightly different logic here
         if (this.level().getDifficulty() == Difficulty.PEACEFUL && this.shouldDespawnInPeaceful()) {
             this.discard();
         } else if (!this.isPersistenceRequired() && !this.requiresCustomPersistence()) {
             Entity entity = this.level().getNearestPlayer(this, -1.0D);
-            net.minecraftforge.eventbus.api.Event.Result result = net.minecraftforge.event.ForgeEventFactory.canEntityDespawn(this, (ServerLevelAccessor) this.level());
-            if (result == net.minecraftforge.eventbus.api.Event.Result.DENY) {
+            MobDespawnEvent.Result result = new MobDespawnEvent(this, (ServerLevelAccessor) level()).getResult();
+            if (result == MobDespawnEvent.Result.DENY) {
                 noActionTime = 0;
                 entity = null;
-            } else if (result == net.minecraftforge.eventbus.api.Event.Result.ALLOW) {
+            } else if (result == MobDespawnEvent.Result.ALLOW) {
                 if (pack != null) pack.forEach(EntityUmvuthanaFollowerToRaptor::setShouldSetDead);
                 this.discard();
                 entity = null;

@@ -1,6 +1,5 @@
 package com.bobmowzie.mowziesmobs.server.entity.effects;
 
-import com.bobmowzie.mowziesmobs.MMCommon;
 import com.bobmowzie.mowziesmobs.server.entity.ILinkedEntity;
 import com.bobmowzie.mowziesmobs.server.message.MessageLinkEntities;
 import net.minecraft.nbt.CompoundTag;
@@ -10,6 +9,7 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -20,7 +20,6 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
@@ -95,8 +94,8 @@ public abstract class EntityMagicEffect extends Entity implements ILinkedEntity 
     }
 
     @Override
-    public void onAddedToWorld() {
-        super.onAddedToWorld();
+    public void onAddedToLevel() {
+        super.onAddedToLevel();
 //        if (!level().isClientSide() && getCasterID().isPresent() && cachedCaster == null) {
 //            Entity casterEntity = ((ServerLevel)this.level()).getEntity(getCasterID().get());
 //            if (casterEntity instanceof LivingEntity) {
@@ -152,10 +151,9 @@ public abstract class EntityMagicEffect extends Entity implements ILinkedEntity 
         return false;
     }
 
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        LivingEntity entity = this.cachedCaster;
-        return new ClientboundAddEntityPacket(this, entity == null ? 0 : entity.getId());
+    @Override // FIXME 1.21 :: correct? takes position and rotation info from the server entity
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket(@NotNull ServerEntity entity) {
+        return new ClientboundAddEntityPacket(this, entity, cachedCaster == null ? 0 : cachedCaster.getId());
     }
 
     @Override

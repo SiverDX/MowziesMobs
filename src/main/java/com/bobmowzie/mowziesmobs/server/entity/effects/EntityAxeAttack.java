@@ -19,7 +19,11 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -30,6 +34,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.CommonHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -78,7 +83,7 @@ public class EntityAxeAttack extends EntityMagicEffect {
                 quakeAngle = getYRot();
                 quakeBB = getBoundingBox().move(0, -getCaster().getEyeHeight(), 0);
                 playSound(MMSounds.ENTITY_WROUGHT_AXE_LAND.get(), 0.3F, 0.5F);
-                playSound(SoundEvents.GENERIC_EXPLODE, 2, 0.9F + random.nextFloat() * 0.1F);
+                playSound(SoundEvents.GENERIC_EXPLODE.value(), 2, 0.9F + random.nextFloat() * 0.1F);
             }
             else if (getVertical() && tickCount == SWING_DURATION_VER /2 + 1) {
                 EntityCameraShake.cameraShake(level(), position(), 10, 0.05f, 0, 10);
@@ -217,12 +222,18 @@ public class EntityAxeAttack extends EntityMagicEffect {
      * Copied from player entity, with modification
      */
     public void attackTargetEntityWithCurrentItem(Entity targetEntity, Player player, float damageMult, float knockbackMult) {
-        if (!net.minecraftforge.common.ForgeHooks.onPlayerAttackTarget(player, targetEntity)) return;
+        if (!CommonHooks.onPlayerAttackTarget(player, targetEntity)) return;
 
         ItemStack oldStack = player.getMainHandItem();
         ItemStack newStack = getAxeStack();
         player.setItemInHand(InteractionHand.MAIN_HAND, newStack);
-        player.getAttributes().addTransientAttributeModifiers(newStack.getAttributeModifiers(EquipmentSlot.MAINHAND));
+        newStack.forEachModifier(EquipmentSlot.MAINHAND, (attribute, modifier) -> {
+            AttributeInstance instance = player.getAttribute(attribute);
+
+            if (instance != null) {
+                instance.addTransientModifier(modifier);
+            }
+        });
 
         if (targetEntity.isAttackable()) {
             if (!targetEntity.skipAttackInteraction(player)) {
@@ -258,7 +269,7 @@ public class EntityAxeAttack extends EntityMagicEffect {
                         f4 = ((LivingEntity)targetEntity).getHealth();
                         if (j > 0 && !targetEntity.isOnFire()) {
                             flag4 = true;
-                            targetEntity.setSecondsOnFire(1);
+                            targetEntity.igniteForSeconds(1);
                         }
                     }
 

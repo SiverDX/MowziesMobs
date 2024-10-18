@@ -8,13 +8,13 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -33,13 +33,11 @@ import java.util.function.Consumer;
  * Created by BobMowzie on 8/15/2016.
  */
 public class ItemSolVisage extends MowzieArmorItem implements UmvuthanaMask, GeoItem {
-    private static final SolVisageMaterial SOL_VISAGE_MATERIAL = new SolVisageMaterial();
-
     public String controllerName = "controller";
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public ItemSolVisage(Item.Properties properties) {
-        super(SOL_VISAGE_MATERIAL, Type.HELMET, properties);
+        super(MaterialHandler.SOL_VISAGE_MATERIAL.value(), Type.HELMET, properties);
     }
 
     @Override
@@ -59,7 +57,7 @@ public class ItemSolVisage extends MowzieArmorItem implements UmvuthanaMask, Geo
     }
 
     @Override
-    public boolean canBeDepleted() {
+    public boolean canBeDepleted() { // FIXME 1.21 :: this stuff is handled through 'DataComponents.MAX_DAMAGE' -> need earlier config to set in item registration? (or is common early enough?)
         return ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SOL_VISAGE.breakable.get();
     }
 
@@ -80,8 +78,8 @@ public class ItemSolVisage extends MowzieArmorItem implements UmvuthanaMask, Geo
 
     @Nullable
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/entity/umvuthi.png").toString();
+    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/entity/umvuthi.png");
     }
 
     @Override
@@ -109,49 +107,6 @@ public class ItemSolVisage extends MowzieArmorItem implements UmvuthanaMask, Geo
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
-    }
-
-    private static class SolVisageMaterial implements ArmorMaterial {
-
-        @Override
-        public int getDurabilityForType(Type equipmentSlotType) {
-            return ArmorMaterials.GOLD.getDurabilityForType(equipmentSlotType);
-        }
-
-        @Override
-        public int getDefenseForType(Type equipmentSlotType) {
-            return (int) (ArmorMaterials.GOLD.getDefenseForType(Type.HELMET) * ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SOL_VISAGE.armorConfig.damageReductionMultiplierValue);
-        }
-
-        @Override
-        public int getEnchantmentValue() {
-            return ArmorMaterials.GOLD.getEnchantmentValue();
-        }
-
-        @Override
-        public SoundEvent getEquipSound() {
-            return ArmorMaterials.GOLD.getEquipSound();
-        }
-
-        @Override
-        public Ingredient getRepairIngredient() {
-            return ArmorMaterials.GOLD.getRepairIngredient();
-        }
-
-        @Override
-        public String getName() {
-            return "sol_visage";
-        }
-
-        @Override
-        public float getToughness() {
-            return ArmorMaterials.GOLD.getToughness() * ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SOL_VISAGE.armorConfig.toughnessMultiplierValue;
-        }
-
-        @Override
-        public float getKnockbackResistance() {
-            return ArmorMaterials.GOLD.getKnockbackResistance();
-        }
     }
 
     @Override

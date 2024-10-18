@@ -9,10 +9,7 @@ import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthi;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -33,13 +30,12 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class EntitySunstrike extends Entity implements IEntityAdditionalSpawnData {
+public class EntitySunstrike extends Entity implements IEntityWithComplexSpawn {
     public static final int STRIKE_EXPLOSION = 35;
 
     private static final int STRIKE_LENGTH = 43;
@@ -216,7 +212,7 @@ public class EntitySunstrike extends Entity implements IEntityAdditionalSpawnDat
                 }
                 if (entity.hurt(damageSources().mobProjectile(this, caster), damageMob)) entity.invulnerableTime = 0;
                 if (entity.hurt(damageSources().onFire(), damageFire)) {
-                    entity.setSecondsOnFire(3);
+                    entity.igniteForSeconds(3);
                 }
             }
         }
@@ -276,11 +272,6 @@ public class EntitySunstrike extends Entity implements IEntityAdditionalSpawnDat
     public void readAdditionalSaveData(CompoundTag compound) {
         setStrikeTime(compound.getInt("strikeTime"));
         setVariant(compound.getLong("variant"));
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override

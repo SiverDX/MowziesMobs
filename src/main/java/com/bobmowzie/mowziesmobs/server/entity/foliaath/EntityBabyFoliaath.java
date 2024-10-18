@@ -34,6 +34,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -222,10 +223,11 @@ public class EntityBabyFoliaath extends MowzieLLibraryEntity {
         List<Entity> list = level().getEntities(this, getBoundingBox().inflate(distanceX, distanceY, distanceZ));
         ArrayList<ItemEntity> listEntityItem = new ArrayList<>();
         for (Entity entityNeighbor : list) {
-            if (entityNeighbor instanceof ItemEntity && distanceTo(entityNeighbor) <= radius) {
-                FoodProperties food = ((ItemEntity) entityNeighbor).getItem().getItem().getFoodProperties();
-                if (food != null && food.isMeat()) {
-                    listEntityItem.add((ItemEntity) entityNeighbor);
+            if (entityNeighbor instanceof ItemEntity itemEntity && distanceTo(entityNeighbor) <= radius) {
+                ItemStack stack = itemEntity.getItem();
+                // FIXME 1.21 :: add own tag?
+                if ((stack.is(Tags.Items.FOODS_RAW_MEAT) || stack.is(Tags.Items.FOODS_COOKED_MEAT)) && stack.getFoodProperties(null) != null) {
+                    listEntityItem.add(itemEntity);
                 }
             }
         }

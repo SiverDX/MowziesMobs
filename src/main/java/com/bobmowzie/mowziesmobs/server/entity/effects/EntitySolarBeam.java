@@ -34,9 +34,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -70,7 +67,6 @@ public class EntitySolarBeam extends Entity {
     public float prevYaw;
     public float prevPitch;
 
-    @OnlyIn(Dist.CLIENT)
     private Vec3[] attractorPos;
 
     private boolean didRaytrace;

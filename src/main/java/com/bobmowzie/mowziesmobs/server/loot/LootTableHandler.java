@@ -5,10 +5,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -33,20 +30,11 @@ public class LootTableHandler {
 
     public static final DeferredRegister<LootItemFunctionType<?>> LOOT_FUNCTION_TYPE_REG = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, MMCommon.MODID);
     public static final DeferredRegister<LootItemConditionType> LOOT_CONDITION_TYPE_REG = DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, MMCommon.MODID);
-    // FIXME 1.21 :: is this now a datapack registry?
-    public static DeferredHolder<LootItemConditionalFunction, LootFunctionGrottolDeathType> GROTTOL_DEATH_TYPE = registerFunction("grottol_death_type", new LootFunctionGrottolDeathType.FunctionSerializer());
 
-    public static DeferredHolder<LootItemConditionType, LootItemConditionType> FROSTMAW_HAS_CRYSTAL = registerCondition("has_crystal", new LootConditionFrostmawHasCrystal.ConditionSerializer());
+    public static DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<LootFunctionGrottolDeathType>> GROTTOL_DEATH_TYPE = LOOT_FUNCTION_TYPE_REG.register("grottol_death_type", () -> new LootItemFunctionType<>(LootFunctionGrottolDeathType.CODEC));
+    public static DeferredHolder<LootItemConditionType, LootItemConditionType> FROSTMAW_HAS_CRYSTAL = LOOT_CONDITION_TYPE_REG.register("has_crystal", () -> new LootItemConditionType(LootConditionFrostmawHasCrystal.CODEC));
 
     private static ResourceKey<LootTable> register(String id) {
         return ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, id));
-    }
-
-    private static DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<?>> registerFunction(String name, Serializer<? extends LootItemFunction> serializer) {
-        return LOOT_FUNCTION_TYPE_REG.register(name, () -> new LootItemFunctionType(serializer));
-    }
-
-    private static DeferredHolder<LootItemConditionType, LootItemConditionType> registerCondition(String registryName, Serializer<? extends LootItemCondition> serializer) {
-        return LOOT_CONDITION_TYPE_REG.register(registryName, () -> new LootItemConditionType(serializer));
     }
 }

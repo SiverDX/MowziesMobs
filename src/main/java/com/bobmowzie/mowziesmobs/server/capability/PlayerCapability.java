@@ -23,7 +23,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -409,11 +409,11 @@ public class PlayerCapability {
                 if (iceBreathAbility != null && iceBreathAbility.isUsing()) {
                     InteractionHand handIn = player.getUsedItemHand();
                     if (stack.getDamageValue() + 5 < stack.getMaxDamage()) {
-                        stack.hurtAndBreak(5, player, handIn == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+                        stack.hurtAndBreak(5, player, LivingEntity.getSlotForHand(handIn));
                     }
                     else {
                         if (ConfigHandler.COMMON.TOOLS_AND_ABILITIES.ICE_CRYSTAL.breakable.get()) {
-                            stack.hurtAndBreak(5, player, handIn == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+                            stack.hurtAndBreak(5, player, LivingEntity.getSlotForHand(handIn));
                         }
                         iceBreathAbility.end();
                     }

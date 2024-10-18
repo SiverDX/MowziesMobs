@@ -18,7 +18,6 @@ import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemWroughtAxe extends MowzieAxeItem {
@@ -44,14 +43,14 @@ public class ItemWroughtAxe extends MowzieAxeItem {
     }
 
     @Override
-    public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
+    public boolean onEntitySwing(ItemStack stack, LivingEntity entity, InteractionHand hand) { // FIXME 1.21 :: now has the hand -> the point where this is called seems to be the same though ('LivingEntity#swing' always had hand context)
         PlayerCapability.IPlayerCapability playerCapability = CapabilityHandler.getCapability(entity, CapabilityHandler.PLAYER_CAPABILITY);
         return playerCapability != null && playerCapability.getUntilAxeSwing() > 0;
     }
 
     @Override
     public boolean hurtEnemy(ItemStack heldItemStack, LivingEntity entityHit, LivingEntity attacker) {
-        if (ConfigHandler.COMMON.TOOLS_AND_ABILITIES.AXE_OF_A_THOUSAND_METALS.breakable.get()) heldItemStack.hurtAndBreak(2, attacker, p -> p.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+        if (ConfigHandler.COMMON.TOOLS_AND_ABILITIES.AXE_OF_A_THOUSAND_METALS.breakable.get()) heldItemStack.hurtAndBreak(2, attacker, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND));
         if (!entityHit.level().isClientSide) {
             entityHit.playSound(SoundEvents.ANVIL_LAND, 0.3F, 0.5F);
         }
@@ -84,8 +83,8 @@ public class ItemWroughtAxe extends MowzieAxeItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
+        super.appendHoverText(stack, context, tooltip, flagIn);
         tooltip.add(Component.translatable(getDescriptionId() + ".text.0").setStyle(ItemHandler.TOOLTIP_STYLE));
         tooltip.add(Component.translatable(getDescriptionId() + ".text.1").setStyle(ItemHandler.TOOLTIP_STYLE));
         tooltip.add(Component.translatable(getDescriptionId() + ".text.2").setStyle(ItemHandler.TOOLTIP_STYLE));

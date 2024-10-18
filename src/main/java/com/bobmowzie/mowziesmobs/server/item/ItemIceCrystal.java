@@ -33,7 +33,7 @@ public class ItemIceCrystal extends Item {
             playerIn.startUsingItem(handIn);
             if (stack.getDamageValue() + 5 < stack.getMaxDamage() || ConfigHandler.COMMON.TOOLS_AND_ABILITIES.ICE_CRYSTAL.breakable.get()) {
                 if (!worldIn.isClientSide()) AbilityHandler.INSTANCE.sendAbilityMessage(playerIn, AbilityHandler.ICE_BREATH_ABILITY);
-                stack.hurtAndBreak(5, playerIn, handIn == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+                stack.hurtAndBreak(5, playerIn, LivingEntity.getSlotForHand(handIn));
                 playerIn.startUsingItem(handIn);
                 return new InteractionResultHolder<>(InteractionResult.SUCCESS, playerIn.getItemInHand(handIn));
             } else {

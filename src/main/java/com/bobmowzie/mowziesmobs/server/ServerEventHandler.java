@@ -466,7 +466,7 @@ public final class ServerEventHandler {
 
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent.RightClickEmpty event) { // FIXME 1.21 :: cannot be cancelled
-        if (event.getEntity().hasEffect(EffectHandler.FROZEN.get())) {
+        if (event.getEntity().hasEffect(EffectHandler.FROZEN)) {
             event.setCanceled(true);
             return;
         }
@@ -729,8 +729,9 @@ public final class ServerEventHandler {
                 Vec3 vecBetween = new Vec3(target.getX() - event.getEntity().getX(), 0, target.getZ() - event.getEntity().getZ()).normalize();
                 double dot = lookDir.dot(vecBetween);
                 if (dot > 0.7) {
-                    event.setResult(Event.Result.ALLOW);
-                    event.setDamageModifier(ConfigHandler.COMMON.TOOLS_AND_ABILITIES.NAGA_FANG_DAGGER.backstabDamageMultiplier.get().floatValue());
+                    event.setCriticalHit(true);
+                    // FIXME 1.21 :: add to current damage modifier (in case mods modify this as well)?
+                    event.setDamageMultiplier(ConfigHandler.COMMON.TOOLS_AND_ABILITIES.NAGA_FANG_DAGGER.backstabDamageMultiplier.get().floatValue());
                     target.playSound(MMSounds.ENTITY_NAGA_ACID_HIT.get(), 1f, 1.2f);
                     AbilityHandler.INSTANCE.sendAbilityMessage(attacker, AbilityHandler.BACKSTAB_ABILITY);
 
@@ -773,8 +774,8 @@ public final class ServerEventHandler {
             }
             else if (weapon.getItem() instanceof ItemSpear) {
                 if (target instanceof Animal && target.getMaxHealth() <= 30 && attacker.level().getRandom().nextFloat() <= 0.334) {
-                    event.setResult(Event.Result.ALLOW);
-                    event.setDamageModifier(400);
+                    event.setCriticalHit(true);
+                    event.setDamageMultiplier(400);
                 }
             }
         }
@@ -861,7 +862,7 @@ public final class ServerEventHandler {
                     ground.is(Blocks.DARK_OAK_SLAB) ||
                     ground.is(Blocks.DARK_OAK_STAIRS))
             ) {
-                event.setResult(Event.Result.DENY);
+                event.setResult(MobSpawnEvent.SpawnPlacementCheck.Result.FAIL);
             }
         }
     }

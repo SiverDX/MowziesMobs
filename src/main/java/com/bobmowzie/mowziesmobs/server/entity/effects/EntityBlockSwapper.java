@@ -16,6 +16,7 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +26,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
@@ -266,11 +266,18 @@ public class EntityBlockSwapper extends Entity {
             }
         }
 
+        @Override // FIXME 1.21 :: correct? takes position and rotation info from the server entity
+        public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket(@NotNull ServerEntity entity) {
+            return new ClientboundAddEntityPacket(this, entity, cachedTunneler == null ? 0 : cachedTunneler.getId());
+        }
+
+        /*
         @Override
         public Packet<ClientGamePacketListener> getAddEntityPacket() {
             LivingEntity entity = this.cachedTunneler;
             return new ClientboundAddEntityPacket(this, entity == null ? 0 : entity.getId());
         }
+        */
 
         @Override
         public void recreateFromPacket(ClientboundAddEntityPacket packet) {

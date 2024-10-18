@@ -69,10 +69,10 @@ public class ItemBlowgun extends BowItem {
                         }
 
                         if (EnchantmentUtils.getLevel(Enchantments.FLAME, player.level(), stack) > 0) {
-                            abstractarrowentity.setSecondsOnFire(100);
+                            abstractarrowentity.igniteForSeconds(100);
                         }
 
-                        stack.hurtAndBreak(1, player, entityLiving.getUsedItemHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+                        stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(entityLiving.getUsedItemHand()));
                         if (flag1 || player.getAbilities().instabuild && (itemstack.getItem() == Items.SPECTRAL_ARROW || itemstack.getItem() == Items.TIPPED_ARROW)) {
                             abstractarrowentity.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                         }

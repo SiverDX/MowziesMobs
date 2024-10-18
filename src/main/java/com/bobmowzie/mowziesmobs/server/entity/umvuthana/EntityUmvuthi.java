@@ -513,7 +513,7 @@ public class EntityUmvuthi extends MowzieGeckoEntity implements LeaderSunstrikeI
             for (Player player : getPlayersNearby(15, 15, 15, 15)) {
                 ItemStack headArmorStack = player.getInventory().armor.get(3);
                 if (getTarget() != player && canAttack(player, GIVE_ACHIEVEMENT_PRED) && headArmorStack.getItem() instanceof UmvuthanaMask) {
-                    if (player instanceof ServerPlayer) AdvancementHandler.SNEAK_VILLAGE_TRIGGER.trigger((ServerPlayer) player);
+                    if (player instanceof ServerPlayer serverPlayer) AdvancementHandler.SNEAK_VILLAGE_TRIGGER.value().trigger(serverPlayer);
                 }
             }
         }

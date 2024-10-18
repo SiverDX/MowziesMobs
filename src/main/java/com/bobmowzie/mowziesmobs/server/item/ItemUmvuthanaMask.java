@@ -12,12 +12,11 @@ import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthanaCraneToP
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.EntityUmvuthanaFollowerToPlayer;
 import com.bobmowzie.mowziesmobs.server.entity.umvuthana.MaskType;
 import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -26,8 +25,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -43,17 +44,16 @@ import java.util.function.Consumer;
 
 public class ItemUmvuthanaMask extends MowzieArmorItem implements UmvuthanaMask, GeoItem {
     private final MaskType type;
-    private static final UmvuthanaMaskMaterial UMVUTHANA_MASK_MATERIAL = new UmvuthanaMaskMaterial();
 
     public String controllerName = "controller";
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public ItemUmvuthanaMask(MaskType type, Item.Properties properties) {
-        super(UMVUTHANA_MASK_MATERIAL, Type.HELMET, properties);
+        super(MaterialHandler.UMVUTHANA_MASK_MATERIAL.value(), Type.HELMET, properties);
         this.type = type;
     }
 
-    public MobEffect getPotion() {
+    public Holder<MobEffect> getPotion() {
         return type.potion;
     }
 
@@ -67,7 +67,7 @@ public class ItemUmvuthanaMask extends MowzieArmorItem implements UmvuthanaMask,
         ItemStack stack = player.getItemInHand(hand);
         ItemStack headStack = player.getInventory().armor.get(3);
         if (headStack.getItem() instanceof ItemSolVisage) {
-            if (ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SOL_VISAGE.breakable.get() && !player.isCreative()) headStack.hurtAndBreak(2, player, p -> p.broadcastBreakEvent(hand));
+            if (ConfigHandler.COMMON.TOOLS_AND_ABILITIES.SOL_VISAGE.breakable.get() && !player.isCreative()) headStack.hurtAndBreak(2, player, LivingEntity.getSlotForHand(hand));
             boolean didSpawn = spawnUmvuthana(type, stack, player,(float)stack.getDamageValue() / (float)stack.getMaxDamage());
             if (didSpawn) {
                 if (!player.isCreative()) stack.shrink(1);
@@ -142,16 +142,15 @@ public class ItemUmvuthanaMask extends MowzieArmorItem implements UmvuthanaMask,
         return type;
     }
 
-    @Nullable
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        String s = ChatFormatting.stripFormatting(stack.getHoverName().getString());
-        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/item/umvuthana_mask_" + this.type.name + ".png").toString();
+    public @Nullable ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
+        // String s = ChatFormatting.stripFormatting(stack.getHoverName().getString()); // FIXME 1.21 :: was unused
+        return ResourceLocation.fromNamespaceAndPath(MMCommon.MODID, "textures/item/umvuthana_mask_" + this.type.name + ".png");
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
+        super.appendHoverText(stack, context, tooltip, flagIn);
         tooltip.add(Component.translatable(getDescriptionId() + ".text.0").setStyle(ItemHandler.TOOLTIP_STYLE));
         tooltip.add(Component.translatable(getDescriptionId() + ".text.1").setStyle(ItemHandler.TOOLTIP_STYLE));
     }
@@ -182,48 +181,5 @@ public class ItemUmvuthanaMask extends MowzieArmorItem implements UmvuthanaMask,
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
-    }
-
-    private static class UmvuthanaMaskMaterial implements ArmorMaterial {
-
-        @Override
-        public int getDurabilityForType(Type equipmentSlotType) {
-            return ArmorMaterials.LEATHER.getDurabilityForType(equipmentSlotType);
-        }
-
-        @Override
-        public int getDefenseForType(Type equipmentSlotType) {
-            return (int) (ArmorMaterials.LEATHER.getDefenseForType(Type.HELMET) * ConfigHandler.COMMON.TOOLS_AND_ABILITIES.UMVUTHANA_MASK.armorConfig.damageReductionMultiplierValue);
-        }
-
-        @Override
-        public int getEnchantmentValue() {
-            return ArmorMaterials.LEATHER.getEnchantmentValue();
-        }
-
-        @Override
-        public SoundEvent getEquipSound() {
-            return ArmorMaterials.LEATHER.getEquipSound();
-        }
-
-        @Override
-        public Ingredient getRepairIngredient() {
-            return null;
-        }
-
-        @Override
-        public String getName() {
-            return "umvuthana_mask";
-        }
-
-        @Override
-        public float getToughness() {
-            return ArmorMaterials.LEATHER.getToughness() * ConfigHandler.COMMON.TOOLS_AND_ABILITIES.UMVUTHANA_MASK.armorConfig.toughnessMultiplierValue;
-        }
-
-        @Override
-        public float getKnockbackResistance() {
-            return ArmorMaterials.LEATHER.getKnockbackResistance();
-        }
     }
 }
