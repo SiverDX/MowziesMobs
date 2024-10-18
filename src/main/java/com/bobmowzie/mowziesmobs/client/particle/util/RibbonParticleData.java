@@ -7,8 +7,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class RibbonParticleData extends AdvancedParticleData {
     public static final Deserializer<RibbonParticleData> DESERIALIZER = new Deserializer<RibbonParticleData>() {
@@ -94,7 +92,6 @@ public class RibbonParticleData extends AdvancedParticleData {
         return super.writeToString() + " " + this.length;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public int getLength() {
         return this.length;
     }

@@ -57,13 +57,13 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -74,9 +74,7 @@ import java.util.List;
  * Created by BobMowzie on 9/9/2018.
  */
 public class EntityNaga extends MowzieLLibraryEntity implements RangedAttackMob, Enemy, FlyingAnimal {
-    @OnlyIn(Dist.CLIENT)
     public DynamicChain dc;
-    @OnlyIn(Dist.CLIENT)
     public Vec3[] mouthPos;
 
     public static final Animation FLAP_ANIMATION = Animation.create(25);
@@ -104,12 +102,9 @@ public class EntityNaga extends MowzieLLibraryEntity implements RangedAttackMob,
     public float prevFlapAnimFrac;
 
     private boolean hasFlapSoundPlayed = false;
-    @OnlyIn(Dist.CLIENT)
     public float shoulderRot;
 
-    @OnlyIn(Dist.CLIENT)
     public float banking;
-    @OnlyIn(Dist.CLIENT)
     public float prevBanking;
 
     public static final int ROAR_DURATION = 30;
@@ -152,11 +147,11 @@ public class EntityNaga extends MowzieLLibraryEntity implements RangedAttackMob,
 
         this.moveControl = new NagaMoveHelper(this);
         this.lookControl = new NagaLookController(this);
-        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0F);
-        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
-        this.setPathfindingMalus(BlockPathTypes.WATER_BORDER, -1.0F);
-        this.setPathfindingMalus(BlockPathTypes.FENCE, -1.0F);
-        this.setPathfindingMalus(BlockPathTypes.WALKABLE, -1.0F);
+        this.setPathfindingMalus(PathType.DANGER_FIRE, -1.0F);
+        this.setPathfindingMalus(PathType.WATER, -1.0F);
+        this.setPathfindingMalus(PathType.WATER_BORDER, -1.0F);
+        this.setPathfindingMalus(PathType.FENCE, -1.0F);
+        this.setPathfindingMalus(PathType.WALKABLE, -1.0F);
     }
 
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
@@ -339,7 +334,6 @@ public class EntityNaga extends MowzieLLibraryEntity implements RangedAttackMob,
         return distance < 16600;
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public AABB getBoundingBoxForCulling() {
         return super.getBoundingBoxForCulling().inflate(12.0D);
@@ -579,9 +573,9 @@ public class EntityNaga extends MowzieLLibraryEntity implements RangedAttackMob,
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, SpawnGroupData spawnDataIn, CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, SpawnGroupData spawnDataIn) {
         restrictTo(this.blockPosition(), MAX_DIST_FROM_HOME);
-        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
     @Override
@@ -687,8 +681,7 @@ public class EntityNaga extends MowzieLLibraryEntity implements RangedAttackMob,
     }
 
     public void travel(Vec3 motion) {
-        double d0 = 0.08D;
-        AttributeInstance gravity = this.getAttribute(net.minecraftforge.common.ForgeMod.ENTITY_GRAVITY.get());
+        double gravity = getAttributeValue(Attributes.GRAVITY);
         boolean flag = this.getDeltaMovement().y <= 0.0D;
 //        if (flag && this.isPotionActive(Effects.SLOW_FALLING)) {
 //            if (!gravity.hasModifier(SLOW_FALLING)) gravity.applyNonPersistentModifier(SLOW_FALLING);
@@ -696,15 +689,14 @@ public class EntityNaga extends MowzieLLibraryEntity implements RangedAttackMob,
 //        } else if (gravity.hasModifier(SLOW_FALLING)) {
 //            gravity.removeModifier(SLOW_FALLING);
 //        } TODO: SLOW_FALLING has private access. Skip?
-        d0 = gravity.getValue();
 
         FluidState fluidstate = this.level().getFluidState(this.blockPosition());
-        if ((this.isInWater() || (this.isInFluidType(fluidstate) && fluidstate.getFluidType() != net.minecraftforge.common.ForgeMod.LAVA_TYPE.get())) && this.isAffectedByFluids() && !this.canStandOnFluid(fluidstate)) {
-            if (this.isInWater() || (this.isInFluidType(fluidstate) && !this.moveInFluid(fluidstate, motion, d0))) {
+        if ((this.isInWater() || (this.isInFluidType(fluidstate) && fluidstate.getFluidType() != NeoForgeMod.LAVA_TYPE.value())) && this.isAffectedByFluids() && !this.canStandOnFluid(fluidstate)) {
+            if (this.isInWater() || (this.isInFluidType(fluidstate) && !this.moveInFluid(fluidstate, motion, gravity))) {
                 double d8 = this.getY();
                 float f5 = this.isSprinting() ? 0.9F : this.getWaterSlowDown();
                 float f6 = 0.02F;
-                float f7 = (float) EnchantmentHelper.getDepthStrider(this);
+                float f7 = (float) EnchantmentHelper.getDepthStrider(this); // FIXME 1.21 :: adjust to 1.21 code (which uses swim speed etc.)
                 if (f7 > 3.0F) {
                     f7 = 3.0F;
                 }
@@ -722,7 +714,7 @@ public class EntityNaga extends MowzieLLibraryEntity implements RangedAttackMob,
                     f5 = 0.96F;
                 }
 
-                f6 *= (float) this.getAttribute(net.minecraftforge.common.ForgeMod.SWIM_SPEED.get()).getValue();
+                f6 *= (float) this.getAttributeValue(NeoForgeMod.SWIM_SPEED);
                 this.moveRelative(f6, motion);
                 this.move(MoverType.SELF, this.getDeltaMovement());
                 Vec3 vector3d6 = this.getDeltaMovement();
@@ -731,7 +723,7 @@ public class EntityNaga extends MowzieLLibraryEntity implements RangedAttackMob,
                 }
 
                 this.setDeltaMovement(vector3d6.multiply((double)f5, (double)0.8F, (double)f5));
-                Vec3 vec32 = this.getFluidFallingAdjustedMovement(d0, flag, this.getDeltaMovement());
+                Vec3 vec32 = this.getFluidFallingAdjustedMovement(gravity, flag, this.getDeltaMovement());
                 this.setDeltaMovement(vec32);
                 if (this.horizontalCollision && this.isFree(vec32.x, vec32.y + (double)0.6F - this.getY() + d8, vec32.z)) {
                     this.setDeltaMovement(vec32.x, (double)0.3F, vec32.z);
@@ -743,14 +735,14 @@ public class EntityNaga extends MowzieLLibraryEntity implements RangedAttackMob,
             this.move(MoverType.SELF, this.getDeltaMovement());
             if (this.getFluidHeight(FluidTags.LAVA) <= this.getFluidJumpThreshold()) {
                 this.setDeltaMovement(this.getDeltaMovement().multiply(0.5D, 0.8F, 0.5D));
-                Vec3 vector3d3 = this.getFluidFallingAdjustedMovement(d0, flag, this.getDeltaMovement());
+                Vec3 vector3d3 = this.getFluidFallingAdjustedMovement(gravity, flag, this.getDeltaMovement());
                 this.setDeltaMovement(vector3d3);
             } else {
                 this.setDeltaMovement(this.getDeltaMovement().scale(0.5D));
             }
 
             if (!this.isNoGravity()) {
-                this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -d0 / 4.0D, 0.0D));
+                this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -gravity / 4.0D, 0.0D));
             }
 
             Vec3 vector3d4 = this.getDeltaMovement();
@@ -799,7 +791,7 @@ public class EntityNaga extends MowzieLLibraryEntity implements RangedAttackMob,
             double d12 = moveDirection.length();
             float f3 = Mth.cos(f6);
             f3 = (float) ((double) f3 * (double) f3 * Math.min(1.0D, d12 / 0.4D));
-            vec3 = this.getDeltaMovement().add(0.0D, d0 * (-1.0D + (double) f3 * 0.75D), 0.0D);
+            vec3 = this.getDeltaMovement().add(0.0D, gravity * (-1.0D + (double) f3 * 0.75D), 0.0D);
             if (vec3.y < 0.0D && d9 > 0.0D) {
                 double d3 = vec3.y * -0.1D * (double) f3;
                 vec3 = vec3.add(moveDirection.x * d3 / d9, d3, moveDirection.z * d3 / d9);
@@ -834,7 +826,7 @@ public class EntityNaga extends MowzieLLibraryEntity implements RangedAttackMob,
                     d2 = 0.0D;
                 }
             } else if (!this.isNoGravity()) {
-                d2 -= d0;
+                d2 -= gravity;
             }
 
             if (this.shouldDiscardFriction()) {

@@ -6,9 +6,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class DecalParticleData extends AdvancedParticleData {
     public static final Deserializer<DecalParticleData> DESERIALIZER = new Deserializer<DecalParticleData>() {
@@ -79,7 +76,6 @@ public class DecalParticleData extends AdvancedParticleData {
         return super.writeToString() + " " + this.spriteSize + " " + this.bufferSize;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public double getAngle() {
         if (this.getRotation() instanceof ParticleRotation.EulerAngles) {
             return ((ParticleRotation.EulerAngles) this.getRotation()).yaw;
@@ -87,12 +83,10 @@ public class DecalParticleData extends AdvancedParticleData {
         return 0;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public int getSpriteSize() {
         return spriteSize;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public int getBufferSize() {
         return bufferSize;
     }

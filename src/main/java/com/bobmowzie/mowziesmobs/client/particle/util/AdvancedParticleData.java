@@ -4,14 +4,10 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Locale;
 
@@ -190,57 +186,46 @@ public class AdvancedParticleData implements ParticleOptions {
         return type;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public double getRed() {
         return this.red;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public double getGreen() {
         return this.green;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public double getBlue() {
         return this.blue;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public double getAlpha() {
         return this.alpha;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public double getAirDrag() {
         return airDrag;
     }
-    
-    @OnlyIn(Dist.CLIENT)
+
     public ParticleRotation getRotation() {
         return rotation;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public double getScale() {
         return scale;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public boolean isEmissive() {
         return emissive;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public double getDuration() {
         return duration;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public boolean getCanCollide() {
         return canCollide;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public ParticleComponent[] getComponents() {
         return components;
     }

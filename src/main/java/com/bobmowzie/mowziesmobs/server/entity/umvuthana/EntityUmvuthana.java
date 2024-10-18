@@ -30,6 +30,7 @@ import com.bobmowzie.mowziesmobs.server.item.UmvuthanaMask;
 import com.bobmowzie.mowziesmobs.server.loot.LootTableHandler;
 import com.bobmowzie.mowziesmobs.server.potion.EffectHandler;
 import com.bobmowzie.mowziesmobs.server.sound.MMSounds;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -59,16 +60,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animation.*;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.AnimationState;
 
 import java.util.EnumSet;
 
@@ -134,7 +132,7 @@ public abstract class EntityUmvuthana extends MowzieGeckoEntity {
                 if (itemEntity != null) {
                     ItemStack item = itemEntity.getItem();
                     item.setDamageValue((int) Math.ceil((1.0f - getUser().getHealthRatio()) * item.getMaxDamage()));
-                    item.setHoverName(getUser().getCustomName());
+                    item.set(DataComponents.CUSTOM_NAME, getUser().getCustomName());
                 }
             }
         }
@@ -159,13 +157,9 @@ public abstract class EntityUmvuthana extends MowzieGeckoEntity {
     public int timeUntilDeath = -1;
     private int blockCount = 0;
 
-    @OnlyIn(Dist.CLIENT)
     public Vec3[] staffPos;
-    @OnlyIn(Dist.CLIENT)
     public Vec3[] headPos;
-    @OnlyIn(Dist.CLIENT)
     public Vec3[] barakoPos;
-    @OnlyIn(Dist.CLIENT)
     public Vec3[] myPos;
 
     protected Vec3 teleportDestination;
@@ -183,7 +177,6 @@ public abstract class EntityUmvuthana extends MowzieGeckoEntity {
     public EntityUmvuthana(EntityType<? extends EntityUmvuthana> type, Level world) {
         super(type, world);
         setMask(MaskType.from(Mth.nextInt(random, 1, 4)));
-        setMaxUpStep(1);
         circleTick += random.nextInt(200);
         frame += random.nextInt(50);
         xpReward = 6;
@@ -200,7 +193,7 @@ public abstract class EntityUmvuthana extends MowzieGeckoEntity {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, -8);
+        setPathfindingMalus(PathType.DAMAGE_FIRE, -8);
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(0, new UseAbilityAI<>(this, ACTIVATE_ABILITY));
         goalSelector.addGoal(0, new UseAbilityAI<>(this, DEACTIVATE_ABILITY));
@@ -353,16 +346,17 @@ public abstract class EntityUmvuthana extends MowzieGeckoEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return MowzieEntity.createAttributes().add(Attributes.ATTACK_DAMAGE, 3)
-                .add(Attributes.MAX_HEALTH, 8);
+                .add(Attributes.MAX_HEALTH, 8)
+                .add(Attributes.STEP_HEIGHT, 1);
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, SpawnGroupData livingData, CompoundTag compound) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, SpawnGroupData livingData) {
         if (canHoldVaryingWeapons()) {
             setWeapon(random.nextInt(3) == 0 ? 1 : 0);
         }
         if (reason == MobSpawnType.COMMAND && !(this instanceof EntityUmvuthanaRaptor) && !(this instanceof EntityUmvuthanaCrane) && !(this instanceof EntityUmvuthanaCraneToPlayer)) setMask(MaskType.from(Mth.nextInt(random, 1, 4)));
-        return super.finalizeSpawn(world, difficulty, reason, livingData, compound);
+        return super.finalizeSpawn(world, difficulty, reason, livingData);
     }
 
     protected boolean canHoldVaryingWeapons() {
